@@ -7,10 +7,6 @@ import com.real.simhotel.view.base.BaseFragment;
  * Created by liudan on 2016/12/7.
  */
 public class StudentMainActivity extends AppActivity{
-    @Override
-    protected BaseFragment getFirstFragment() {
-        return null;
-    }
 
     @Override
     protected void initData() {
@@ -27,8 +23,5 @@ public class StudentMainActivity extends AppActivity{
         return 0;
     }
 
-    @Override
-    protected int getFragmentContentId() {
-        return 0;
-    }
+
 }

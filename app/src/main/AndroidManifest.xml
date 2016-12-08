@@ -8,9 +8,10 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
 
-        <activity android:name=".view.activity.HomeActivity"
+        <activity android:name=".view.activity.SplashActivity"
             android:launchMode="singleTask"
             android:theme="@style/FullscreenTheme">
 
@@ -20,6 +21,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".view.activity.HomeActivity"></activity>
+        <activity android:name=".view.activity.student.StudentMainActivity"></activity>
+        <activity android:name=".view.activity.teacher.TeacherMainActivity"></activity>
 
     </application>
 

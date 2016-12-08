@@ -1,6 +1,8 @@
 package com.real.simhotel.view.base;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -19,7 +21,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/7.
  */
-public abstract class BaseFragment<T extends Presenter> extends RxFragment implements BaseView {
+public abstract class BaseFragment<T extends Presenter> extends Fragment implements BaseView {
     //与Fragment绑定的activity对象
     protected BaseActivity mActivity;
     //当前View的Presenter
@@ -50,30 +52,10 @@ public abstract class BaseFragment<T extends Presenter> extends RxFragment imple
 
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        this.mActivity = (BaseActivity) activity;
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.mActivity = (BaseActivity)getActivity();
     }
-
-    //添加fragment
-    protected void addFragment(BaseFragment fragment) {
-        if (null != fragment) {
-            getChildFragmentManager().beginTransaction()
-                    .replace(getFragmentContentId(), fragment, fragment.getClass().getSimpleName())
-                    .addToBackStack(fragment.getClass().getSimpleName())
-                    .commitAllowingStateLoss();
-        }
-    }
-
-    //移除fragment
-    protected void removeFragment() {
-        if (getChildFragmentManager().getBackStackEntryCount() > 1) {
-            getChildFragmentManager().popBackStack();
-        }
-    }
-
-    //添加fragment的布局节点的ID
-    protected abstract int getFragmentContentId();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -145,62 +127,10 @@ public abstract class BaseFragment<T extends Presenter> extends RxFragment imple
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    public void showLoading() {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.showLoading();
-    }
-
-    @Override
-    public void refreshView() {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.restore();
-    }
-
-    @Override
-    public void showNetError() {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.showNetworkError(v -> {
-            showLoading();
-            mPresenter.requestData(getRequestParams());
-        });
-    }
-
-    @Override
-    public void hasNoMoreData() {
-
-    }
-
-    @Override
-    public void loadMoreFinish(List dates) {
-
-    }
-
-    @Override
-    public void showRefreshFinish(List score) {
-
-    }
-
-    @Override
-    public void showToastError() {
-
-    }
 
     protected String getRequestParams() {
         return null;
     }
 
-    @Override
-    public void showEmptyView(String msg) {
-        if (mVaryViewHelperController == null) {
-            throw new IllegalStateException("no ViewHelperController");
-        }
-        mVaryViewHelperController.showEmpty(msg);
-    }
+
 }

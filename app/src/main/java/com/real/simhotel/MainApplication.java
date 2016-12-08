@@ -26,4 +26,8 @@ public class MainApplication extends Application {
 
         mComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
     }
+
+
+
+
 }

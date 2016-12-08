@@ -10,10 +10,7 @@ import com.real.simhotel.view.base.BaseFragment;
 public class HomeActivity extends AppActivity {
 
 
-    @Override
-    protected BaseFragment getFirstFragment() {
-        return null;
-    }
+
 
     @Override
     protected void initData() {
@@ -30,8 +27,5 @@ public class HomeActivity extends AppActivity {
         return R.layout.activity_fullscreen;
     }
 
-    @Override
-    protected int getFragmentContentId() {
-        return 0;
-    }
+
 }

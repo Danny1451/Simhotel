@@ -10,10 +10,6 @@ import com.real.simhotel.MainApplication;
  */
 public abstract class AppActivity extends BaseActivity  {
 
-    /**
-     * 获取第一个fragment  如果没有返回null即可
-     */
-    protected abstract BaseFragment getFirstFragment();
 
     /**
      * 处理Intent
@@ -27,19 +23,16 @@ public abstract class AppActivity extends BaseActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getContentViewId());
+
         MainApplication.getComponent().inject(this);
+
         if (null != getIntent()) {
             handleIntent(getIntent());
         }
+
         initView();
         initData();
-        //避免重复添加Fragment
-        if (null == getSupportFragmentManager().getFragments()) {
-            BaseFragment firstFragment = getFirstFragment();
-            if (null != firstFragment) {
-                addFragment(firstFragment);
-            }
-        }
+
     }
 
     /**
