@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.real.simhotel.internal.dl.components.ApplicationComponent;
 import com.real.simhotel.internal.dl.components.DaggerApplicationComponent;
+import com.real.simhotel.internal.dl.modules.ApiServiceModule;
 import com.real.simhotel.internal.dl.modules.ApplicationModule;
 
 /**
@@ -24,7 +25,9 @@ public class MainApplication extends Application {
         mContext = this;
 
 
-        mComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(this)).build();
+        mComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this))
+                .apiServiceModule(new ApiServiceModule()).build();
     }
 
 

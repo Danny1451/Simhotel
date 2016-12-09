@@ -17,7 +17,7 @@ import com.real.simhotel.view.base.BaseFragment;
  */
 public class SplashActivity extends AppActivity {
 
-    private static final int sleepTime = 2000;
+    private static final int sleepTime = 1000;
     private Context mContext;
 
     @Override

@@ -11,5 +11,5 @@
         android:id="@+id/textView5"
         android:layout_gravity="center"
         android:layout_centerInParent="true"
-        android:textSize="48dp" />
+        android:textSize="36dp" />
 </RelativeLayout>

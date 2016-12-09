@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.real.simhotel">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".MainApplication"
         android:allowBackup="true"
@@ -13,7 +16,7 @@
 
         <activity android:name=".view.activity.SplashActivity"
             android:launchMode="singleTask"
-            android:theme="@style/FullscreenTheme">
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +24,7 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".view.activity.LoginActivity"></activity>
         <activity android:name=".view.activity.HomeActivity"></activity>
         <activity android:name=".view.activity.student.StudentMainActivity"></activity>
         <activity android:name=".view.activity.teacher.TeacherMainActivity"></activity>

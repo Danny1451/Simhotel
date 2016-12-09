@@ -6,8 +6,8 @@ import com.real.simhotel.config.Constants;
 public class Response<T> {
 
     public String code;
-    public String message;
-    public T object;
+    public String text;
+    public T ext;
 
 
     public boolean isSuccess() {

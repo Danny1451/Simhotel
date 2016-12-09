@@ -7,7 +7,7 @@ import rx.Subscriber;
 /**
  * Created by liudan on 2016/12/8.
  */
-public class RetrofixUtils {
+public class RetrofitUtils {
 
     /**
      * 对网络接口返回的Response进行分割操作
@@ -23,11 +23,11 @@ public class RetrofixUtils {
             public void call(Subscriber<? super T> subscriber) {
                 if (response.isSuccess()) {
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onNext(response.object);
+                        subscriber.onNext(response.ext);
                     }
                 } else {
                     if (!subscriber.isUnsubscribed()) {
-                        subscriber.onError(new APIException(response.code, response.message));
+                        subscriber.onError(new APIException(response.code, response.text));
                     }
                     return;
                 }
@@ -42,7 +42,7 @@ public class RetrofixUtils {
 
 
     /**
-     * 自定义异常，当接口返回的{@link Response#code}不为{@link Constant#OK}时，需要跑出此异常
+     * 自定义异常，当接口返回的{@link Response#code}不为{@link Constants#OK}时，需要跑出此异常
      * eg：登陆时验证码错误；参数为传递等
      */
     public static class APIException extends Exception {

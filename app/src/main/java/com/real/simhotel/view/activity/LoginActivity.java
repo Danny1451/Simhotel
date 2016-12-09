@@ -52,6 +52,14 @@ public class LoginActivity extends AppActivity implements LoginView{
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (null != mLoginPresenter)
+            mLoginPresenter.destroy();
+    }
+
+    @Override
     protected void initData() {
 
         mLoginPresenter = new LoginPresenter(this);
@@ -60,7 +68,7 @@ public class LoginActivity extends AppActivity implements LoginView{
 
     @Override
     protected void initView() {
-        ButterKnife.bind(this);
+
 
     }
 
@@ -68,15 +76,22 @@ public class LoginActivity extends AppActivity implements LoginView{
     @Override
     public void loginFaied(String reason) {
 
+        showToast("登录失败");
+
     }
 
     @Override
     public void loginStudentSuccess(int role) {
-
+        //跳转到学生界面
+        showToast("登录成功");
+        navigator.toStudentMainActivity(this,role);
     }
 
     @Override
     public void loginTeacherSuccess(int role) {
 
+        //跳转到老师界面
+        showToast("登录成功");
+        navigator.toTeacherMainActivity(this);
     }
 }
