@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.real.simhotel.view.activity.LoginActivity;
+import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 
 import javax.inject.Inject;
 
@@ -20,7 +21,8 @@ public class Navigator {
     }
 
     public void toTeacherMainActivity(Context context){
-
+        Intent intent = new Intent(context, TeacherMainActivity.class);
+        context.startActivity(intent);
     }
 
     /**

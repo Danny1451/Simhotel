@@ -78,6 +78,8 @@ public class LoginActivity extends AppActivity implements LoginView{
 
         showToast("登录失败");
 
+
+
     }
 
     @Override
@@ -93,5 +95,26 @@ public class LoginActivity extends AppActivity implements LoginView{
         //跳转到老师界面
         showToast("登录成功");
         navigator.toTeacherMainActivity(this);
+    }
+
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void showEmptyView(String msg) {
+
+    }
+
+    @Override
+    public void refreshView() {
+
+    }
+
+    @Override
+    public void showError(String msg) {
+
     }
 }

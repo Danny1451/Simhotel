@@ -29,8 +29,13 @@ public class SplashActivity extends AppActivity {
         new Thread(new Runnable() {
             public void run() {
                 String lastUser = PreferenceUtils.getLastUser(mContext);
+                lastUser = "techer";
                 if (!TextUtils.isEmpty(lastUser)) {
                     // auto login mode, make sure all group and conversation is loaed before enter the main screen
+                    try {
+                        Thread.sleep(sleepTime);
+                    } catch (InterruptedException e) {
+                    }
 
                     if (lastUser.startsWith("stu")){
                         startActivity(new Intent(SplashActivity.this, StudentMainActivity.class));

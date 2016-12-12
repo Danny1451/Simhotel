@@ -22,6 +22,7 @@ public class LoginPresenter extends BasePresenter {
     private Subscription subscription;
 
     private LoginActivity mView;
+
     public LoginPresenter(LoginActivity view){
         mView = view;
     }
@@ -29,23 +30,15 @@ public class LoginPresenter extends BasePresenter {
     public void login(String userName, String pwd){
         //请求网络
 
-//        subscription = apiService.login(userName,pwd)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .flatMap(new Func1<Response<String>, Observable<String>>() {
-//                             @Override
-//                             public Observable<String> call(Response<String> stringResponse) {
-//                                 return RetrofitUtils.flatResponse(stringResponse);
-//                             }
-//                         }).subscribe(new LoginSubscriber());
-
-        subscription = apiService.getHotelList(1).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
-                .flatMap(new Func1<Response<List<Hotel>>,Observable<List<Hotel>>>() {
-                    @Override
-                    public Observable<List<Hotel>> call(Response<List<Hotel>> listResponse) {
-                        return RetrofitUtils.flatResponse(listResponse);
-                    }
-                }).subscribe(new HotelListSubscriber());
+        subscription = apiService.login(userName,pwd)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                             @Override
+                             public Observable<String> call(Response<String> stringResponse) {
+                                 return RetrofitUtils.flatResponse(stringResponse);
+                             }
+                         }).subscribe(new LoginSubscriber());
 
 
     }
@@ -57,19 +50,7 @@ public class LoginPresenter extends BasePresenter {
             subscription.unsubscribe();
     }
 
-    public class HotelListSubscriber extends DefaultSubscriber<List<Hotel>>{
-        @Override
-        public void onNext(List<Hotel> hotels) {
-            super.onNext(hotels);
 
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-        }
-    }
 
     public class LoginSubscriber extends DefaultSubscriber<String>{
 

@@ -22,8 +22,10 @@
             this.helper = helper;
         }
 
-        public void showNetworkError(View.OnClickListener onClickListener) {
+        public void showNetworkError(String msg,View.OnClickListener onClickListener) {
             View layout = helper.inflate(R.layout.pager_error);
+            TextView info = (TextView) layout.findViewById(R.id.erroinfotv);
+            info.setText(msg);
             Button againBtn = (Button) layout.findViewById(R.id.pager_error_loadingAgain);
             if (null != onClickListener) {
                 againBtn.setOnClickListener(onClickListener);

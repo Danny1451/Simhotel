@@ -1,6 +1,7 @@
 package com.real.simhotel.data;
 
 import com.real.simhotel.config.Constants;
+import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
 
 
@@ -22,7 +23,12 @@ public interface ApiService {
     @GET(Constants.API_URL_Login)
     Observable<Response<String>> login(@Query("name") String name, @Query("pwd") String pwd);
 
-
     @GET(Constants.API_URL_HOTEL_LIST)
     Observable<Response<List<Hotel>>> getHotelList(@Query("training_id") int trainId);
+
+    @GET(Constants.API_URL_GROUP_LIST)
+    Observable<Response<List<Group>>> getGroupList(@Query("training_id") int trainId);
+
+    @GET(Constants.API_URL_CREATE_GROUP)
+    Observable<Response<String>> createGroup(@Query("training_id") int trainId,@Query("group_name") String groupname,@Query("group_des") String des);
 }

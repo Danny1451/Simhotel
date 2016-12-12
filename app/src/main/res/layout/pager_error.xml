@@ -9,18 +9,14 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/msg_network"/>
-
         <TextView
             android:textColor="#666666"
             android:textSize="14dip"
             android:layout_marginTop="15dip"
-            android:text="当前网络不太顺畅"
+            android:text="获取失败"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:id="@+id/erroinfotv" />
 
         <Button
             android:id="@+id/pager_error_loadingAgain"

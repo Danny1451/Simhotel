@@ -1,10 +1,11 @@
 package com.real.simhotel.view.base;
 
-import android.app.Activity;
-import android.app.Fragment;
+
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,8 @@ import android.view.ViewGroup;
 import com.real.simhotel.presenter.Presenter;
 import com.real.simhotel.view.BaseView;
 import com.real.simhotel.view.loading.VaryViewHelperController;
-import com.trello.rxlifecycle.components.RxFragment;
 
-import java.util.List;
+
 
 import butterknife.ButterKnife;
 
@@ -133,4 +133,39 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment impleme
     }
 
 
+    @Override
+    public void showLoading() {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        mVaryViewHelperController.showLoading();
+    }
+
+    @Override
+    public void refreshView() {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        mVaryViewHelperController.restore();
+    }
+
+    @Override
+    public void showError(String msg) {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        //点击重新加载
+        mVaryViewHelperController.showNetworkError(msg,v -> {
+            showLoading();
+            mPresenter.requestData(getRequestParams());
+        });
+    }
+
+    @Override
+    public void showEmptyView(String msg) {
+        if (mVaryViewHelperController == null) {
+            throw new IllegalStateException("no ViewHelperController");
+        }
+        mVaryViewHelperController.showEmpty(msg);
+    }
 }

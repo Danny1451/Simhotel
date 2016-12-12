@@ -6,13 +6,13 @@ import java.util.List;
  * Created by liudan on 2016/12/7.
  */
 public interface BaseView {
-//    void showLoading();
+    void showLoading();
 //
-//    void showEmptyView(String msg);
+    void showEmptyView(String msg);
 //
-//    void refreshView();
+    void refreshView();
 //
-//    void showNetError();
+    void showError(String msg);
 //
 //
 //    void hasNoMoreData();
