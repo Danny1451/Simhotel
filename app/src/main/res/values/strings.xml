@@ -3,4 +3,6 @@
 
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="teacher_main_title">教师管理界面</string>
+    <string name="student_main_title">模拟酒店</string>
 </resources>

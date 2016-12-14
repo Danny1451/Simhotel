@@ -18,8 +18,6 @@ import rx.Observable;
  */
 public interface ApiService {
 
-
-
     @GET(Constants.API_URL_Login)
     Observable<Response<String>> login(@Query("name") String name, @Query("pwd") String pwd);
 
@@ -30,5 +28,15 @@ public interface ApiService {
     Observable<Response<List<Group>>> getGroupList(@Query("training_id") int trainId);
 
     @GET(Constants.API_URL_CREATE_GROUP)
-    Observable<Response<String>> createGroup(@Query("training_id") int trainId,@Query("group_name") String groupname,@Query("group_des") String des);
+    Observable<Response<String>> createGroup(@Query("training_id") int trainId,
+                                             @Query("group_name") String groupname,
+                                             @Query("group_des") String des);
+
+    @GET(Constants.API_URL_CREATE_HOTEL)
+    Observable<Response<String>> createHotel(@Query("training_id") int trainId,
+                                             @Query("location") int location,
+                                             @Query("room_least_num") int roomMinNum,
+                                             @Query("room_cost") int roomcoast,
+                                             @Query("room_income")int income );
+
 }

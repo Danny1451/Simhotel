@@ -1,8 +1,11 @@
 package com.real.simhotel.view.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.real.simhotel.MainApplication;
@@ -15,6 +18,8 @@ import butterknife.ButterKnife;
 public abstract class AppActivity extends BaseActivity  {
 
 
+
+    protected Context mContext;
     /**
      * 处理Intent
      *
@@ -26,8 +31,16 @@ public abstract class AppActivity extends BaseActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // 隐藏标题栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // 隐藏状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(getContentViewId());
 
+        mContext = this;
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
 
         ButterKnife.bind(this);
@@ -60,7 +73,7 @@ public abstract class AppActivity extends BaseActivity  {
     protected abstract void initView();
 
 
-    protected void showToast(String content){
+    public void showToast(String content){
         Toast.makeText(this,content,Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,6 @@
 package com.real.simhotel.view.base;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
@@ -21,7 +22,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //布局文件ID
     protected abstract int getContentViewId();
 
-  
+
     //返回键返回事件的处理
     //如果FragmentStack中只有1个fragment 关闭当前activity
     // 如果FragmentStack中还有>1数量fragment则可以removeFragment()将fragment出栈 此部分交给子类实现

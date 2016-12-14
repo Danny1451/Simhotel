@@ -36,13 +36,22 @@ public class TeacherMainPresenter extends BasePresenter {
 
     public void createGroup(int trainsId,String groupName, String groupDes){
 
-        apiService.createGroup(trainsId,groupName,groupDes).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        subscription = apiService.createGroup(trainsId,groupName,groupDes)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
                 .flatMap(new Func1<Response<String>, Observable<String>>() {
                     @Override
                     public Observable<String> call(Response<String> stringResponse) {
                         return RetrofitUtils.flatResponse(stringResponse);
                     }
                 }).subscribe(new GroupCreateSubscriber());
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (subscription != null)
+            subscription.unsubscribe();
     }
 
     public class GroupCreateSubscriber extends DefaultSubscriber<String>{
@@ -55,6 +64,12 @@ public class TeacherMainPresenter extends BasePresenter {
         @Override
         public void onNext(String s) {
             super.onNext(s);
+
+            //刷新数据
+            mView.showToast("添加成功");
+            mView.removeDialog();
+            mGroupView.reloadData();
+
         }
     }
 }

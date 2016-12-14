@@ -1,6 +1,7 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.view.activity.student.StudentMainActivity;
+import com.real.simhotel.view.base.BaseFragment;
 
 import rx.Subscription;
 
@@ -12,6 +13,7 @@ public class StudentMainPresenter extends BasePresenter {
     private StudentMainActivity mView;
 
 
+    private BaseFragment mRoleFragment;
     public StudentMainPresenter(StudentMainActivity View){ this.mView = mView;}
 
     @Override

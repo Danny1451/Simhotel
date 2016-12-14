@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="400dp"
     android:layout_height="wrap_content">
 
     <LinearLayout
@@ -19,7 +19,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText2"
+            android:id="@+id/group_create_et_name"
             android:layout_weight="1" />
     </LinearLayout>
 
@@ -39,7 +39,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/group_create_et_des"
             android:layout_weight="1" />
     </LinearLayout>
 
@@ -52,14 +52,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="确定"
-            android:id="@+id/button2"
+            android:id="@+id/group_create_btn_confirm"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="取消"
-            android:id="@+id/button3"
+            android:id="@+id/group_create_btn_cancel"
             android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>
