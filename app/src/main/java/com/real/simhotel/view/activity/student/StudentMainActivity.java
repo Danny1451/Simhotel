@@ -8,7 +8,7 @@ import android.view.MenuItem;
 import com.real.simhotel.R;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
-import com.real.simhotel.view.fragment.CeoInitFragment;
+import com.real.simhotel.view.fragment.student.CeoInitFragment;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -50,6 +50,12 @@ public class StudentMainActivity extends AppActivity{
                 return true;
             case R.id.action_searc:
                 return true;
+            case R.id.action_exit:
+
+                android.os.Process.killProcess(android.os.Process.myPid());  //获取PID
+                System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }

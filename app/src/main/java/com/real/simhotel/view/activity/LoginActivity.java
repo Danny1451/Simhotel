@@ -8,17 +8,16 @@ import android.widget.Toast;
 
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.LoginPresenter;
+import com.real.simhotel.view.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
-import com.real.simhotel.view.base.BaseFragment;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by liudan on 2016/12/7.
  */
-public class LoginActivity extends AppActivity implements LoginView{
+public class LoginActivity extends AppActivity implements ILoginView {
 
     @Bind(R.id.loginbtn)
     Button mLoginBtn;

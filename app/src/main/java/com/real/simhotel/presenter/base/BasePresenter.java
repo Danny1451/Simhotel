@@ -1,10 +1,7 @@
-package com.real.simhotel.presenter;
-
-import android.content.Context;
+package com.real.simhotel.presenter.base;
 
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.ApiService;
-import com.real.simhotel.view.BaseView;
 
 import javax.inject.Inject;
 
@@ -16,7 +13,7 @@ public class BasePresenter  implements Presenter {
 
 
     @Inject
-    ApiService apiService;
+    protected ApiService apiService;
 
     public BasePresenter(){
         MainApplication.getComponent().inject(this);

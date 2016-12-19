@@ -3,8 +3,9 @@ package com.real.simhotel.presenter;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Hotel;
+import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
-import com.real.simhotel.view.HotelListView;
+import com.real.simhotel.view.IHotelListView;
 
 import java.util.List;
 
@@ -19,11 +20,11 @@ import rx.schedulers.Schedulers;
  */
 public class HotelListPresenter extends BasePresenter {
 
-    private HotelListView mView;
+    private IHotelListView mView;
 
     private Subscription subscription;
 
-    public HotelListPresenter(HotelListView view) {
+    public HotelListPresenter(IHotelListView view) {
 
         mView = view;
 

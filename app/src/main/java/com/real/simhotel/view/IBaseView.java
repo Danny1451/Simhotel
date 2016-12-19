@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by liudan on 2016/12/7.
  */
-public interface BaseView {
+public interface IBaseView {
     void showLoading();
 //
     void showEmptyView(String msg);

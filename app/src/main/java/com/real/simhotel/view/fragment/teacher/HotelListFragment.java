@@ -1,4 +1,4 @@
-package com.real.simhotel.view.fragment;
+package com.real.simhotel.view.fragment.teacher;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,7 +8,7 @@ import android.view.View;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.presenter.HotelListPresenter;
-import com.real.simhotel.view.HotelListView;
+import com.real.simhotel.view.IHotelListView;
 import com.real.simhotel.view.adapter.HotelListAdapter;
 import com.real.simhotel.view.base.BaseFragment;
 
@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/12.
  */
-public class HotelListFragment extends BaseFragment<HotelListPresenter> implements HotelListView {
+public class HotelListFragment extends BaseFragment<HotelListPresenter> implements IHotelListView {
 
 
     @Inject

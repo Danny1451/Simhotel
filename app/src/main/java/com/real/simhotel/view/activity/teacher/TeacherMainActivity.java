@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.orhanobut.dialogplus.DialogPlus;
@@ -18,8 +17,8 @@ import com.real.simhotel.R;
 import com.real.simhotel.presenter.TeacherMainPresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
-import com.real.simhotel.view.fragment.GroupListFragment;
-import com.real.simhotel.view.fragment.HotelListFragment;
+import com.real.simhotel.view.fragment.teacher.GroupListFragment;
+import com.real.simhotel.view.fragment.teacher.HotelListFragment;
 
 import butterknife.Bind;
 import butterknife.OnClick;

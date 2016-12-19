@@ -2,10 +2,11 @@ package com.real.simhotel.presenter;
 
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
-import com.real.simhotel.view.fragment.GroupListFragment;
-import com.real.simhotel.view.fragment.HotelListFragment;
+import com.real.simhotel.view.fragment.teacher.GroupListFragment;
+import com.real.simhotel.view.fragment.teacher.HotelListFragment;
 
 import rx.Observable;
 import rx.Subscription;

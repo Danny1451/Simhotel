@@ -1,4 +1,4 @@
-package com.real.simhotel.view.fragment;
+package com.real.simhotel.view.fragment.teacher;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,8 +8,7 @@ import android.view.View;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.presenter.GroupListPresenter;
-import com.real.simhotel.view.BaseView;
-import com.real.simhotel.view.GroupListView;
+import com.real.simhotel.view.IGroupListView;
 import com.real.simhotel.view.adapter.GroupListAdapter;
 import com.real.simhotel.view.base.BaseFragment;
 
@@ -23,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/12.
  */
-public class GroupListFragment extends BaseFragment<GroupListPresenter> implements GroupListView {
+public class GroupListFragment extends BaseFragment<GroupListPresenter> implements IGroupListView {
 
 
     @Inject

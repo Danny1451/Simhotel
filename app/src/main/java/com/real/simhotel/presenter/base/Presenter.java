@@ -1,4 +1,4 @@
-package com.real.simhotel.presenter;
+package com.real.simhotel.presenter.base;
 
 /**
  * Created by liudan on 2016/12/7.

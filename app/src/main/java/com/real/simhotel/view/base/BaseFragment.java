@@ -9,9 +9,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.real.simhotel.presenter.Presenter;
-import com.real.simhotel.view.BaseView;
+import com.real.simhotel.presenter.base.Presenter;
+import com.real.simhotel.view.IBaseView;
 import com.real.simhotel.view.loading.VaryViewHelperController;
 
 
@@ -21,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/7.
  */
-public abstract class BaseFragment<T extends Presenter> extends Fragment implements BaseView {
+public abstract class BaseFragment<T extends Presenter> extends Fragment implements IBaseView {
     //与Fragment绑定的activity对象
     protected BaseActivity mActivity;
     //当前View的Presenter
@@ -167,5 +168,9 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment impleme
             throw new IllegalStateException("no ViewHelperController");
         }
         mVaryViewHelperController.showEmpty(msg);
+    }
+
+    public void showToast(String text){
+        Toast.makeText(getHoldingActivity(),text,Toast.LENGTH_SHORT).show();
     }
 }
