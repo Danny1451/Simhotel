@@ -8,8 +8,10 @@ import android.widget.Button;
 
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.CeoInitPresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DyNamicListAdapter;
 import com.real.simhotel.view.adapter.DyNamicListModel;
+import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.base.BaseFragment;
 
 import java.util.List;
@@ -39,8 +41,27 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
 
         ButterKnife.bind(this,view);
         mAdapter = new DyNamicListAdapter(mActivity);
+
+
+        mAdapter.setChooseInterface(new DyNamicListAdapter.NormalChooseInterface() {
+            @Override
+            public void confim(DyNamicListModel model) {
+                //click confim
+
+                KLog.d("model confirm = " + model.title);
+            }
+
+            @Override
+            public void cancel(DyNamicListModel model) {
+
+                KLog.d("model cancel = " + model.title);
+            }
+        });
+
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
+
         mList.setAdapter(mAdapter);
+        mList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
     }
 
     @Override

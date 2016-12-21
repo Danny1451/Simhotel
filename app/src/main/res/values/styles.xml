@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:listDivider">@drawable/divider</item>
     </style>
 
     <style name="ActionBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -15,6 +16,7 @@
 
         <!-- 隐藏标题栏 -->
         <item name="android:windowNoTitle">true</item>
+        <item name="android:listDivider">@drawable/divider</item>
 
     </style>
 
@@ -31,6 +33,7 @@
         <item name="android:windowFullscreen">true</item>
         <!-- 隐藏标题栏 -->
         <item name="android:windowNoTitle">true</item>
+        <item name="android:listDivider">@drawable/divider</item>
     </style>
 </resources>
 

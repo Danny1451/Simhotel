@@ -11,6 +11,8 @@ public class DyNamicListModel {
     public static final int TYPE_CHOOSE = 1;
     public static final int TYPE_PLAINTEXT = 2;
     public static final int TYPE_SEEK = 3;
+    public static final int TYPE_NORMAL_INFO = 4;
+    public static final int TYPE_NORMAL_CHOOSE = 5;
 
     //类型
     public int itemType;
@@ -26,4 +28,8 @@ public class DyNamicListModel {
     public String unit;
 
     public int max;
+
+    public String time;
+
+    public String info;
 }

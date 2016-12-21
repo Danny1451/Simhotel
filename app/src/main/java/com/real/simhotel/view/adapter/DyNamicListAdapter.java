@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -30,6 +31,12 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
     private final LayoutInflater layoutInflater;
     private List<DyNamicListModel> mDataList;
     private Context mContext;
+
+    private NormalChooseInterface mChooseInterface;
+
+    public void setChooseInterface(NormalChooseInterface mChooseInterface) {
+        this.mChooseInterface = mChooseInterface;
+    }
 
     public void setDataList(List<DyNamicListModel> dataList) {
         this.mDataList = dataList;
@@ -64,6 +71,12 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
                 view = this.layoutInflater.inflate(R.layout.row_seekbar,parent,false);
                 return new SeekBarViewHolder(view);
 
+            case DyNamicListModel.TYPE_NORMAL_INFO:
+                view = this.layoutInflater.inflate(R.layout.row_normal_info,parent,false);
+                return new NormalInfoViewHolder(view);
+            case DyNamicListModel.TYPE_NORMAL_CHOOSE:
+                view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
+                return new NormalChooseViewHolder(view,mChooseInterface);
             default:
                 view = this.layoutInflater.inflate(R.layout.row_hotel,parent,false);
 
@@ -203,8 +216,92 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
             });
         }
 
-
-
     }
+
+    //普通只有文字
+    public class NormalInfoViewHolder extends DyNamicBaseViewHolder{
+
+        @Bind(R.id.normal_info_tv)
+
+        TextView info;
+        @Bind(R.id.normal_time_tv)
+
+        TextView time;
+        public NormalInfoViewHolder(View view){
+            super(view);
+        }
+
+        @Override
+        public void bind(DyNamicListModel model) {
+
+            info.setText(model.info);
+
+            time.setText(model.time);
+
+        }
+    }
+
+    public interface NormalChooseInterface{
+        void confim(DyNamicListModel model);
+        void cancel(DyNamicListModel model);
+    }
+
+
+    //普通带选择按钮
+    public class NormalChooseViewHolder extends DyNamicBaseViewHolder{
+
+        @Bind(R.id.normal_info_tv)
+        TextView info;
+
+        @Bind(R.id.normal_time_tv)
+        TextView time;
+
+        @Bind(R.id.normal_cofirm_btn)
+        Button confrim;
+
+        @Bind(R.id.normal_cancel_btn)
+        Button cancel;
+
+        private NormalChooseInterface mInterface;
+
+        private DyNamicListModel mModel;
+
+        private View.OnClickListener listerner = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (view.getId()){
+                    case R.id.normal_cancel_btn:
+                        if (mInterface != null )
+                            mInterface.cancel(mModel);
+                        break;
+                    case R.id.normal_cofirm_btn:
+                        if (mInterface != null )
+                            mInterface.confim(mModel);
+                        break;
+                }
+            }
+        };
+
+        public NormalChooseViewHolder(View view , NormalChooseInterface mInterface){
+            super(view);
+            this.mInterface = mInterface;
+
+            confrim.setOnClickListener(listerner);
+            cancel.setOnClickListener(listerner);
+        }
+
+        @Override
+        public void bind(DyNamicListModel model) {
+            info.setText(model.info);
+
+            time.setText(model.time);
+
+            mModel = model;
+
+
+
+        }
+    }
+
 
 }

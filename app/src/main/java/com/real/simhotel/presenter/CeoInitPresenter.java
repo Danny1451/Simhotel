@@ -53,10 +53,23 @@ public class CeoInitPresenter extends BasePresenter {
 
         modelTest3.title = "酒店位置";
 
+
+        DyNamicListModel modelTest4 = new DyNamicListModel();
+        modelTest4.itemType = DyNamicListModel.TYPE_NORMAL_INFO;
+        modelTest4.info = "上个月的收入 100玩 ,支出 30玩";
+        modelTest4.time = "2016年7月";
+
+        DyNamicListModel modelTest5 = new DyNamicListModel();
+        modelTest5.itemType = DyNamicListModel.TYPE_NORMAL_CHOOSE;
+        modelTest5.info = "本季度招聘会即将开始是否招聘?";
+        modelTest5.time = "2016年8月";
+
+
         list.add(modelTest2);
         list.add(modelTest);
         list.add(modelTest3);
-
+        list.add(modelTest4);
+        list.add(modelTest5);
         //加载列表
         mView.loadList(list);
     }
