@@ -25,11 +25,11 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/19.
  */
-public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.DyNamicBaseViewHolder> {
+public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.DyNamicBaseViewHolder> {
 
 
     private final LayoutInflater layoutInflater;
-    private List<DyNamicListModel> mDataList;
+    private List<DynamicListModel> mDataList;
     private Context mContext;
 
     private NormalChooseInterface mChooseInterface;
@@ -38,13 +38,13 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         this.mChooseInterface = mChooseInterface;
     }
 
-    public void setDataList(List<DyNamicListModel> dataList) {
+    public void setDataList(List<DynamicListModel> dataList) {
         this.mDataList = dataList;
         this.notifyDataSetChanged();
     }
 
     @Inject
-    public DyNamicListAdapter(Context context){
+    public DynamicListAdapter(Context context){
         this.layoutInflater =
                 (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.mDataList = Collections.emptyList();
@@ -56,25 +56,25 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         //view的调整
         View view = null;
         switch (viewType){
-            case DyNamicListModel.TYPE_DEFAULT:
+            case DynamicListModel.TYPE_DEFAULT:
 
                 break;
-            case DyNamicListModel.TYPE_PLAINTEXT:
+            case DynamicListModel.TYPE_PLAINTEXT:
 
                 break;
-            case DyNamicListModel.TYPE_CHOOSE:
+            case DynamicListModel.TYPE_CHOOSE:
                 view = this.layoutInflater.inflate(R.layout.row_radio_group,parent,false);
                 return new RadioGroupViewHolder(view,mContext);
 
-            case DyNamicListModel.TYPE_SEEK:
+            case DynamicListModel.TYPE_SEEK:
 
                 view = this.layoutInflater.inflate(R.layout.row_seekbar,parent,false);
                 return new SeekBarViewHolder(view);
 
-            case DyNamicListModel.TYPE_NORMAL_INFO:
+            case DynamicListModel.TYPE_NORMAL_INFO:
                 view = this.layoutInflater.inflate(R.layout.row_normal_info,parent,false);
                 return new NormalInfoViewHolder(view);
-            case DyNamicListModel.TYPE_NORMAL_CHOOSE:
+            case DynamicListModel.TYPE_NORMAL_CHOOSE:
                 view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
                 return new NormalChooseViewHolder(view,mChooseInterface);
             default:
@@ -113,7 +113,7 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
             ButterKnife.bind(this,itemView);
         }
 
-        public abstract void bind(DyNamicListModel model);
+        public abstract void bind(DynamicListModel model);
     }
 
 
@@ -134,7 +134,7 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         }
 
         @Override
-        public void bind(DyNamicListModel model) {
+        public void bind(DynamicListModel model) {
 
             title.setText(model.title);
 
@@ -182,7 +182,7 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         }
 
         @Override
-        public void bind(DyNamicListModel model) {
+        public void bind(DynamicListModel model) {
 
             title.setText(model.title);
             //移除所有框架
@@ -232,7 +232,7 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         }
 
         @Override
-        public void bind(DyNamicListModel model) {
+        public void bind(DynamicListModel model) {
 
             info.setText(model.info);
 
@@ -242,8 +242,8 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
     }
 
     public interface NormalChooseInterface{
-        void confim(DyNamicListModel model);
-        void cancel(DyNamicListModel model);
+        void confim(DynamicListModel model);
+        void cancel(DynamicListModel model);
     }
 
 
@@ -252,6 +252,9 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
 
         @Bind(R.id.normal_info_tv)
         TextView info;
+
+        @Bind(R.id.normal_choose_info_tv)
+        TextView chooseInfo;
 
         @Bind(R.id.normal_time_tv)
         TextView time;
@@ -264,7 +267,7 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
 
         private NormalChooseInterface mInterface;
 
-        private DyNamicListModel mModel;
+        private DynamicListModel mModel;
 
         private View.OnClickListener listerner = new View.OnClickListener() {
             @Override
@@ -291,12 +294,25 @@ public class DyNamicListAdapter extends RecyclerView.Adapter<DyNamicListAdapter.
         }
 
         @Override
-        public void bind(DyNamicListModel model) {
+        public void bind(DynamicListModel model) {
             info.setText(model.info);
 
             time.setText(model.time);
 
             mModel = model;
+
+            if (model.hasChoose){
+
+                confrim.setVisibility(View.GONE);
+                cancel.setVisibility(View.GONE);
+                chooseInfo.setVisibility(View.VISIBLE);
+                chooseInfo.setText(model.chooseInfo);
+
+            }else {
+                confrim.setVisibility(View.VISIBLE);
+                cancel.setVisibility(View.VISIBLE);
+                chooseInfo.setVisibility(View.GONE);
+            }
 
 
 

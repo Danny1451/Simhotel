@@ -25,13 +25,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="确定"
-            android:id="@+id/normal_cofirm_btn" />
+            android:id="@+id/normal_cofirm_btn"
+            android:visibility="visible" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="取消"
-            android:id="@+id/normal_cancel_btn" />
+            android:id="@+id/normal_cancel_btn"
+            android:visibility="visible" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New Text"
+            android:id="@+id/normal_choose_info_tv"
+            android:visibility="gone" />
     </LinearLayout>
 
     <TextView

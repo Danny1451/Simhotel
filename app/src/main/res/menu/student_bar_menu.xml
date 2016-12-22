@@ -4,11 +4,11 @@
     >
 
     <!-- 搜索, 应该作为动作按钮展示-->
-    <item android:id="@+id/action_search"
-        android:title="搜索"
+    <item android:id="@+id/action_ceo_init"
+        android:title="经理初始化"
         simhotel:showAsAction="ifRoom" />
-    <item android:id="@+id/action_searc"
-        android:title="放弃"
+    <item android:id="@+id/action_ceo_normal"
+        android:title="经理日常"
         simhotel:showAsAction="ifRoom" />
     <!-- 设置, 在溢出菜单中展示 -->
     <item android:id="@+id/action_update"

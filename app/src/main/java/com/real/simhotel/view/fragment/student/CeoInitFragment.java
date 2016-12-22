@@ -9,8 +9,8 @@ import android.widget.Button;
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.CeoInitPresenter;
 import com.real.simhotel.utils.log.KLog;
-import com.real.simhotel.view.adapter.DyNamicListAdapter;
-import com.real.simhotel.view.adapter.DyNamicListModel;
+import com.real.simhotel.view.adapter.DynamicListAdapter;
+import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.base.BaseFragment;
 
@@ -28,7 +28,7 @@ import butterknife.OnClick;
 public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
 
     @Inject
-    DyNamicListAdapter mAdapter;
+    DynamicListAdapter mAdapter;
 
     @Bind(R.id.ceo_init_rv)
     RecyclerView mList;
@@ -40,23 +40,8 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
     protected void initView(View view, Bundle savedInstanceState) {
 
         ButterKnife.bind(this,view);
-        mAdapter = new DyNamicListAdapter(mActivity);
+        mAdapter = new DynamicListAdapter(mActivity);
 
-
-        mAdapter.setChooseInterface(new DyNamicListAdapter.NormalChooseInterface() {
-            @Override
-            public void confim(DyNamicListModel model) {
-                //click confim
-
-                KLog.d("model confirm = " + model.title);
-            }
-
-            @Override
-            public void cancel(DyNamicListModel model) {
-
-                KLog.d("model cancel = " + model.title);
-            }
-        });
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
 
@@ -90,11 +75,10 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
     }
 
 
-    public void loadList(List<DyNamicListModel> list){
+    public void loadList(List<DynamicListModel> list){
 
         if (list != null)
             mAdapter.setDataList(list);
-
 
     }
 

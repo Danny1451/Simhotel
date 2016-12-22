@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Created by liudan on 2016/12/19.
  */
-public class DyNamicListModel {
+public class DynamicListModel {
 
     public static final int TYPE_DEFAULT = 0;
     public static final int TYPE_CHOOSE = 1;
@@ -17,6 +17,8 @@ public class DyNamicListModel {
     //类型
     public int itemType;
 
+    //详细类型
+    public int detailType;
     //最后选择的值
     public int selectedValue;
 
@@ -32,4 +34,10 @@ public class DyNamicListModel {
     public String time;
 
     public String info;
+
+    //是否选择
+    public Boolean hasChoose = false;
+
+    //选择之后的信息
+    public String chooseInfo;
 }

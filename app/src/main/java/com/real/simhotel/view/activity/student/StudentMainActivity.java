@@ -9,6 +9,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
+import com.real.simhotel.view.fragment.student.CeoNormalFragment;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -33,6 +34,7 @@ public class StudentMainActivity extends AppActivity{
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
 
+
     }
 
     @Override
@@ -46,10 +48,26 @@ public class StudentMainActivity extends AppActivity{
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_search:
+            case R.id.action_ceo_init:
+            {
+                BaseFragment fragment = new CeoInitFragment();
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
                 return true;
-            case R.id.action_searc:
+            }
+
+            case R.id.action_ceo_normal:{
+                BaseFragment fragment = new CeoNormalFragment();
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
                 return true;
+            }
+
+            case R.id.action_update:{
+
+                navigator.toTeacherMainActivity(this);
+                return true;
+            }
             case R.id.action_exit:
 
                 android.os.Process.killProcess(android.os.Process.myPid());  //获取PID
