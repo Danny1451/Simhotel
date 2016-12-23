@@ -14,6 +14,8 @@ public class DynamicListModel {
     public static final int TYPE_NORMAL_INFO = 4;
     public static final int TYPE_NORMAL_CHOOSE = 5;
 
+    public static final int TYPE_TITLE_INFO = 6;
+
     //类型
     public int itemType;
 
@@ -40,4 +42,12 @@ public class DynamicListModel {
 
     //选择之后的信息
     public String chooseInfo;
+
+    public DynamicListModel(){
+        super();
+    }
+    public DynamicListModel(int type){
+        super();
+        this.itemType = type;
+    }
 }

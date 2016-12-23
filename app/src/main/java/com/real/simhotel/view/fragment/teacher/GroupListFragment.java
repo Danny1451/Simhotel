@@ -8,7 +8,7 @@ import android.view.View;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.presenter.GroupListPresenter;
-import com.real.simhotel.view.IGroupListView;
+import com.real.simhotel.view.iview.IGroupListView;
 import com.real.simhotel.view.adapter.GroupListAdapter;
 import com.real.simhotel.view.base.BaseFragment;
 

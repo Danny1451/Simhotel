@@ -2,6 +2,7 @@ package com.real.simhotel.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,9 +34,14 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     private Context mContext;
 
     private NormalChooseInterface mChooseInterface;
+    private DynamicListRowInterface mRowInterface;
 
     public void setChooseInterface(NormalChooseInterface mChooseInterface) {
         this.mChooseInterface = mChooseInterface;
+    }
+
+    public void setRowInterface(DynamicListRowInterface mRowInterface) {
+        this.mRowInterface = mRowInterface;
     }
 
     public void setDataList(List<DynamicListModel> dataList) {
@@ -72,11 +78,21 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 return new SeekBarViewHolder(view);
 
             case DynamicListModel.TYPE_NORMAL_INFO:
+
                 view = this.layoutInflater.inflate(R.layout.row_normal_info,parent,false);
                 return new NormalInfoViewHolder(view);
             case DynamicListModel.TYPE_NORMAL_CHOOSE:
                 view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
                 return new NormalChooseViewHolder(view,mChooseInterface);
+
+            case DynamicListModel.TYPE_TITLE_INFO:
+                view = this.layoutInflater.inflate(R.layout.row_title_info,parent,false);
+
+                //增加点击效果
+                TypedValue typedValue = new TypedValue();
+                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+                view.setBackgroundResource(typedValue.resourceId);
+                return new TitlleInfoViewHolder(view);
             default:
                 view = this.layoutInflater.inflate(R.layout.row_hotel,parent,false);
 
@@ -97,6 +113,16 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     public void onBindViewHolder(DyNamicBaseViewHolder holder, int position) {
         //绑定数据
         holder.bind(mDataList.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mRowInterface != null){
+                    //设置了点击相应的话 回调
+                    mRowInterface.onSelected(position,mDataList.get(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -112,6 +138,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+
 
         public abstract void bind(DynamicListModel model);
     }
@@ -130,6 +157,9 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         TextView info;
         public SeekBarViewHolder(View itemView){
             super((itemView));
+
+
+
 
         }
 
@@ -247,6 +277,10 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     }
 
 
+    public interface DynamicListRowInterface{
+        void onSelected(int pos, DynamicListModel model);
+    }
+
     //普通带选择按钮
     public class NormalChooseViewHolder extends DyNamicBaseViewHolder{
 
@@ -314,6 +348,38 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 chooseInfo.setVisibility(View.GONE);
             }
 
+
+
+        }
+    }
+
+    public class TitlleInfoViewHolder extends DyNamicBaseViewHolder{
+
+        @Bind(R.id.row_title_tv)
+        TextView name;
+
+        @Bind(R.id.row_info_tv)
+        TextView detail;
+
+        public TitlleInfoViewHolder(View view){
+            super(view);
+
+        }
+
+        @Override
+        public void bind(DynamicListModel model) {
+            name.setText(model.title);
+
+            if (model.selectedValue != 0){
+
+                detail.setText(model.selectedValue + "万");
+
+
+            }else{
+
+                detail.setText("未报价");
+
+            }
 
 
         }

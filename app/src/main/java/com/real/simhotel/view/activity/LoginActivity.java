@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.LoginPresenter;
-import com.real.simhotel.view.ILoginView;
+import com.real.simhotel.view.iview.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
 
 import butterknife.Bind;

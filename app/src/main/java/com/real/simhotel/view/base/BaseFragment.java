@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.real.simhotel.presenter.base.Presenter;
-import com.real.simhotel.view.IBaseView;
+import com.real.simhotel.view.iview.IBaseView;
 import com.real.simhotel.view.loading.VaryViewHelperController;
 
 

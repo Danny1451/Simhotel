@@ -5,7 +5,7 @@ import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
-import com.real.simhotel.view.IHotelListView;
+import com.real.simhotel.view.iview.IHotelListView;
 
 import java.util.List;
 

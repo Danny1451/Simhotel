@@ -1,4 +1,4 @@
-package com.real.simhotel.view;
+package com.real.simhotel.view.iview;
 
 import java.util.List;
 

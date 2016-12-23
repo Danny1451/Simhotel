@@ -1,6 +1,4 @@
-package com.real.simhotel.view;
-
-import com.real.simhotel.view.IBaseView;
+package com.real.simhotel.view.iview;
 
 /**
  * Created by liudan on 2016/12/8.

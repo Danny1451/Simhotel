@@ -6,7 +6,7 @@ import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
-import com.real.simhotel.view.IGroupListView;
+import com.real.simhotel.view.iview.IGroupListView;
 
 
 import java.util.List;

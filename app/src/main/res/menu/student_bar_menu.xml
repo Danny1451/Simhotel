@@ -10,6 +10,12 @@
     <item android:id="@+id/action_ceo_normal"
         android:title="经理日常"
         simhotel:showAsAction="ifRoom" />
+    <item android:id="@+id/action_hr_bit"
+        android:title="人力竞价"
+        simhotel:showAsAction="ifRoom" />
+    <item android:id="@+id/action_hr_normal"
+        android:title="人力日常"
+        simhotel:showAsAction="ifRoom" />
     <!-- 设置, 在溢出菜单中展示 -->
     <item android:id="@+id/action_update"
         android:title="刷新数据"

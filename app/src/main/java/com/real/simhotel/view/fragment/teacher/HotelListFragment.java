@@ -8,7 +8,7 @@ import android.view.View;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.presenter.HotelListPresenter;
-import com.real.simhotel.view.IHotelListView;
+import com.real.simhotel.view.iview.IHotelListView;
 import com.real.simhotel.view.adapter.HotelListAdapter;
 import com.real.simhotel.view.base.BaseFragment;
 

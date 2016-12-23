@@ -1,4 +1,4 @@
-package com.real.simhotel.view;
+package com.real.simhotel.view.iview;
 
 import com.real.simhotel.model.Group;
 
