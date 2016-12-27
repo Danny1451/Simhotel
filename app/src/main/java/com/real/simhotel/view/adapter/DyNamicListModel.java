@@ -43,6 +43,10 @@ public class DynamicListModel {
     //选择之后的信息
     public String chooseInfo;
 
+
+    //额外信息
+    public Object ext;
+
     public DynamicListModel(){
         super();
     }

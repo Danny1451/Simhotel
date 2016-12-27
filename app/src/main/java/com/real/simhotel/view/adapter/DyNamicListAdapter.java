@@ -89,9 +89,21 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 view = this.layoutInflater.inflate(R.layout.row_title_info,parent,false);
 
                 //增加点击效果
-                TypedValue typedValue = new TypedValue();
-                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
-                view.setBackgroundResource(typedValue.resourceId);
+
+                view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (mRowInterface != null){
+                            //设置了点击相应的话 回调
+                            int pos = (int)view.getTag();
+                            view.setFocusable(true);
+                            mRowInterface.onSelected(pos,mDataList.get(pos));
+                        }
+                    }
+                });
+//                TypedValue typedValue = new TypedValue();
+//                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
+//                view.setBackgroundResource(typedValue.resourceId);
                 return new TitlleInfoViewHolder(view);
             default:
                 view = this.layoutInflater.inflate(R.layout.row_hotel,parent,false);
@@ -114,15 +126,8 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         //绑定数据
         holder.bind(mDataList.get(position));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mRowInterface != null){
-                    //设置了点击相应的话 回调
-                    mRowInterface.onSelected(position,mDataList.get(position));
-                }
-            }
-        });
+        holder.itemView.setTag(position);
+
     }
 
     @Override

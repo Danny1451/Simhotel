@@ -4,11 +4,10 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.Button;
 
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.BitInitPresenter;
-import com.real.simhotel.presenter.base.Presenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
@@ -20,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by liudan on 2016/12/21.
@@ -33,7 +33,20 @@ public class BidInitFragment extends BaseFragment<BitInitPresenter> {
     @Bind(R.id.bid_applicants_rv)
     RecyclerView mList;
 
+    @Bind(R.id.bid_confirm_btn)
+    Button mConfirm;
 
+    //详情页面
+    ApplicantInfoFragment mDetailFragment;
+
+
+    public ApplicantInfoFragment getDetailFragment(){
+        if (mDetailFragment == null){
+            mDetailFragment = new ApplicantInfoFragment();
+        }
+
+        return mDetailFragment;
+    }
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
@@ -46,7 +59,7 @@ public class BidInitFragment extends BaseFragment<BitInitPresenter> {
             @Override
             public void onSelected(int pos, DynamicListModel model) {
 
-                mPresenter.clickApplicantsList(pos,model);
+                mPresenter.onClickApplicantsRow(pos,model);
             }
         });
 
@@ -56,6 +69,29 @@ public class BidInitFragment extends BaseFragment<BitInitPresenter> {
         mList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
 
 
+        mDetailFragment = new ApplicantInfoFragment();
+        //绑定按钮事件
+
+
+
+        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
+
+        mDetailFragment.setConfirmListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //点击了确定 通知presenter 刷新list
+
+                mPresenter.updateApplicantsRow((DynamicListModel)view.getTag());
+
+            }
+        });
+    }
+
+    @OnClick({R.id.bid_confirm_btn})
+    public void onClick(View view) {
+
+        mPresenter.requestForBid();
     }
 
     @Override

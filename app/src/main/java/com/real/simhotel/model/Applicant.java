@@ -9,13 +9,28 @@ public class Applicant {
 
     public String name;
 
-    public String level;
+    public int level;
 
     public int expectValues;
 
     public int year;
 
-    public int headUrl;
+    public int headRes;
 
+    public int quotePrice;
 
+    public String getLevelStr(){
+        switch (level){
+            case 0:
+                return "初级工人";
+            case 1:
+                return "中级工人";
+            case 2:
+                return "高级工人";
+            case 3:
+                return "特级工人";
+            default:
+                return "屌丝工人";
+        }
+    }
 }
