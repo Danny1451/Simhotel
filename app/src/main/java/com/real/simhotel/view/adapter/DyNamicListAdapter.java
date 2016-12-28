@@ -32,7 +32,11 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     private List<DynamicListModel> mDataList;
     private Context mContext;
 
+    //多项选择
+    private ItemsChooseInterface mItemChooseInterce;
+    //两个选择
     private NormalChooseInterface mChooseInterface;
+    //行点击接口
     private DynamicListRowInterface mRowInterface;
 
     public void setChooseInterface(NormalChooseInterface mChooseInterface) {
@@ -41,6 +45,10 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 
     public void setRowInterface(DynamicListRowInterface mRowInterface) {
         this.mRowInterface = mRowInterface;
+    }
+
+    public void setItemChooseInterce(ItemsChooseInterface mItemChooseInterce) {
+        this.mItemChooseInterce = mItemChooseInterce;
     }
 
     public void setDataList(List<DynamicListModel> dataList) {
@@ -176,19 +184,26 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         @Override
         public void bind(DynamicListModel model) {
 
+
+
             title.setText(model.title);
 
-            info.setText(0 + model.unit);
+
 
             seekBar.setMax(model.max);
+            seekBar.setProgress(0);
+            info.setText(model.minus + model.unit);
+
+
 
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
-                    info.setText(i + model.unit);
 
-                    model.selectedValue = i;
+
+                    model.selectedValue = model.minus + i;
+                    info.setText( model.selectedValue + model.unit);
                 }
 
                 @Override
@@ -225,35 +240,54 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         public void bind(DynamicListModel model) {
 
             title.setText(model.title);
-            //移除所有框架
-            group.removeAllViews();
-            RadioGroup.LayoutParams radioParams = new RadioGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT, 1);
-            for (int i = 0 ; i < model.mChooseItems.size() ; i++){
 
-                String  temp = model.mChooseItems.get(i);
 
-                RadioButton radio = new RadioButton(mContext);
+            if (model.selectedValue != -1){
+                //已经选中了 之前已经初始化了
 
-                radio.setLayoutParams(radioParams);
-                radio.setText(temp);
-                radio.setTag(i);
 
-                group.addView(radio);
+
+            }else {
+
+                //移除所有框架
+                group.removeAllViews();
+                RadioGroup.LayoutParams radioParams = new RadioGroup.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 1);
+                for (int i = 0; i < model.mChooseItems.size(); i++) {
+
+                    String temp = model.mChooseItems.get(i);
+
+                    RadioButton radio = new RadioButton(mContext);
+
+                    radio.setLayoutParams(radioParams);
+                    radio.setText(temp);
+                    radio.setTag(i);
+
+                    group.addView(radio);
+                }
+
+
+                //改变状态
+                group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                        RadioButton radioButton = (RadioButton) group.findViewById(i);
+                        if (null != radioButton && radioButton.isChecked()) {// 选中的item才会执行这个
+
+
+                            if (mItemChooseInterce != null) {
+
+                                int pos = (int) radioButton.getTag();
+                                mItemChooseInterce.onItemsSelected(pos, model);
+                            }
+
+
+                        }
+                    }
+                });
+
             }
 
-            //改变状态
-            group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                    RadioButton radioButton = (RadioButton) group.findViewById(i);
-                    if (null != radioButton && radioButton.isChecked()) {// 选中的item才会执行这个
-
-                        model.selectedValue = (int) radioButton.getTag();
-
-                    }
-                }
-            });
         }
 
     }
@@ -286,6 +320,9 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         void cancel(DynamicListModel model);
     }
 
+    public interface ItemsChooseInterface{
+        void onItemsSelected(int pos ,DynamicListModel model);
+    }
 
     public interface DynamicListRowInterface{
         void onSelected(int pos, DynamicListModel model);

@@ -170,6 +170,7 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment impleme
         mVaryViewHelperController.showEmpty(msg);
     }
 
+    @Override
     public void showToast(String text){
         Toast.makeText(getHoldingActivity(),text,Toast.LENGTH_SHORT).show();
     }

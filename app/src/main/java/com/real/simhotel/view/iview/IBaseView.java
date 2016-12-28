@@ -13,6 +13,8 @@ public interface IBaseView {
     void refreshView();
 //
     void showError(String msg);
+
+    void showToast(String msg);
 //
 //
 //    void hasNoMoreData();

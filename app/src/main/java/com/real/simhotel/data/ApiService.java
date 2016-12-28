@@ -3,6 +3,7 @@ package com.real.simhotel.data;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
+import com.real.simhotel.model.HotelTemplate;
 
 
 import java.util.List;
@@ -38,5 +39,8 @@ public interface ApiService {
                                              @Query("room_least_num") int roomMinNum,
                                              @Query("room_cost") int roomcoast,
                                              @Query("room_income")int income );
+
+    @GET(Constants.API_URL_HOTEL_TEMPLATE_LIST)
+    Observable<Response<List<HotelTemplate>>> getHotelTemplateList(@Query("training_id") int trainId);
 
 }

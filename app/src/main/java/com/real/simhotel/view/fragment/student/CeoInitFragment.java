@@ -13,6 +13,7 @@ import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.base.BaseFragment;
+import com.real.simhotel.view.iview.ICeoInitView;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import butterknife.OnClick;
 /**
  * Created by liudan on 2016/12/14.
  */
-public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
+public class CeoInitFragment extends BaseFragment<CeoInitPresenter> implements ICeoInitView{
 
     @Inject
     DynamicListAdapter mAdapter;
@@ -42,6 +43,13 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
         ButterKnife.bind(this,view);
         mAdapter = new DynamicListAdapter(mActivity);
 
+        mAdapter.setItemChooseInterce((int pos, DynamicListModel model)-> {
+
+            //选中的话
+            mPresenter.updateMinusRoomNum(pos);
+
+
+        });
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
 
@@ -75,13 +83,6 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
     }
 
 
-    public void loadList(List<DynamicListModel> list){
-
-        if (list != null)
-            mAdapter.setDataList(list);
-
-    }
-
     @OnClick({R.id.ceo_init_confirm})
     public void onClick(View view){
         switch (view.getId()){
@@ -93,5 +94,11 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> {
             }
             default:
         }
+    }
+
+    @Override
+    public void renderHotelInitItems(List<DynamicListModel> list) {
+        if (list != null)
+            mAdapter.setDataList(list);
     }
 }

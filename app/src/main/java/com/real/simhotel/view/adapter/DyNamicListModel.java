@@ -41,6 +41,8 @@ public class DynamicListModel {
 
     public int max;
 
+    public int minus;
+
     public String time;
 
     public String info;
@@ -63,6 +65,7 @@ public class DynamicListModel {
     public DynamicListModel(int type){
         super();
         this.itemType = type;
+        this.selectedValue = -1;
     }
 
 
