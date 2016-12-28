@@ -15,14 +15,14 @@ import java.util.List;
 /**
  * Created by liudan on 2016/12/23.
  */
-public class BitInitPresenter extends BasePresenter {
+public class BidInitPresenter extends BasePresenter {
 
     private BidInitFragment mView;
 
     private List<DynamicListModel> data;
 
 
-    public BitInitPresenter(BidInitFragment view){
+    public BidInitPresenter(BidInitFragment view){
 
         mView = view;
     }
@@ -88,6 +88,7 @@ public class BitInitPresenter extends BasePresenter {
         mView.loadList(data);
 
 
+//        onClickApplicantsRow(0,model1);
     }
 
     //开始最终的竞价

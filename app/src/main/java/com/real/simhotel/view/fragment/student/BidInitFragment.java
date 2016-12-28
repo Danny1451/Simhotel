@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.real.simhotel.R;
-import com.real.simhotel.presenter.BitInitPresenter;
+import com.real.simhotel.presenter.BidInitPresenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
 /**
  * Created by liudan on 2016/12/21.
  */
-public class BidInitFragment extends BaseFragment<BitInitPresenter> {
+public class BidInitFragment extends BaseFragment<BidInitPresenter> {
 
 
     @Inject
@@ -118,8 +118,8 @@ public class BidInitFragment extends BaseFragment<BitInitPresenter> {
     }
 
     @Override
-    protected BitInitPresenter getChildPresenter() {
-        return new BitInitPresenter(this);
+    protected BidInitPresenter getChildPresenter() {
+        return new BidInitPresenter(this);
     }
 
     @Override

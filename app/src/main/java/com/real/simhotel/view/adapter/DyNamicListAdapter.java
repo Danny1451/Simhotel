@@ -2,7 +2,6 @@ package com.real.simhotel.view.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +78,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 
             case DynamicListModel.TYPE_NORMAL_INFO:
 
-                view = this.layoutInflater.inflate(R.layout.row_normal_info,parent,false);
+                view = this.layoutInflater.inflate(R.layout.row_info_time,parent,false);
                 return new NormalInfoViewHolder(view);
             case DynamicListModel.TYPE_NORMAL_CHOOSE:
                 view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
@@ -105,8 +104,14 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 //                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
 //                view.setBackgroundResource(typedValue.resourceId);
                 return new TitlleInfoViewHolder(view);
+            case DynamicListModel.TYPE_NUMBER_INFO:
+
+                view = this.layoutInflater.inflate(R.layout.row_number_title_info,parent,false);
+
+                return new NumberTitleInfoViewHolder(view);
+
             default:
-                view = this.layoutInflater.inflate(R.layout.row_hotel,parent,false);
+
 
         }
 
@@ -386,6 +391,33 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 
             }
 
+
+        }
+    }
+
+    public class NumberTitleInfoViewHolder extends DyNamicBaseViewHolder{
+
+        @Bind(R.id.row_number_tv)
+        TextView number;
+
+        @Bind(R.id.row_number_title_tv)
+        TextView title;
+
+        @Bind(R.id.row_number_info_tv)
+        TextView info;
+
+        public NumberTitleInfoViewHolder(View view){
+            super(view);
+        }
+
+        @Override
+        public void bind(DynamicListModel model) {
+
+            number.setText(model.number + "");
+
+            title.setText(model.title + "");
+
+            info.setText(model.info + "");
 
         }
     }

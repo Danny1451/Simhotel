@@ -9,6 +9,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
+import com.real.simhotel.view.fragment.student.BidResultFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
 
@@ -74,6 +75,9 @@ public class StudentMainActivity extends AppActivity{
 
             case R.id.action_hr_normal:{
 
+                BaseFragment fragment = new BidResultFragment();
+
+                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
 
                 return true;
             }
