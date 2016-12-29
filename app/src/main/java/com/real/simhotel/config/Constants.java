@@ -13,6 +13,9 @@ public class Constants {
     public static final String API_URL_CREATE_GROUP = "/api/erp/edu/hotel/create_group.json";
     public static final String API_URL_CREATE_HOTEL = "/api/erp/edu/hotel/create_group.json";
 
+
+    public static final String API_URL_HOTEL_TEMPLATE_CHOOSE = "/api/erp/edu/hotel/choose_hotel.json";
+
     public static final String API_URL_GET_USER_DETAILS = "user_";
     public static final String USER_ID = "USER_ID";
 

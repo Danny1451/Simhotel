@@ -10,6 +10,12 @@ import java.util.List;
  */
 public class DynamicListModelFactory {
 
+    /**
+     * 把酒店列表数据转换成显示列表
+     *
+     * @param hotelTemplateList
+     * @return
+     */
     public static List<DynamicListModel> parseFromHotelTemplate(List<HotelTemplate> hotelTemplateList){
 
         List<DynamicListModel> result = new ArrayList<>();
@@ -20,7 +26,7 @@ public class DynamicListModelFactory {
             items.add(template.getLocationName());
         }
 
-        DynamicListModel modelHotelType = new DynamicListModel(DynamicListModel.TYPE_CHOOSE);
+        DynamicListModel modelHotelType = new DynamicListModel(DynamicListModel.TYPE_RADIO_BUTTONS);
         modelHotelType.title = "酒店位置";
         modelHotelType.mChooseItems = items;
 
@@ -39,5 +45,30 @@ public class DynamicListModelFactory {
 
         return result;
 
+    }
+
+
+    public static DynamicListModel modelForCeoNormalMessage(String info, String time){
+        DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_INFO_TIME);
+        model.info = info;
+        model.time = time;
+        return model;
+    }
+
+
+    public static DynamicListModel modelForCeoDecisionMessage(String info, String time, Object ext){
+        DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_TWO_BUTTONS_CHOOSE);
+        model.info = info;
+        model.time = time;
+        model.ext = ext;
+        return model;
+    }
+
+    public static DynamicListModel modelForApplicantsBidResult(int number,String title, String info){
+        DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_NUMBER_INFO);
+        model.number = number;
+        model.title = title;
+        model.info = info;
+        return model;
     }
 }

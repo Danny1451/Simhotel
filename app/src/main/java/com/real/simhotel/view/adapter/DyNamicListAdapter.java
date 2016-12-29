@@ -75,7 +75,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             case DynamicListModel.TYPE_PLAINTEXT:
 
                 break;
-            case DynamicListModel.TYPE_CHOOSE:
+            case DynamicListModel.TYPE_RADIO_BUTTONS:
                 view = this.layoutInflater.inflate(R.layout.row_radio_group,parent,false);
                 return new RadioGroupViewHolder(view,mContext);
 
@@ -84,11 +84,11 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 view = this.layoutInflater.inflate(R.layout.row_seekbar,parent,false);
                 return new SeekBarViewHolder(view);
 
-            case DynamicListModel.TYPE_NORMAL_INFO:
+            case DynamicListModel.TYPE_INFO_TIME:
 
                 view = this.layoutInflater.inflate(R.layout.row_info_time,parent,false);
                 return new NormalInfoViewHolder(view);
-            case DynamicListModel.TYPE_NORMAL_CHOOSE:
+            case DynamicListModel.TYPE_TWO_BUTTONS_CHOOSE:
                 view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
                 return new NormalChooseViewHolder(view,mChooseInterface);
 
@@ -387,7 +387,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 confrim.setVisibility(View.GONE);
                 cancel.setVisibility(View.GONE);
                 chooseInfo.setVisibility(View.VISIBLE);
-                chooseInfo.setText(model.chooseInfo);
+                chooseInfo.setText(model.butonChooseInfo);
 
             }else {
                 confrim.setVisibility(View.VISIBLE);

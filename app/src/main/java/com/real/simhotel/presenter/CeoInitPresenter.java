@@ -28,8 +28,10 @@ public class CeoInitPresenter extends BasePresenter {
 
     private ICeoInitView mView;
 
+    //展示的Recycleview的 Model
     private List<DynamicListModel> viewModellist;
 
+    //获取的酒店列表模板
     private List<HotelTemplate> dataModellist;
 
     private Subscription subscription;
@@ -48,6 +50,7 @@ public class CeoInitPresenter extends BasePresenter {
         //这边请求初始化的 可配置参数
 
 
+        //请求参数
         subscription =apiService.getHotelTemplateList(1).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribeOn(Schedulers.io()).
@@ -82,7 +85,7 @@ public class CeoInitPresenter extends BasePresenter {
 //        modelTest.selectedValue = - 1;
 //
 //        DynamicListModel modelTest3 = new DynamicListModel();
-//        modelTest3.itemType = DynamicListModel.TYPE_CHOOSE;
+//        modelTest3.itemType = DynamicListModel.TYPE_RADIO_BUTTONS;
 //        modelTest3.mChooseItems = new ArrayList<>();
 //        modelTest3.mChooseItems.add("选项1");
 //        modelTest3.mChooseItems.add("选项2");
@@ -130,16 +133,22 @@ public class CeoInitPresenter extends BasePresenter {
     }
 
 
+    //更新最小显示的 房间数
     public void updateMinusRoomNum(int locationId){
 
+
+        DynamicListModel mLocationViewModel = viewModellist.get(0);
+        DynamicListModel mNumsViewModel = viewModellist.get(1);
+
+
         //将第二栏的 最小值 设置为数据源的 最小值
-        viewModellist.get(1).minus = dataModellist.get(locationId).getRoomLeastNum();
+        mNumsViewModel.minus = dataModellist.get(locationId).getRoomLeastNum();
         //重置
-        viewModellist.get(1).selectedValue = -1;
+        mNumsViewModel.selectedValue = -1;
 
 
         //选中了 标签
-        viewModellist.get(0).selectedValue = locationId;
+        mLocationViewModel.selectedValue = locationId;
 
 
         //重新渲染 标签
@@ -150,6 +159,17 @@ public class CeoInitPresenter extends BasePresenter {
 
     //请求参数
     public void requestParams(){
+
+
+        //获取选择的 hotel_id 和 hotel num
+        DynamicListModel mLocationViewModel = viewModellist.get(0);
+        DynamicListModel mNumsViewModel = viewModellist.get(1);
+
+
+        int hotelId = mLocationViewModel.selectedValue;
+        int roomNums = mNumsViewModel.selectedValue;
+
+        KLog.d("dad","hotelID = " + hotelId + " roomNums = " + roomNums);
 
         String res = "res";
 

@@ -8,20 +8,32 @@ import java.util.List;
 public class DynamicListModel {
 
     public static final int TYPE_DEFAULT = 0;
-    //带选项的
-    public static final int TYPE_CHOOSE = 1;
+    //
+    /**
+     * 多个RadioButton选项的 配合mChooseItems [酒店初始化-位置选择]
+     */
+    public static final int TYPE_RADIO_BUTTONS = 1;
     //纯文本
     public static final int TYPE_PLAINTEXT = 2;
-    //滑动的Seek
+    /**
+     * 滑动的Seek [酒店初始化-数量选择]
+     */
     public static final int TYPE_SEEK = 3;
-    //普通带信息的
-    public static final int TYPE_NORMAL_INFO = 4;
-    //普通带选择的
-    public static final int TYPE_NORMAL_CHOOSE = 5;
-    //左右标题 和 信息 选择列表
+    /**
+     * 信息 时间 [酒店日常-普通消息推送]
+     */
+    public static final int TYPE_INFO_TIME = 4;
+    /**
+     * 普通带两个按钮选择 [酒店日常-决策消息]
+     */
+    public static final int TYPE_TWO_BUTTONS_CHOOSE = 5;
+    /**
+     * 标题 和 信息 [竞价模块-候选人列表]
+     */
     public static final int TYPE_TITLE_INFO = 6;
-
-    //带序号的 标题 和 信息
+    /**
+     * 序号 标题 信息 [竞价结果-酒店列表]
+     */
     public static final int TYPE_NUMBER_INFO = 7;
 
     //类型
@@ -52,9 +64,8 @@ public class DynamicListModel {
     //是否选择
     public Boolean hasChoose = false;
 
-    //选择之后的信息
-    public String chooseInfo;
-
+    //按钮选择之后的信息
+    public String butonChooseInfo;
 
     //额外信息
     public Object ext;
@@ -69,11 +80,5 @@ public class DynamicListModel {
     }
 
 
-    public static DynamicListModel modelWithNumberTitleInfo(int number,String title, String info){
-        DynamicListModel model = new DynamicListModel(TYPE_NUMBER_INFO);
-        model.number = number;
-        model.title = title;
-        model.info = info;
-        return model;
-    }
+
 }

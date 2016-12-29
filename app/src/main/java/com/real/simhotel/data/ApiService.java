@@ -19,8 +19,15 @@ import rx.Observable;
  */
 public interface ApiService {
 
+    /**
+     * 登录接口
+     * @param name
+     * @param pwd
+     * @return
+     */
     @GET(Constants.API_URL_Login)
     Observable<Response<String>> login(@Query("name") String name, @Query("pwd") String pwd);
+
 
     @GET(Constants.API_URL_HOTEL_LIST)
     Observable<Response<List<Hotel>>> getHotelList(@Query("training_id") int trainId);
@@ -40,7 +47,27 @@ public interface ApiService {
                                              @Query("room_cost") int roomcoast,
                                              @Query("room_income")int income );
 
+    /**
+     * 获取酒店模板的接口
+     * @param trainId
+     * @return
+     */
     @GET(Constants.API_URL_HOTEL_TEMPLATE_LIST)
     Observable<Response<List<HotelTemplate>>> getHotelTemplateList(@Query("training_id") int trainId);
+
+
+    /**
+     * 创建酒店的接口
+     * @param groupId
+     * @param hotelId
+     * @param roomNum
+     * @return
+     */
+    @GET(Constants.API_URL_CREATE_HOTEL)
+    Observable<Response<String>> createHotel(@Query("group_id") int groupId,
+                                             @Query("hotel_id") int hotelId,
+                                             @Query("room_num") int roomNum);
+
+
 
 }

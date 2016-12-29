@@ -4,6 +4,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.view.adapter.DynamicListModel;
+import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.fragment.student.BidResultFragment;
 
 import java.util.ArrayList;
@@ -100,14 +101,14 @@ public class BidResultPresenter extends BasePresenter {
 
         List<DynamicListModel> res = new ArrayList<>();
 
-        res.add(DynamicListModel.modelWithNumberTitleInfo(1,"万达喜来登酒店",quoteprice + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(2,"希尔顿酒店",quoteprice - 100 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(3,"如家酒店",quoteprice - 200 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(4,"怡莱酒店",quoteprice - 300 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(5,"汉庭酒店",quoteprice - 400 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(6,"好的酒店",quoteprice - 500 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(7,"苏果酒店",quoteprice - 600 + ""));
-        res.add(DynamicListModel.modelWithNumberTitleInfo(8,"大润发酒店",quoteprice - 700 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(1,"万达喜来登酒店",quoteprice + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(2,"希尔顿酒店",quoteprice - 100 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(3,"如家酒店",quoteprice - 200 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(4,"怡莱酒店",quoteprice - 300 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(5,"汉庭酒店",quoteprice - 400 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(6,"好的酒店",quoteprice - 500 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(7,"苏果酒店",quoteprice - 600 + ""));
+        res.add(DynamicListModelFactory.modelForApplicantsBidResult(8,"大润发酒店",quoteprice - 700 + ""));
 
         mView.loadBidResultList(pos,res);
 

@@ -3,6 +3,7 @@ package com.real.simhotel.presenter;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListModel;
+import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
 
 import java.util.ArrayList;
@@ -34,28 +35,11 @@ public class CeoNormalPresenter extends BasePresenter{
 
         list = new ArrayList();
 
-
-        DynamicListModel modelTest4 = new DynamicListModel();
-        modelTest4.itemType = DynamicListModel.TYPE_NORMAL_INFO;
-        modelTest4.info = "上个月的收入 100玩 ,支出 30玩";
-        modelTest4.time = "2016年7月";
-
-        DynamicListModel modelTest5 = new DynamicListModel();
-        modelTest5.itemType = DynamicListModel.TYPE_NORMAL_CHOOSE;
-        modelTest5.detailType = 1;
-        modelTest5.info = "本季度招聘会即将开始是否招聘?";
-        modelTest5.time = "2016年8月";
-
-
-        DynamicListModel modelTest1 = new DynamicListModel();
-        modelTest1.itemType = DynamicListModel.TYPE_NORMAL_CHOOSE;
-        modelTest1.detailType = 2;
-        modelTest1.info = "大哥你要破产了,贷款不?";
-        modelTest1.time = "2016年9月";
-
-        list.add(modelTest4);
-        list.add(modelTest5);
-        list.add(modelTest1);
+        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 80 玩 ,支出 10 玩","2016年6月"));
+        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 90 玩 ,支出 30 玩","2016年6月"));
+        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 100 玩 ,支出 30 玩","2016年7月"));
+        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",1));
+        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("大哥你要破产了,贷款不?","2016年9月",2));
 
         //加载列表
         mView.loadList(list);
@@ -70,15 +54,15 @@ public class CeoNormalPresenter extends BasePresenter{
         public void confim(DynamicListModel model) {
 
             model.hasChoose = true;
-            if (model.detailType == 1) {
+            if ( (int)model.ext == 1) {
 
-                model.chooseInfo = "已开始招聘";
+                model.butonChooseInfo = "已开始招聘";
 
                 mView.showToast("选择招聘");
 
-            }else if (model.detailType == 2){
+            }else if ((int)model.ext == 2){
 
-                model.chooseInfo = "已经选择贷款";
+                model.butonChooseInfo = "已经选择贷款";
                 mView.showToast("选择贷款");
 
             }
@@ -90,7 +74,7 @@ public class CeoNormalPresenter extends BasePresenter{
         public void cancel(DynamicListModel model) {
 
             model.hasChoose = true;
-            model.chooseInfo = "已放弃";
+            model.butonChooseInfo = "已放弃";
             mView.showToast("选择放弃");
             mView.reload();
 
