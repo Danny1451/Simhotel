@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.real.simhotel.view.activity.LoginActivity;
+import com.real.simhotel.view.activity.TrainingChooseActivity;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 
 import javax.inject.Inject;
@@ -25,6 +26,14 @@ public class Navigator {
         context.startActivity(intent);
     }
 
+
+    public void toTrainingDetailActivity(Context context, int userType){
+
+        Intent intent = new Intent(context, TrainingChooseActivity.class);
+
+        intent.putExtra("user_type",userType);
+        context.startActivity(intent);
+    }
     /**
      * 调整登录
      * @param context

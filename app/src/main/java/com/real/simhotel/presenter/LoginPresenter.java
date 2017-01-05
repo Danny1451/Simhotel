@@ -5,6 +5,7 @@ import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.activity.LoginActivity;
 
 import rx.Observable;
@@ -63,6 +64,10 @@ public class LoginPresenter extends BasePresenter {
         @Override
         public void onNext(Integer s) {
             super.onNext(s);
+
+            //保存uid
+            application.uid = s + "";
+            KLog.d("uid = " + s);
 
             //根据登录结果 回调 view
             if (mUserType == Constants.USER_TYPE_STUDENT) {

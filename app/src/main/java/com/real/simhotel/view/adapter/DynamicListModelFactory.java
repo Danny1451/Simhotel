@@ -1,6 +1,7 @@
 package com.real.simhotel.view.adapter;
 
 import com.real.simhotel.model.HotelTemplate;
+import com.real.simhotel.model.Training;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,28 @@ public class DynamicListModelFactory {
 
     }
 
+
+    /**
+     * 转换成展示用的列表
+     * @param trainingsList
+     * @return
+     */
+    public static List<DynamicListModel> parseFromTraining(List<Training> trainingsList){
+
+        List<DynamicListModel> result = new ArrayList<>();
+
+
+        for (Training temp : trainingsList){
+
+            DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+            model.title = temp.getTrainingName();
+            model.info = temp.getUpdateTime();
+            model.ext = temp;
+            result.add(model);
+        }
+
+        return result;
+    }
 
     public static DynamicListModel modelForCeoNormalMessage(String info, String time){
         DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_INFO_TIME);

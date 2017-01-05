@@ -40,6 +40,12 @@
 
         </activity>
 
+        <activity
+            android:name=".view.activity.TrainingChooseActivity"
+            android:theme="@style/ActionBarTheme"
+            android:label="@string/training_choose_title"
+            ></activity>
+
     </application>
 
 

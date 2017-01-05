@@ -37,6 +37,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
 
     private LoginPresenter mLoginPresenter;
+
     @Override
     protected int getContentViewId() {
         return R.layout.login_layout;
@@ -54,7 +55,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
             return;
         }
 
-        int role = mToggleBtn.isChecked() ? Constants.USER_TYPE_TEACHER : Constants.USER_TYPE_STUDENT;
+        int role = !mToggleBtn.isChecked() ? Constants.USER_TYPE_TEACHER : Constants.USER_TYPE_STUDENT;
 
         //登录
         mLoginPresenter.login(role,name,pwd);
@@ -86,7 +87,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
     @Override
     public void loginFaied(String reason) {
 
-        showToast("登录失败");
+        showToast("登录失败 " + reason);
 
 
 
@@ -96,7 +97,8 @@ public class LoginActivity extends AppActivity implements ILoginView {
     public void loginStudentSuccess(int uid) {
         //跳转到学生界面
         showToast("登录成功");
-        navigator.toStudentMainActivity(this,uid);
+//        navigator.toStudentMainActivity(this,uid);
+        navigator.toTrainingDetailActivity(this,uid);
     }
 
     @Override
@@ -104,7 +106,8 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
         //跳转到老师界面
         showToast("登录成功");
-        navigator.toTeacherMainActivity(this);
+        navigator.toTrainingDetailActivity(this,uid);
+//        navigator.toTeacherMainActivity(this,uid);
     }
 
 

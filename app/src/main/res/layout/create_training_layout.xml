@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="实训名称"
+            android:id="@+id/textView15"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/training_name_tv"
+            android:layout_weight="1"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="实训周期"
+            android:id="@+id/textView16"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/training_time_tv"
+            android:layout_weight="1"
+            android:phoneNumber="true"
+            android:text="12"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="招聘周期"
+            android:id="@+id/textView17"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/training_hire_time_tv"
+            android:layout_weight="1"
+            android:phoneNumber="true"
+            android:text="4"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备周期"
+            android:id="@+id/textView18"
+            android:layout_weight="0.2"
+            android:gravity="center" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/training_equip_time_tv"
+            android:layout_weight="1"
+            android:phoneNumber="true"
+            android:text="6"
+            android:textAlignment="center" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="600dp"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="确定"
+            android:id="@+id/training_create_confirm"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:id="@+id/training_create_cancel"
+            android:layout_weight="1" />
+    </LinearLayout>
+</LinearLayout>

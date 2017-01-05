@@ -79,6 +79,15 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
-    Observable<Response<List<Training>>> getTrainingListForTeacher(@Query("teacher_id") int teacherId);
+    Observable<Response<List<Training>>> getTrainingListForTeacher(@Query("teacher_id") String teacherId);
+
+
+    /**
+     * 获取给学生的实例列表
+     * @param teacherId
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
+    Observable<Response<List<Training>>> getTrainingListForStudent(@Query("teacher_id") String teacherId);
 
 }

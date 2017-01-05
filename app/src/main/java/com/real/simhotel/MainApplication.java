@@ -22,7 +22,8 @@ public class MainApplication extends Application {
     //角色
     public int mRole;
 
-
+    //用户id 老师或者学生
+    public String uid;
 
 
     public static ApplicationComponent getComponent() {
