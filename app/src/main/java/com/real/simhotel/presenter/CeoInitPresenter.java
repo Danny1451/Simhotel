@@ -1,5 +1,6 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Hotel;
@@ -49,6 +50,7 @@ public class CeoInitPresenter extends BasePresenter {
         mView.showLoading();
         //这边请求初始化的 可配置参数
 
+        KLog.d("id = " + application.mHotel.getId());
 
         //请求参数
         subscription =apiService.getHotelTemplateList(1).

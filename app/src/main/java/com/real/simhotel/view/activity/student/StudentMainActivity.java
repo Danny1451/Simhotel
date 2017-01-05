@@ -5,6 +5,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
@@ -35,6 +36,7 @@ public class StudentMainActivity extends AppActivity{
         mFragment = new CeoInitFragment();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
+
 
 
     }

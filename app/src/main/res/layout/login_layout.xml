@@ -56,12 +56,21 @@
             android:id="@+id/pwdtf" />
     </LinearLayout>
 
+    <ToggleButton
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:text="New ToggleButton"
+        android:id="@+id/roleToggleButton"
+        android:layout_gravity="center"
+        android:textOff="老师"
+        android:textOn="学生" />
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="登录"
         android:id="@+id/loginbtn"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="5dp" />
 
 </LinearLayout>

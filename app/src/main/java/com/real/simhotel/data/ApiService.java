@@ -4,6 +4,7 @@ import com.real.simhotel.config.Constants;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
+import com.real.simhotel.model.Training;
 
 
 import java.util.List;
@@ -21,12 +22,15 @@ public interface ApiService {
 
     /**
      * 登录接口
-     * @param name
-     * @param pwd
-     * @return
+     * @param type 类型 老师或者学生
+     * @param account 账号
+     * @param pwd 密码
+     * @return 返回ID
      */
-    @GET(Constants.API_URL_Login)
-    Observable<Response<String>> login(@Query("name") String name, @Query("pwd") String pwd);
+    @GET(Constants.API_URL_LOGIN)
+    Observable<Response<Integer>> login(@Query("user_type") int type,
+                                        @Query("login_account") String account,
+                                        @Query("password") String pwd);
 
 
     @GET(Constants.API_URL_HOTEL_LIST)
@@ -69,5 +73,12 @@ public interface ApiService {
                                              @Query("room_num") int roomNum);
 
 
+    /**
+     * 获取给教师的实例列表
+     * @param teacherId
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
+    Observable<Response<List<Training>>> getTrainingListForTeacher(@Query("teacher_id") int teacherId);
 
 }

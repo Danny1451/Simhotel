@@ -1,6 +1,7 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.presenter.base.BasePresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
@@ -32,6 +33,8 @@ public class CeoNormalPresenter extends BasePresenter{
     @Override
     public void requestData(Object... o) {
         super.requestData(o);
+
+        KLog.d("id = " + application.mHotel.getId());
 
         list = new ArrayList();
 

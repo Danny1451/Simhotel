@@ -5,8 +5,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.real.simhotel.R;
+import com.real.simhotel.config.Constants;
+import com.real.simhotel.config.Role;
 import com.real.simhotel.presenter.LoginPresenter;
 import com.real.simhotel.view.iview.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
@@ -28,6 +31,11 @@ public class LoginActivity extends AppActivity implements ILoginView {
     @Bind(R.id.pwdtf)
     EditText mPwdTf;
 
+    @Bind(R.id.roleToggleButton)
+    ToggleButton mToggleBtn;
+
+
+
     private LoginPresenter mLoginPresenter;
     @Override
     protected int getContentViewId() {
@@ -46,7 +54,10 @@ public class LoginActivity extends AppActivity implements ILoginView {
             return;
         }
 
-        mLoginPresenter.login(name,pwd);
+        int role = mToggleBtn.isChecked() ? Constants.USER_TYPE_TEACHER : Constants.USER_TYPE_STUDENT;
+
+        //登录
+        mLoginPresenter.login(role,name,pwd);
 
     }
 
@@ -82,14 +93,14 @@ public class LoginActivity extends AppActivity implements ILoginView {
     }
 
     @Override
-    public void loginStudentSuccess(int role) {
+    public void loginStudentSuccess(int uid) {
         //跳转到学生界面
         showToast("登录成功");
-        navigator.toStudentMainActivity(this,role);
+        navigator.toStudentMainActivity(this,uid);
     }
 
     @Override
-    public void loginTeacherSuccess(int role) {
+    public void loginTeacherSuccess(int uid) {
 
         //跳转到老师界面
         showToast("登录成功");

@@ -2,6 +2,7 @@ package com.real.simhotel.internal.dl.components;
 
 import android.content.Context;
 
+import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.ApiService;
 import com.real.simhotel.internal.dl.modules.ApiServiceModule;
 import com.real.simhotel.internal.dl.modules.ApplicationModule;
@@ -24,6 +25,8 @@ public interface ApplicationComponent {
     void inject(BaseActivity activity);
 
     Context context();
+
+    MainApplication application();
 
     ApiService apiService();
 }

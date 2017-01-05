@@ -5,6 +5,6 @@ package com.real.simhotel.view.iview;
  */
 public interface ILoginView extends IBaseView {
     void loginFaied(String reason);
-    void loginStudentSuccess(int role);
-    void loginTeacherSuccess(int role);
+    void loginStudentSuccess(int uid);
+    void loginTeacherSuccess(int uid);
 }

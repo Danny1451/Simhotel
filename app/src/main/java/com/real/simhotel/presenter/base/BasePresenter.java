@@ -15,6 +15,9 @@ public class BasePresenter  implements Presenter {
     @Inject
     protected ApiService apiService;
 
+    @Inject
+    protected MainApplication application;
+
     public BasePresenter(){
         MainApplication.getComponent().inject(this);
     }

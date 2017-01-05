@@ -1,5 +1,6 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.config.Constants;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.presenter.base.BasePresenter;
@@ -25,18 +26,18 @@ public class LoginPresenter extends BasePresenter {
         mView = view;
     }
 
-    public void login(String userName, String pwd){
+    public void login(int userType , String userName, String pwd){
         //请求网络
 
-        subscription = apiService.login(userName,pwd)
+        subscription = apiService.login(userType,userName,pwd)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                .flatMap(new Func1<Response<Integer>, Observable<Integer>>() {
                              @Override
-                             public Observable<String> call(Response<String> stringResponse) {
+                             public Observable<Integer> call(Response<Integer> stringResponse) {
                                  return RetrofitUtils.flatResponse(stringResponse);
                              }
-                         }).subscribe(new LoginSubscriber());
+                         }).subscribe(new LoginSubscriber(userType));
 
 
     }
@@ -50,13 +51,25 @@ public class LoginPresenter extends BasePresenter {
 
 
 
-    public class LoginSubscriber extends DefaultSubscriber<String>{
+    public class LoginSubscriber extends DefaultSubscriber<Integer>{
+
+        int mUserType;
+
+        public LoginSubscriber(int userType){
+            super();
+            mUserType = userType;
+        }
 
         @Override
-        public void onNext(String s) {
+        public void onNext(Integer s) {
             super.onNext(s);
 
-            mView.loginStudentSuccess(1);
+            //根据登录结果 回调 view
+            if (mUserType == Constants.USER_TYPE_STUDENT) {
+                mView.loginStudentSuccess(s);
+            }else {
+                mView.loginTeacherSuccess(s);
+            }
 
         }
 
@@ -64,8 +77,9 @@ public class LoginPresenter extends BasePresenter {
         public void onError(Throwable e) {
             super.onError(e);
 
-            mView.loginFaied(e.toString());
             //加载失败
+            mView.loginFaied(e.toString());
+
         }
     }
 }

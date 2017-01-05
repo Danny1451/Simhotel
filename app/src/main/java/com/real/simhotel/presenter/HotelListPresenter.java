@@ -5,6 +5,7 @@ import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.iview.IHotelListView;
 
 import java.util.List;
@@ -40,7 +41,8 @@ public class HotelListPresenter extends BasePresenter {
     public void requestData(Object... o) {
         super.requestData(o);
 
-
+        KLog.d("id = " + application.mHotel.getId());
+        KLog.d();
         mView.showLoading();
 
         subscription = apiService.getHotelList(1).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
