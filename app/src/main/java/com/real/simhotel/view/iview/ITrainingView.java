@@ -18,4 +18,11 @@ public interface ITrainingView extends IBaseView {
     void renderTrainingDetail(Training training);
 
     void selectTrainingRow(int pos);
+
+    void closeDialog();
+
+    void reloadTrainingList();
+
+
+    void enterTrainingForTeacher(Training training);
 }

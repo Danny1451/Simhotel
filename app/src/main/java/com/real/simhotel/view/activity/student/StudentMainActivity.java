@@ -86,7 +86,7 @@ public class StudentMainActivity extends AppActivity{
 
             case R.id.action_update:{
 
-                navigator.toTeacherMainActivity(this,0);
+                navigator.toTeacherMainActivity(this);
                 return true;
             }
             case R.id.action_exit:

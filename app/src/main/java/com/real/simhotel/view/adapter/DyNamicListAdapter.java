@@ -417,16 +417,18 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         public void bind(DynamicListModel model) {
             name.setText(model.title);
 
-            if (model.selectedValue != 0){
+            detail.setText(model.info);
 
-                detail.setText(model.selectedValue + "万");
-
-
-            }else{
-
-                detail.setText("未报价");
-
-            }
+//            if (model.selectedValue != 0){
+//
+//                detail.setText(model.selectedValue + "万");
+//
+//
+//            }else{
+//
+//                detail.setText("未报价");
+//
+//            }
 
 
         }

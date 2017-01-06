@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/12.
  */
-public class HotelListFragment extends BaseFragment<HotelListPresenter> implements IHotelListView {
+public class HotelTemplateFragment extends BaseFragment<HotelListPresenter> implements IHotelListView {
 
 
     @Inject

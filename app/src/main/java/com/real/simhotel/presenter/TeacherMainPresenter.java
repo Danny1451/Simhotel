@@ -4,10 +4,9 @@ import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
-import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 import com.real.simhotel.view.fragment.teacher.GroupListFragment;
-import com.real.simhotel.view.fragment.teacher.HotelListFragment;
+import com.real.simhotel.view.fragment.teacher.HotelTemplateFragment;
 
 import rx.Observable;
 import rx.Subscription;
@@ -21,12 +20,12 @@ import rx.schedulers.Schedulers;
 public class TeacherMainPresenter extends BasePresenter {
 
     private TeacherMainActivity mView;
-    private HotelListFragment mHotelView;
+    private HotelTemplateFragment mHotelView;
     private GroupListFragment mGroupView;
 
     private Subscription subscription;
 
-    public TeacherMainPresenter(TeacherMainActivity view, HotelListFragment hotelView,GroupListFragment groupView){
+    public TeacherMainPresenter(TeacherMainActivity view, HotelTemplateFragment hotelView, GroupListFragment groupView){
         mView = view;
         mHotelView = hotelView;
         mGroupView = groupView;
@@ -36,9 +35,9 @@ public class TeacherMainPresenter extends BasePresenter {
 
     }
 
-    public void createGroup(int trainsId,String groupName, String groupDes){
+    public void createGroup(String groupName, String groupDes){
 
-
+        int trainsId = application.mTraining.getId();
 
         subscription = apiService.createGroup(trainsId,groupName,groupDes)
                 .observeOn(AndroidSchedulers.mainThread())

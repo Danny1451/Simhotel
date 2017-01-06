@@ -43,6 +43,14 @@ public class TrainingChoosePresenter extends BasePresenter {
         mView = view;
     }
 
+    //点击了确认进入实例
+    public void confirmEnterTraining(Training training){
+
+        //存到Application中
+        application.mTraining = training;
+
+        mView.enterTrainingForTeacher(training);
+    }
     /**
      * 请求实例列表
      * @param userType
@@ -76,6 +84,7 @@ public class TrainingChoosePresenter extends BasePresenter {
                         }
                     }).subscribe(new TeacherTrainingListSubscriber());
 
+
         }
 
     }
@@ -84,10 +93,53 @@ public class TrainingChoosePresenter extends BasePresenter {
 
         KLog.d(" 创建Training " + name + time + hireTime + equipTime);
 
-        mView.refreshView();
+
+        mTrainingList = apiService.createTraining(
+                application.uid,
+                name,
+                Integer.parseInt(time),
+                Integer.parseInt(hireTime),
+                Integer.parseInt(hireTime),
+                Integer.parseInt(equipTime),
+                0.12,
+                Integer.parseInt(equipTime))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                }).subscribe(new TrainingCreateSubscriber());
+
     }
 
 
+    /**
+     * 老师创建实例
+     */
+    public class TrainingCreateSubscriber extends DefaultSubscriber<String>{
+        @Override
+        public void onNext(String s) {
+            super.onNext(s);
+
+            mView.closeDialog();
+            mView.reloadTrainingList();
+
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            super.onError(e);
+
+            mView.showToast("创建实例失败");
+            KLog.e(e.toString());
+        }
+    }
+
+    /**
+     * 获取老师的实例列表
+     */
     public class TeacherTrainingListSubscriber extends DefaultSubscriber<List<Training>>{
         @Override
         public void onNext(List<Training> trainings) {

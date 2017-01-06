@@ -17,11 +17,11 @@ public class Navigator {
     public Navigator() {
     }
 
-    public void toStudentMainActivity(Context context, int uid){
+    public void toStudentMainActivity(Context context){
 
     }
 
-    public void toTeacherMainActivity(Context context, int uid){
+    public void toTeacherMainActivity(Context context){
         Intent intent = new Intent(context, TeacherMainActivity.class);
         context.startActivity(intent);
     }

@@ -18,7 +18,7 @@ import com.real.simhotel.presenter.TeacherMainPresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.fragment.teacher.GroupListFragment;
-import com.real.simhotel.view.fragment.teacher.HotelListFragment;
+import com.real.simhotel.view.fragment.teacher.HotelTemplateFragment;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -41,7 +41,7 @@ public class TeacherMainActivity extends AppActivity {
 
     TeacherMainPresenter mainPresenter;
 
-    HotelListFragment hotelListFragment;
+    HotelTemplateFragment hotelListFragment;
 
     GroupListFragment groupListFragment;
 
@@ -56,7 +56,7 @@ public class TeacherMainActivity extends AppActivity {
     @Override
     protected void initView() {
 
-        hotelListFragment = new HotelListFragment();
+        hotelListFragment = new HotelTemplateFragment();
 
         groupListFragment = new GroupListFragment();
 
@@ -100,7 +100,7 @@ public class TeacherMainActivity extends AppActivity {
                                             return;
                                         }
 
-                                        mainPresenter.createGroup(1,name,des);
+                                        mainPresenter.createGroup(name,des);
 
                                         break;
                                     }

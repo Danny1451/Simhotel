@@ -8,6 +8,7 @@ import com.real.simhotel.internal.dl.components.DaggerApplicationComponent;
 import com.real.simhotel.internal.dl.modules.ApiServiceModule;
 import com.real.simhotel.internal.dl.modules.ApplicationModule;
 import com.real.simhotel.model.Hotel;
+import com.real.simhotel.model.Training;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -24,6 +25,9 @@ public class MainApplication extends Application {
 
     //用户id 老师或者学生
     public String uid;
+
+    //当前的实例
+    public Training mTraining;
 
 
     public static ApplicationComponent getComponent() {

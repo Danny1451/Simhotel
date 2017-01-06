@@ -99,6 +99,8 @@ public class LoginActivity extends AppActivity implements ILoginView {
         showToast("登录成功");
 //        navigator.toStudentMainActivity(this,uid);
         navigator.toTrainingDetailActivity(this,uid);
+
+        finish();
     }
 
     @Override
@@ -108,6 +110,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
         showToast("登录成功");
         navigator.toTrainingDetailActivity(this,uid);
 //        navigator.toTeacherMainActivity(this,uid);
+        finish();
     }
 
 

@@ -90,4 +90,28 @@ public interface ApiService {
     @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
     Observable<Response<List<Training>>> getTrainingListForStudent(@Query("teacher_id") String teacherId);
 
+
+    /**
+     * 创建实例对象
+     * @param teacherId
+     * @param trainingName
+     * @param trainingCycle
+     * @param initialCapital
+     * @param recruitCycle
+     * @param customerCycle
+     * @param equipDeprePer
+     * @param equipDepreCycle
+     * @return
+     */
+    @GET(Constants.API_URL_CREATE_TRAINING)
+    Observable<Response<String>> createTraining(@Query("teacher_id") String teacherId,
+                                                @Query("training_name") String trainingName,
+                                                @Query("training_cycle") int trainingCycle,
+                                                @Query("initial_capital") int initialCapital,
+                                                @Query("recruit_cycle") int recruitCycle,
+                                                @Query("customer_cycle") int customerCycle,
+                                                @Query("equip_depre_per") Double equipDeprePer,
+                                                @Query("equip_depre_cycle") int equipDepreCycle
+                                                );
+
 }

@@ -115,6 +115,8 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
 
             //点击了
             KLog.d("点击了 进入实例");
+            mPresenter.confirmEnterTraining(mTrainingDetail.model);
+            finish();
 
         });
 
@@ -184,6 +186,19 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     }
 
     @Override
+    public void closeDialog() {
+
+        if (mDialog !=  null)
+            mDialog.dismiss();
+    }
+
+    @Override
+    public void reloadTrainingList() {
+
+        mPresenter.requestTrainingList(mUserType);
+    }
+
+    @Override
     protected int getContentViewId() {
         return R.layout.activity_training_choose;
     }
@@ -220,6 +235,12 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     }
 
     @Override
+    public void enterTrainingForTeacher(Training training) {
+
+        navigator.toTeacherMainActivity(this);
+    }
+
+    @Override
     public void showLoading() {
 
     }
@@ -232,8 +253,7 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     @Override
     public void refreshView() {
 
-        if (mDialog !=  null)
-            mDialog.dismiss();
+
     }
 
     @Override

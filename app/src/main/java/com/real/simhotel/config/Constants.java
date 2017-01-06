@@ -10,8 +10,9 @@ public class Constants {
     public static final String API_URL_HOTEL_TEMPLATE_LIST = "/api/erp/edu/hotel/list_hotel_template.json";
     public static final String API_URL_GROUP_LIST = "/api/erp/edu/hotel/list_group.json";
 
-    public static final String API_URL_CREATE_GROUP = "/api/erp/edu/hotel/create_group.json";
+    public static final String API_URL_CREATE_GROUP = "/api/erp/edu/hotel/init_group.json";
     public static final String API_URL_CREATE_HOTEL = "/api/erp/edu/hotel/create_group.json";
+    public static final String API_URL_CREATE_TRAINING = "/api/erp/edu/hotel/init_training.json";
 
     public static final String API_URL_TRAINING_LIST_TEACHER = "/api/erp/edu/hotel/list_training_for_teacher.json";
 
