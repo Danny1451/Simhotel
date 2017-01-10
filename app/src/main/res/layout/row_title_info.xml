@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:clickable="true"
-    android:focusable="true"
-    android:background="@drawable/list_item_selected">
+    android:focusable="true">
 
     <TextView
         android:layout_width="wrap_content"

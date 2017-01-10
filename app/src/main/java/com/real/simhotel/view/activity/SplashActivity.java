@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.real.simhotel.R;
 import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.view.activity.student.StudentMainActivity;
+import com.real.simhotel.view.activity.teacher.TeacherControlActivity;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseActivity;

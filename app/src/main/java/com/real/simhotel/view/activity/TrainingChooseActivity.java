@@ -121,9 +121,6 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         });
 
 
-
-
-
     }
 
     @OnClick({R.id.add_training_btn})
@@ -212,10 +209,18 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
 
         this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mTrainingDetail).commitAllowingStateLoss();
 
+
+
+        //选中第一个
+        trainingsList.get(0).isSelected = true;
         //更新
         mAdapter.setDataList(trainingsList);
 
+        //默认选中第一个
         mTrainingDetail.updateInfo((Training) trainingsList.get(0).ext);
+
+
+
 
     }
 
@@ -261,5 +266,10 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mPresenter != null)
+            mPresenter.destroy();
+    }
 }

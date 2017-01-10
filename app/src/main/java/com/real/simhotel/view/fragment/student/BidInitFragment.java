@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.real.simhotel.R;
 import com.real.simhotel.presenter.BidInitPresenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
@@ -20,6 +21,7 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import rx.functions.Action1;
 
 /**
  * Created by liudan on 2016/12/21.

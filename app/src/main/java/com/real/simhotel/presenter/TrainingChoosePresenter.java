@@ -5,20 +5,26 @@ import android.util.Log;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
+import com.real.simhotel.rx.RxBus;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.iview.ITrainingView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Scheduler;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -31,12 +37,11 @@ public class TrainingChoosePresenter extends BasePresenter {
 
     Subscription mTrainingList;
 
+    Subscription mRepeat;
 
     //展示model
     List<DynamicListModel> viewModelList;
 
-    //实际数据的model
-    List<Training> dataModelList;
 
     public TrainingChoosePresenter(ITrainingView view){
         super();
@@ -51,6 +56,18 @@ public class TrainingChoosePresenter extends BasePresenter {
 
         mView.enterTrainingForTeacher(training);
     }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+
+        if (mTrainingList != null)
+            mTrainingList.unsubscribe();
+
+        if (mRepeat != null)
+            mRepeat.unsubscribe();
+    }
+
     /**
      * 请求实例列表
      * @param userType
@@ -59,30 +76,70 @@ public class TrainingChoosePresenter extends BasePresenter {
 
         if (userType == Constants.USER_TYPE_TEACHER){
 
-
-
             mTrainingList = apiService.getTrainingListForTeacher(application.uid)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())//事件的消费线程 回调的线程
+                    .subscribeOn(Schedulers.io())//事件的产生线程
                     .flatMap(new Func1<Response<List<Training>>, Observable<List<Training>>>() {
                         @Override
                         public Observable<List<Training>> call(Response<List<Training>> listResponse) {
+                            //获取 data 数据
                             return RetrofitUtils.flatResponse(listResponse);
                         }
-                    }).subscribe(new TeacherTrainingListSubscriber());
+                    })
+                    .map(new Func1<List<Training>, List<DynamicListModel>>() {
+
+                        @Override
+                        public List<DynamicListModel> call(List<Training> trainings) {
+                            //数据转换到 viewmodel
+                            return DynamicListModelFactory.parseFromTraining(trainings);
+                        }
+                    })
+                    .subscribe(new TeacherTrainingListSubscriber());
+
+
+//            //轮询
+//            mRepeat =  Observable.interval(0,30,TimeUnit.SECONDS)
+//                    .observeOn(Schedulers.io())//都在子线程中
+//                    .subscribeOn(Schedulers.io())
+//                    .subscribe(aLong -> {
+//
+//
+//
+//
+//
+//                    });
+//
+//            RxBus.getDefault().post(new Hotel());
+//
+//            Subscription ms = RxBus.getDefault()
+//                    .toObservable(Hotel.class)
+//                    .subscribe(new Action1<Hotel>() {
+//                @Override
+//                public void call(Hotel s) {
+//                    KLog.d();
+//                }
+//            });
+//            //定时
+//            Observable.timer(2,TimeUnit.SECONDS)
+//                    .subscribe(call ->{
+//
+//
+//            });
+
+
 
 
         }else {
 
-            mTrainingList = apiService.getTrainingListForStudent(application.uid)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .flatMap(new Func1<Response<List<Training>>, Observable<List<Training>>>() {
-                        @Override
-                        public Observable<List<Training>> call(Response<List<Training>> listResponse) {
-                            return RetrofitUtils.flatResponse(listResponse);
-                        }
-                    }).subscribe(new TeacherTrainingListSubscriber());
+//            mTrainingList = apiService.getTrainingListForStudent(application.uid)
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribeOn(Schedulers.io())
+//                    .flatMap(new Func1<Response<List<Training>>, Observable<List<Training>>>() {
+//                        @Override
+//                        public Observable<List<Training>> call(Response<List<Training>> listResponse) {
+//                            return RetrofitUtils.flatResponse(listResponse);
+//                        }
+//                    }).subscribe(new TeacherTrainingListSubscriber());
 
 
         }
@@ -140,9 +197,9 @@ public class TrainingChoosePresenter extends BasePresenter {
     /**
      * 获取老师的实例列表
      */
-    public class TeacherTrainingListSubscriber extends DefaultSubscriber<List<Training>>{
+    public class TeacherTrainingListSubscriber extends DefaultSubscriber<List<DynamicListModel>>{
         @Override
-        public void onNext(List<Training> trainings) {
+        public void onNext(List<DynamicListModel> trainings) {
             super.onNext(trainings);
 
             if (trainings == null || trainings.size() == 0){
@@ -151,20 +208,17 @@ public class TrainingChoosePresenter extends BasePresenter {
 
             }else {
 
-                Log.d("AAAAA","++++++++++++++++");
                 mView.refreshView();
 
-
-                dataModelList = trainings;
-
                 //数据转换
-                viewModelList = DynamicListModelFactory.parseFromTraining(trainings);
+                viewModelList = trainings;
 
                 //渲染界面
                 mView.renderTrainingsList(viewModelList);
 
-                //默认选中第一行
-                mView.selectTrainingRow(0);
+
+
+
             }
 
 

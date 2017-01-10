@@ -55,11 +55,16 @@ public class TrainingDetailFragment extends BaseFragment {
     protected void initView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
         confirmBtn.setOnClickListener(mConfirmListener);
+
+        if (model != null)
+            updateInfo(model);
     }
 
     public void updateInfo(Training info){
 
         model = info;
+        if (tvLine1 == null)
+            return;
         tvLine1.setText(info.getTrainingName());
         tvLine2.setText("创建时间:" + info.getInsertTime());
         tvLine3.setText("更新时间:" + info.getUpdateTime());

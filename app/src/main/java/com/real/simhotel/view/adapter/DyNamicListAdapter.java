@@ -1,6 +1,8 @@
 package com.real.simhotel.view.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.real.simhotel.R;
+import com.real.simhotel.utils.log.KLog;
 
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +30,7 @@ import butterknife.ButterKnife;
  */
 public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.DyNamicBaseViewHolder> {
 
+    private int mSelectPos = -1;
 
     private final LayoutInflater layoutInflater;
     private List<DynamicListModel> mDataList;
@@ -54,6 +58,12 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     public void setDataList(List<DynamicListModel> dataList) {
         this.mDataList = dataList;
         this.notifyDataSetChanged();
+        for (int i = 0; i < dataList.size(); i++) {
+            if (dataList.get(i).isSelected) {
+                mSelectPos = i;
+            }
+        }
+
     }
 
     @Inject
@@ -95,19 +105,6 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             case DynamicListModel.TYPE_TITLE_INFO:
                 view = this.layoutInflater.inflate(R.layout.row_title_info,parent,false);
 
-                //增加点击效果
-
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (mRowInterface != null){
-                            //设置了点击相应的话 回调
-                            int pos = (int)view.getTag();
-                            view.setFocusable(true);
-                            mRowInterface.onSelected(pos,mDataList.get(pos));
-                        }
-                    }
-                });
 //                TypedValue typedValue = new TypedValue();
 //                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
 //                view.setBackgroundResource(typedValue.resourceId);
@@ -140,6 +137,41 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         holder.bind(mDataList.get(position));
 
         holder.itemView.setTag(position);
+
+        KLog.d("update @ " + position + " isSelected " + mDataList.get(position).isSelected);
+        if (mDataList.get(position).isSelected){
+            holder.itemView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.colorPrimary100));
+
+        }else {
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
+        //增加点击效果
+        holder.itemView.setOnClickListener(view -> {
+
+
+            if (mRowInterface != null){
+
+                if (mSelectPos != position ){
+
+                    KLog.d("neeed update @ " + position);
+                    //只刷新需要改版的界面
+                    mDataList.get(mSelectPos).isSelected = false;
+                    notifyItemChanged(mSelectPos);
+
+                    mSelectPos = position;
+                    mDataList.get(mSelectPos).isSelected = true;
+                    notifyItemChanged(mSelectPos);
+                    //设置了点击相应的话 回调
+
+                    //响应时间
+                    int pos = (int)view.getTag();
+                    mRowInterface.onSelected(pos,mDataList.get(pos));
+                }
+
+
+            }
+        });
+
 
     }
 

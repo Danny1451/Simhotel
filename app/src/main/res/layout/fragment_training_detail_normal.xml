@@ -55,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="进入实例"
         android:id="@+id/training_detail_btn_confirm"
-        android:layout_gravity="right"
+        android:layout_gravity="bottom|right"
         android:layout_marginRight="20dp" />
 
 </LinearLayout>

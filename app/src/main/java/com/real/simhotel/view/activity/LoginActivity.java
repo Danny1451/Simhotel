@@ -11,6 +11,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.presenter.LoginPresenter;
+import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.view.iview.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
 
@@ -80,7 +81,14 @@ public class LoginActivity extends AppActivity implements ILoginView {
     @Override
     protected void initView() {
 
+        String lastName = PreferenceUtils.getLastUser(mContext);
+        String lastPwd = PreferenceUtils.getLastPwd(mContext);
 
+        if (!TextUtils.isEmpty(lastName))
+            mNameTf.setText(lastName);
+
+        if (!TextUtils.isEmpty(lastPwd))
+            mPwdTf.setText(lastPwd);
     }
 
 
@@ -95,10 +103,15 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
     @Override
     public void loginStudentSuccess(int uid) {
+
+
+
         //跳转到学生界面
         showToast("登录成功");
-//        navigator.toStudentMainActivity(this,uid);
-        navigator.toTrainingDetailActivity(this,uid);
+        navigator.toTrainingDetailActivity(this);
+
+        //记住密码
+        saveNameAndPwd();
 
         finish();
     }
@@ -108,11 +121,18 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
         //跳转到老师界面
         showToast("登录成功");
-        navigator.toTrainingDetailActivity(this,uid);
-//        navigator.toTeacherMainActivity(this,uid);
+        navigator.toTrainingDetailActivity(this);
+
+        //记住密码
+        saveNameAndPwd();
+
         finish();
     }
 
+    private void saveNameAndPwd(){
+        PreferenceUtils.setLastPwd(mContext,mPwdTf.getText().toString());
+        PreferenceUtils.setLastUser(mContext,mNameTf.getText().toString());
+    }
 
     @Override
     public void showLoading() {
@@ -126,6 +146,9 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
     @Override
     public void refreshView() {
+
+
+
 
     }
 

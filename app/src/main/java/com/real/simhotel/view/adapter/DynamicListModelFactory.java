@@ -6,6 +6,9 @@ import com.real.simhotel.model.Training;
 import java.util.ArrayList;
 import java.util.List;
 
+import rx.Observable;
+import rx.functions.Action1;
+
 /**
  * Created by liudan on 2016/12/28.
  */
@@ -57,6 +60,7 @@ public class DynamicListModelFactory {
     public static List<DynamicListModel> parseFromTraining(List<Training> trainingsList){
 
         List<DynamicListModel> result = new ArrayList<>();
+
 
 
         for (Training temp : trainingsList){

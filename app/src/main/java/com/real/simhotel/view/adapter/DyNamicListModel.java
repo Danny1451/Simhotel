@@ -61,6 +61,8 @@ public class DynamicListModel {
 
     public int number;
 
+    public Boolean isSelected = false;
+
     //是否选择
     public Boolean hasChoose = false;
 

@@ -12,19 +12,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="初始化实训"
-            android:id="@+id/initbtn" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="刷新酒店列表"
+            android:text="刷新酒店模板列表"
             android:id="@+id/hotellistbtn" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="创建酒店"
+            android:text="创建酒店模板"
             android:id="@+id/hotelcreatebtn" />
 
         <Button
@@ -33,11 +27,6 @@
             android:text="刷新小组列表"
             android:id="@+id/grouplistbtn" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="创建小组"
-            android:id="@+id/groupcreatebtn" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,13 +50,35 @@
             android:background="@color/colorPrimary200"
             android:id="@+id/group_fragment"></FrameLayout>
 
-        <FrameLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardElevation="20dp"
+                app:cardCornerRadius="10dp"
+                android:id="@+id/cardTest">
 
-        </FrameLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="70dp"
+                    android:text="管理酒店模板"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:padding="10dp"
+                    android:layout_margin="10dp"/>
+            </android.support.v7.widget.CardView>
+
+
+
+
+    </RelativeLayout>
 
 
 

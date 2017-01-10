@@ -1,5 +1,6 @@
 package com.real.simhotel.view.activity.teacher;
 
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.orhanobut.dialogplus.DialogPlus;
 
 
@@ -20,24 +22,26 @@ import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.fragment.teacher.GroupListFragment;
 import com.real.simhotel.view.fragment.teacher.HotelTemplateFragment;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.Bind;
 import butterknife.OnClick;
+import rx.functions.Action1;
 
 /**
  * Created by liudan on 2016/12/7.
  */
 public class TeacherMainActivity extends AppActivity {
 
-    @Bind(R.id.initbtn)
-    Button mInitTrainBtn;
+
     @Bind(R.id.hotelcreatebtn)
     Button mInitHotelBtn;
-    @Bind(R.id.groupcreatebtn)
-    Button mInitGroupBtn;
     @Bind(R.id.hotellistbtn)
     Button mHotelListBtn;
     @Bind(R.id.grouplistbtn)
     Button mGroupListBtn;
+    @Bind(R.id.cardTest)
+    CardView hotelManage;
 
     TeacherMainPresenter mainPresenter;
 
@@ -65,64 +69,70 @@ public class TeacherMainActivity extends AppActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.hotel_fragment,hotelListFragment).commitAllowingStateLoss();
         getSupportFragmentManager().beginTransaction().replace(R.id.group_fragment,groupListFragment).commitAllowingStateLoss();
+
+
+        hotelManage.setOnClickListener(view -> {
+
+            KLog.d();
+
+        });
+
+
     }
 
-    @OnClick({R.id.initbtn,R.id.hotelcreatebtn,R.id.groupcreatebtn,R.id.hotellistbtn,R.id.grouplistbtn})
+    @OnClick({R.id.hotelcreatebtn,R.id.hotellistbtn,R.id.grouplistbtn})
     public void onClick(View view){
 
         switch (view.getId()){
-            case R.id.initbtn:{
 
-                break;
-            }
             case R.id.hotelcreatebtn:{
 
                 break;
             }
-            case R.id.groupcreatebtn:{
-
-                mDialog = DialogPlus.newDialog(this)
-                        .setContentHolder(new ViewHolder(R.layout.create_group_layout))
-                        .setOnClickListener(new OnClickListener() {
-                            @Override
-                            public void onClick(DialogPlus dialog, View view) {
-                                KLog.d(TAG,"CLICK");
-
-                                View content = dialog.getHolderView();
-
-                                String name = ((EditText)content.findViewById(R.id.group_create_et_name)).getText().toString();
-                                String des = ((EditText)content.findViewById(R.id.group_create_et_des)).getText().toString();
-                                switch (view.getId()){
-                                    case R.id.group_create_btn_confirm:{
-
-                                        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(des)){
-                                            Toast.makeText(mContext,"小组描述和名字不能为空",Toast.LENGTH_SHORT).show();
-                                            return;
-                                        }
-
-                                        mainPresenter.createGroup(name,des);
-
-                                        break;
-                                    }
-                                    case R.id.group_create_btn_cancel:{
-
-                                        dialog.dismiss();
-                                        break;
-                                    }
-                                }
-
-                            }
-                        })
-                        .setExpanded(true)
-                        .setMargin(20,0,20,0)
-                        .setGravity(Gravity.CENTER)
-                        .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
-                        .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
-                        .create();
-                mDialog.show();
-
-                break;
-            }
+//            case R.id.groupcreatebtn:{
+//
+//                mDialog = DialogPlus.newDialog(this)
+//                        .setContentHolder(new ViewHolder(R.layout.create_group_layout))
+//                        .setOnClickListener(new OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogPlus dialog, View view) {
+//                                KLog.d(TAG,"CLICK");
+//
+//                                View content = dialog.getHolderView();
+//
+//                                String name = ((EditText)content.findViewById(R.id.group_create_et_name)).getText().toString();
+//                                String des = ((EditText)content.findViewById(R.id.group_create_et_des)).getText().toString();
+//                                switch (view.getId()){
+//                                    case R.id.group_create_btn_confirm:{
+//
+//                                        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(des)){
+//                                            Toast.makeText(mContext,"小组描述和名字不能为空",Toast.LENGTH_SHORT).show();
+//                                            return;
+//                                        }
+//
+//                                        mainPresenter.createGroup(name,des);
+//
+//                                        break;
+//                                    }
+//                                    case R.id.group_create_btn_cancel:{
+//
+//                                        dialog.dismiss();
+//                                        break;
+//                                    }
+//                                }
+//
+//                            }
+//                        })
+//                        .setExpanded(true)
+//                        .setMargin(20,0,20,0)
+//                        .setGravity(Gravity.CENTER)
+//                        .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+//                        .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
+//                        .create();
+//                mDialog.show();
+//
+//                break;
+//            }
             case R.id.hotellistbtn:{
 
                 hotelListFragment.reloadData();

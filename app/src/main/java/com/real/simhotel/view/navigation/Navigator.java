@@ -3,6 +3,7 @@ package com.real.simhotel.view.navigation;
 import android.content.Context;
 import android.content.Intent;
 
+import com.real.simhotel.config.Constants;
 import com.real.simhotel.view.activity.LoginActivity;
 import com.real.simhotel.view.activity.TrainingChooseActivity;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
@@ -27,11 +28,11 @@ public class Navigator {
     }
 
 
-    public void toTrainingDetailActivity(Context context, int userType){
+    public void toTrainingDetailActivity(Context context){
 
         Intent intent = new Intent(context, TrainingChooseActivity.class);
 
-        intent.putExtra("user_type",userType);
+        intent.putExtra("user_type", Constants.USER_TYPE_TEACHER);
         context.startActivity(intent);
     }
     /**

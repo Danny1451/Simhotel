@@ -18,4 +18,14 @@ public class PreferenceUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return  preferences.getString("lastusername","");
     }
+
+    public static void setLastPwd(Context context,String pwd){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putString("lastpassword",pwd).commit();
+    }
+
+    public static String getLastPwd(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getString("lastpassword","");
+    }
 }

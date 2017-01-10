@@ -7,6 +7,7 @@ import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.activity.LoginActivity;
+import com.real.simhotel.view.iview.ILoginView;
 
 import rx.Observable;
 import rx.Subscription;
@@ -21,7 +22,7 @@ public class LoginPresenter extends BasePresenter {
 
     private Subscription subscription;
 
-    private LoginActivity mView;
+    private ILoginView mView;
 
     public LoginPresenter(LoginActivity view){
         mView = view;

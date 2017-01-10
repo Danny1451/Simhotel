@@ -30,4 +30,8 @@ public class Constants {
 
     public static int USER_TYPE_TEACHER = 0;
     public static int USER_TYPE_STUDENT = 1;
+
+
+    //系统的事件广播
+    public static int BORADRCAST_TYPE = 1;
 }
