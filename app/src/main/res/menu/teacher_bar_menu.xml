@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:simhotel="http://schemas.android.com/apk/res-auto">
+
+    <!-- 搜索, 应该作为动作按钮展示-->
+    <item android:id="@+id/action_hr_bit"
+        android:title="小组: 7/10"
+        simhotel:showAsAction="ifRoom" />
+    <item android:id="@+id/action_end_month"
+        android:title="结束本月"
+        simhotel:showAsAction="ifRoom" />
+    <!-- 设置, 在溢出菜单中展示 -->
+    <item android:id="@+id/action_update"
+        android:title="刷新数据"
+        simhotel:showAsAction="never" />
+    <item android:id="@+id/action_exit"
+        android:title="退出"
+        simhotel:showAsAction="never" />
+    <item android:id="@+id/action_about"
+        android:title="关于"
+        simhotel:showAsAction="never" />
+</menu>

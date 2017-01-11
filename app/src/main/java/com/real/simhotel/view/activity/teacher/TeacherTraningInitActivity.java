@@ -1,10 +1,12 @@
-package com.real.simhotel.view.activity;
+package com.real.simhotel.view.activity.teacher;
 
-import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -15,17 +17,15 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.real.simhotel.R;
-import com.real.simhotel.config.Constants;
-import com.real.simhotel.model.Training;
-import com.real.simhotel.presenter.TrainingChoosePresenter;
+import com.real.simhotel.model.HotelTemplate;
+import com.real.simhotel.presenter.TeacherTrainingInitPresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.AppActivity;
-import com.real.simhotel.view.fragment.DetailFragment;
-import com.real.simhotel.view.fragment.TrainingDetailFragment;
-import com.real.simhotel.view.iview.ITrainingView;
+import com.real.simhotel.view.fragment.HotelTemplateDetailFragment;
+import com.real.simhotel.view.iview.ITrainingInitView;
 
 import java.util.List;
 
@@ -35,11 +35,11 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * Created by liudan on 2017/1/5.
- * 选择实例界面
+ * Created by liudan on 2017/1/10.
+ *
+ * 教师 初始化实例 界面
  */
-public class TrainingChooseActivity extends AppActivity implements ITrainingView{
-
+public class TeacherTraningInitActivity extends AppActivity implements ITrainingInitView{
 
     @Inject
     DynamicListAdapter mAdapter;
@@ -53,37 +53,52 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     //增加实例的对话框
     DialogPlus mDialog;
 
-    //角色类型
-    private int mUserType;
+    TeacherTrainingInitPresenter mPresenter;
 
-    private TrainingChoosePresenter mPresenter;
-
-    private TrainingDetailFragment mTrainingDetail;
+    HotelTemplateDetailFragment mHotelTemplateDetail;
 
     @Override
-    protected void handleIntent(Intent intent) {
-        super.handleIntent(intent);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
 
-        //判断是 老师 还是学生的登录界面
-        mUserType = intent.getIntExtra("user_type", Constants.USER_TYPE_STUDENT);
+        inflater.inflate(R.menu.teacher_bar_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_state:{
+
+                //获取小组状态
+
+                return true;
+            }
+            case R.id.action_end_month:{
+
+                //结束本周
+
+                return true;
+            }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
     protected void initData() {
 
-        mPresenter = new TrainingChoosePresenter(this);
+        mPresenter = new TeacherTrainingInitPresenter(this);
 
-        mPresenter.requestTrainingList(mUserType);
-
+        //请求数据
+        mPresenter.requestData();
     }
 
     @Override
     protected void initView() {
 
-        //学生的话不显示加号
-        if (mUserType == Constants.USER_TYPE_STUDENT)
-            mAddTraining.setVisibility(View.GONE);
+        mAddTraining.setText("增加酒店模板");
 
         mAdapter = new DynamicListAdapter(this);
 
@@ -91,17 +106,8 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         //绑定触摸相应
         mAdapter.setRowInterface((pos, model)-> {
 
-             //点击了对应的cell
-             if ( mUserType == Constants.USER_TYPE_STUDENT){
-                 //学生的话 去请求实例信息
-
-
-
-             }else {
-                 //老师的话 刷新
-                 //ext 中会 放入原来的数据模型
-                 renderTrainingDetail((Training) model.ext);
-             }
+            //刷新酒店模板详细
+            mHotelTemplateDetail.updateInfo((HotelTemplate) model.ext);
 
         });
 
@@ -110,24 +116,23 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         mList.addItemDecoration(new DynamicListDecoration(this,DynamicListDecoration.VERTICAL_LIST));
 
 
-        mTrainingDetail = new TrainingDetailFragment();
-        mTrainingDetail.setConfirmListener((view)->{
+        mHotelTemplateDetail = new HotelTemplateDetailFragment();
+        mHotelTemplateDetail.setConfirmListener(view -> {
 
-            //点击了
-            KLog.d("点击了 进入实例");
-            mPresenter.confirmEnterTraining(mTrainingDetail.model);
-            finish();
+            //点击删除指定位置
+            mPresenter.removeTemplate(mAdapter.getSelectPos());
 
         });
 
 
     }
 
+
     @OnClick({R.id.add_training_btn})
     public void onClick(View view){
 
         if (mDialog == null) {
-            KLog.d("点击了 创建实例");
+            KLog.d("点击了 创建酒店模板");
             mDialog = DialogPlus.newDialog(this)
                     .setContentHolder(new ViewHolder(R.layout.create_training_layout))
                     .setOnClickListener(new OnClickListener() {
@@ -146,11 +151,14 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
                                 case R.id.training_create_confirm: {
 
                                     if (TextUtils.isEmpty(name) || TextUtils.isEmpty(time) || TextUtils.isEmpty(hiretime) || TextUtils.isEmpty(equiptime)) {
-                                        Toast.makeText(mContext, "请完整填写实例信息", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext, "请完整填写酒店模板信息", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
 
-                                    mPresenter.createTraining(name,time,hiretime,equiptime);
+                                    HotelTemplate template = new HotelTemplate();
+
+                                    mPresenter.createHotelTemplate(template);
+
 
 
                                     break;
@@ -177,39 +185,11 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         }
     }
 
-    @Override
-    public void selectTrainingRow(int pos) {
-
-    }
 
     @Override
-    public void closeDialog() {
+    public void renderTemlplateList(List<DynamicListModel> trainingsList) {
 
-        if (mDialog !=  null)
-            mDialog.dismiss();
-    }
-
-    @Override
-    public void reloadTrainingList() {
-
-        mPresenter.requestTrainingList(mUserType);
-    }
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.activity_training_choose;
-    }
-
-    /**
-     * 基础左边模块
-     * @param trainingsList
-     */
-    @Override
-    public void renderTrainingsList(List<DynamicListModel> trainingsList) {
-
-        this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mTrainingDetail).commitAllowingStateLoss();
-
-
+        this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mHotelTemplateDetail).commitAllowingStateLoss();
 
         //选中第一个
         trainingsList.get(0).isSelected = true;
@@ -217,30 +197,20 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         mAdapter.setDataList(trainingsList);
 
         //默认选中第一个
-        mTrainingDetail.updateInfo((Training) trainingsList.get(0).ext);
-
-
+        mHotelTemplateDetail.updateInfo((HotelTemplate) trainingsList.get(0).ext);
     }
 
-    /**
-     *
-     * @param groupsList
-     */
-    @Override
-    public void renderGroupsList(List<DynamicListModel> groupsList) {
 
+    @Override
+    public void initSuccess() {
+        //初始化成功 直接回到上衣界面
+
+        showToast("初始化成功");
     }
 
     @Override
-    public void renderTrainingDetail(Training training) {
-
-        mTrainingDetail.updateInfo(training);
-    }
-
-    @Override
-    public void enterTrainingForTeacher(Training training) {
-
-        navigator.toTeacherMainActivity(this);
+    protected int getContentViewId() {
+        return R.layout.activity_training_choose;
     }
 
     @Override
@@ -256,18 +226,10 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     @Override
     public void refreshView() {
 
-
     }
 
     @Override
     public void showError(String msg) {
 
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (mPresenter != null)
-            mPresenter.destroy();
     }
 }

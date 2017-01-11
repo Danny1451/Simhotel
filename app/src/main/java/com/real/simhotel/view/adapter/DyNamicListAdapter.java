@@ -43,6 +43,11 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     //行点击接口
     private DynamicListRowInterface mRowInterface;
 
+
+    public int getSelectPos() {
+        return mSelectPos;
+    }
+
     public void setChooseInterface(NormalChooseInterface mChooseInterface) {
         this.mChooseInterface = mChooseInterface;
     }
@@ -99,20 +104,18 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 view = this.layoutInflater.inflate(R.layout.row_info_time,parent,false);
                 return new NormalInfoViewHolder(view);
             case DynamicListModel.TYPE_TWO_BUTTONS_CHOOSE:
+
                 view = this.layoutInflater.inflate(R.layout.row_normal_choose,parent,false);
                 return new NormalChooseViewHolder(view,mChooseInterface);
 
             case DynamicListModel.TYPE_TITLE_INFO:
-                view = this.layoutInflater.inflate(R.layout.row_title_info,parent,false);
 
-//                TypedValue typedValue = new TypedValue();
-//                mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, typedValue, true);
-//                view.setBackgroundResource(typedValue.resourceId);
+                view = this.layoutInflater.inflate(R.layout.row_title_info,parent,false);
                 return new TitlleInfoViewHolder(view);
+
             case DynamicListModel.TYPE_NUMBER_INFO:
 
                 view = this.layoutInflater.inflate(R.layout.row_number_title_info,parent,false);
-
                 return new NumberTitleInfoViewHolder(view);
 
             default:
@@ -208,9 +211,6 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         public SeekBarViewHolder(View itemView){
             super((itemView));
 
-
-
-
         }
 
         @Override
@@ -231,9 +231,6 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-
-
                     model.selectedValue = model.minus + i;
                     info.setText( model.selectedValue + model.unit);
                 }
