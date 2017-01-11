@@ -4,9 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.real.simhotel.config.Constants;
+import com.real.simhotel.presenter.TeacherHRManagerPresenter;
 import com.real.simhotel.view.activity.LoginActivity;
 import com.real.simhotel.view.activity.TrainingChooseActivity;
+import com.real.simhotel.view.activity.teacher.TeacherControlActivity;
+import com.real.simhotel.view.activity.teacher.TeacherHRManagerActivity;
 import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
+import com.real.simhotel.view.activity.teacher.TeacherTraningInitActivity;
 
 import javax.inject.Inject;
 
@@ -33,6 +37,23 @@ public class Navigator {
         Intent intent = new Intent(context, TrainingChooseActivity.class);
 
         intent.putExtra("user_type", Constants.USER_TYPE_TEACHER);
+        context.startActivity(intent);
+    }
+
+
+    public void toTrainingControlActivity(Context context){
+        Intent intent = new Intent(context, TeacherControlActivity.class);
+        context.startActivity(intent);
+    }
+
+
+    public void toTrainingInitActivity(Context context){
+        Intent intent = new Intent(context, TeacherTraningInitActivity.class);
+        context.startActivity(intent);
+    }
+
+    public void toHRManagerActivity(Context context){
+        Intent intent = new Intent(context, TeacherHRManagerActivity.class);
         context.startActivity(intent);
     }
     /**

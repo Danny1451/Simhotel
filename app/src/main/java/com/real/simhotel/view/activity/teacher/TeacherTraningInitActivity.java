@@ -28,11 +28,14 @@ import com.real.simhotel.view.fragment.HotelTemplateDetailFragment;
 import com.real.simhotel.view.iview.ITrainingInitView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by liudan on 2017/1/10.
@@ -50,6 +53,7 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
     @Bind(R.id.add_training_btn)
     Button mAddTraining;
 
+
     //增加实例的对话框
     DialogPlus mDialog;
 
@@ -61,7 +65,10 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
-        inflater.inflate(R.menu.teacher_bar_menu,menu);
+        inflater.inflate(R.menu.teacher_init_training_bar_menu,menu);
+
+
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -73,11 +80,24 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
                 //获取小组状态
 
+                //获取小组状态
+                item.setTitle("更新中。。。");
+
+                Observable.timer(3, TimeUnit.SECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aLong -> {
+
+                            item.setTitle("小组: 8/10");
+                        });
+
+
                 return true;
             }
-            case R.id.action_end_month:{
+            case R.id.action_end_init:{
 
                 //结束本周
+
+                mPresenter.initHotel();
 
                 return true;
             }
@@ -97,6 +117,8 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
     @Override
     protected void initView() {
+
+
 
         mAddTraining.setText("增加酒店模板");
 
@@ -157,6 +179,8 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
                                     HotelTemplate template = new HotelTemplate();
 
+                                    template.setLocationName(name);
+                                    template.setId(5);
                                     mPresenter.createHotelTemplate(template);
 
 
@@ -191,6 +215,10 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
         this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mHotelTemplateDetail).commitAllowingStateLoss();
 
+        //清空之前的选中状态
+        for (int i = 0; i < trainingsList.size(); i++) {
+           trainingsList.get(i).isSelected = false;
+        }
         //选中第一个
         trainingsList.get(0).isSelected = true;
         //更新
@@ -204,19 +232,15 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
     @Override
     public void initSuccess() {
         //初始化成功 直接回到上衣界面
-
+        finish();
         showToast("初始化成功");
     }
 
     @Override
     protected int getContentViewId() {
-        return R.layout.activity_training_choose;
+        return R.layout.activity_list_detail;
     }
 
-    @Override
-    public void showLoading() {
-
-    }
 
     @Override
     public void showEmptyView(String msg) {

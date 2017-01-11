@@ -53,6 +53,14 @@
             android:label="@string/training_choose_title"
             ></activity>
 
+        <activity android:name=".view.activity.teacher.TeacherTraningInitActivity"
+            android:theme="@style/ActionBarTheme"
+            android:label="实例初始化"></activity>
+
+        <activity android:name=".view.activity.teacher.TeacherHRManagerActivity"
+            android:theme="@style/ActionBarTheme"
+            android:label="招聘管理"></activity>
+
     </application>
 
 

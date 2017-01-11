@@ -26,7 +26,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="管理酒店模板"
+                android:text="实例初始化"
                 android:gravity="center_horizontal|center_vertical"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="管理酒店模板"
+                android:text="招聘模块"
                 android:gravity="center_horizontal|center_vertical"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
@@ -70,7 +70,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
-                android:text="管理酒店模板"
+                android:text="客源模块"
                 android:gravity="center_horizontal|center_vertical"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"

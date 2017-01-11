@@ -1,0 +1,15 @@
+package com.real.simhotel.view.iview;
+
+import com.real.simhotel.view.adapter.DynamicListModel;
+
+import java.util.List;
+
+/**
+ * Created by liudan on 2017/1/11.
+ */
+public interface IHRManagerView extends IBaseView{
+
+    void renderApplicantsList(List<DynamicListModel> applicantsList);
+
+
+}

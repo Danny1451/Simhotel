@@ -51,6 +51,23 @@ public class DynamicListModelFactory {
 
     }
 
+    public static List<DynamicListModel> parseFromHotelTemplateForTeacher(List<HotelTemplate> hotelTemplateList){
+
+        List<DynamicListModel> result = new ArrayList<>();
+
+        for (HotelTemplate temp: hotelTemplateList){
+
+            DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+            model.title = temp.getLocationName();
+            model.info = temp.getId() + "";
+            model.ext = temp;
+            result.add(model);
+
+        }
+
+        return result;
+
+    }
 
     /**
      * 转换成展示用的列表
@@ -74,6 +91,7 @@ public class DynamicListModelFactory {
 
         return result;
     }
+
 
     public static DynamicListModel modelForCeoNormalMessage(String info, String time){
         DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_INFO_TIME);
