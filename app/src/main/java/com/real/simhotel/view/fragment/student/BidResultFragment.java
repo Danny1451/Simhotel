@@ -38,13 +38,15 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> {
         ButterKnife.bind(this,view);
 
 
-        mListAdapter = new DynamicListAdapter(mActivity);
-        mListAdapter.setRowInterface((pos,model)->{
+        mListAdapter = new DynamicListAdapter(mActivity)
+                .setRowInterface((pos,model)->{
 
-            //点击选中了list项
-            mPresenter.onClickApplicantsRow(pos,model);
+                    //点击选中了list项
+                    mPresenter.onClickApplicantsRow(pos,model);
 
-        });
+                });
+
+
         bitResultList.setLayoutManager(new LinearLayoutManager(mActivity));
         bitResultList.setAdapter(mListAdapter);
 //        bitResultList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));

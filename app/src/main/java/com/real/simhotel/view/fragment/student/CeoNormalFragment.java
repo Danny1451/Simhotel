@@ -35,9 +35,11 @@ public class CeoNormalFragment extends BaseFragment{
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
-        mAdapter = new DynamicListAdapter(mActivity);
 
-        mAdapter.setChooseInterface(getChildPresenter().getChooseInterface());
+        mAdapter = new DynamicListAdapter(mActivity)
+                .setChooseInterface(getChildPresenter().getChooseInterface());
+
+
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
 
         mList.setAdapter(mAdapter);

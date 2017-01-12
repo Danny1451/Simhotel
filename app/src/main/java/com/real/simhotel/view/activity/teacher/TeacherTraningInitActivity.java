@@ -122,16 +122,14 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
         mAddTraining.setText("增加酒店模板");
 
-        mAdapter = new DynamicListAdapter(this);
+        mAdapter = new DynamicListAdapter(this)
+                .setRowInterface((pos, model)-> {
 
+                    //刷新酒店模板详细
+                    mHotelTemplateDetail.updateInfo((HotelTemplate) model.ext);
 
-        //绑定触摸相应
-        mAdapter.setRowInterface((pos, model)-> {
+                });
 
-            //刷新酒店模板详细
-            mHotelTemplateDetail.updateInfo((HotelTemplate) model.ext);
-
-        });
 
         mList.setAdapter(mAdapter);
         mList.setLayoutManager(new LinearLayoutManager(this));
@@ -157,9 +155,7 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
             KLog.d("点击了 创建酒店模板");
             mDialog = DialogPlus.newDialog(this)
                     .setContentHolder(new ViewHolder(R.layout.create_training_layout))
-                    .setOnClickListener(new OnClickListener() {
-                        @Override
-                        public void onClick(DialogPlus dialog, View view) {
+                    .setOnClickListener((dialog, view1)-> {
                             KLog.d(TAG, "CLICK");
 
                             View content = dialog.getHolderView();
@@ -195,7 +191,7 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
                             }
 
                         }
-                    })
+                    )
                     .setExpanded(false)
                     .setGravity(Gravity.CENTER)
                     .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)

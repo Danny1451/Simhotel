@@ -84,25 +84,25 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         if (mUserType == Constants.USER_TYPE_STUDENT)
             mAddTraining.setVisibility(View.GONE);
 
-        mAdapter = new DynamicListAdapter(this);
+        mAdapter = new DynamicListAdapter(this)
+                .setRowInterface((pos, model)-> {
 
-
-        //绑定触摸相应
-        mAdapter.setRowInterface((pos, model)-> {
-
-             //点击了对应的cell
-             if ( mUserType == Constants.USER_TYPE_STUDENT){
-                 //学生的话 去请求实例信息
+                    //点击了对应的cell
+                    if ( mUserType == Constants.USER_TYPE_STUDENT){
+                        //学生的话 去请求实例信息
 
 
 
-             }else {
-                 //老师的话 刷新
-                 //ext 中会 放入原来的数据模型
-                 renderTrainingDetail((Training) model.ext);
-             }
+                    }else {
+                        //老师的话 刷新
+                        //ext 中会 放入原来的数据模型
+                        renderTrainingDetail((Training) model.ext);
+                    }
 
-        });
+                });
+
+
+
 
         mList.setAdapter(mAdapter);
         mList.setLayoutManager(new LinearLayoutManager(this));

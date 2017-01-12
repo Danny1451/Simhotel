@@ -54,16 +54,14 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> {
 
         ButterKnife.bind(this,view);
 
-        mAdapter = new DynamicListAdapter(mActivity);
+        mAdapter = new DynamicListAdapter(mActivity)
+                .setRowInterface((pos,model)->{
 
-        //绑定触摸相应
-        mAdapter.setRowInterface(new DynamicListAdapter.DynamicListRowInterface() {
-            @Override
-            public void onSelected(int pos, DynamicListModel model) {
+                     mPresenter.onClickApplicantsRow(pos,model);
 
-                mPresenter.onClickApplicantsRow(pos,model);
-            }
-        });
+                });
+
+
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
 
@@ -78,16 +76,12 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> {
 
         this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
 
-        mDetailFragment.setConfirmListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        mDetailFragment.setConfirmListener(view1 ->{
+            //点击了确定 通知presenter 刷新list
 
-                //点击了确定 通知presenter 刷新list
-
-                mPresenter.updateApplicantsRow((DynamicListModel)view.getTag());
-
-            }
+            mPresenter.updateApplicantsRow((DynamicListModel)view.getTag());
         });
+
     }
 
     @OnClick({R.id.bid_confirm_btn})

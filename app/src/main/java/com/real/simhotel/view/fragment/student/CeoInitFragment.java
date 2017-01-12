@@ -41,15 +41,16 @@ public class CeoInitFragment extends BaseFragment<CeoInitPresenter> implements I
     protected void initView(View view, Bundle savedInstanceState) {
 
         ButterKnife.bind(this,view);
-        mAdapter = new DynamicListAdapter(mActivity);
+        mAdapter = new DynamicListAdapter(mActivity)
+                .setItemChooseInterce(( pos, model)-> {
 
-        mAdapter.setItemChooseInterce((int pos, DynamicListModel model)-> {
-
-            //选中的话
-            mPresenter.updateMinusRoomNum(pos);
+                    //选中的话
+                    mPresenter.updateMinusRoomNum(pos);
 
 
-        });
+                });
+
+
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
 

@@ -146,17 +146,16 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
     protected void initView() {
 
         mAddApplicant.setText("增加候选人");
-        mAdapter = new DynamicListAdapter(this);
+        mAdapter = new DynamicListAdapter(this)
+                .setRowInterface((pos, model)-> {
+
+                //刷新人员模板详细
+                 mDetailFragment.updateInfo(model.ext);
+
+                });
 
 
 
-        //绑定触摸相应
-        mAdapter.setRowInterface((pos, model)-> {
-
-            //刷新人员模板详细
-            mDetailFragment.updateInfo(model.ext);
-
-        });
 
         mList.setAdapter(mAdapter);
         mList.setLayoutManager(new LinearLayoutManager(this));
