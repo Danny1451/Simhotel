@@ -171,6 +171,11 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment impleme
     }
 
     @Override
+    public void disMissLoading() {
+
+    }
+
+    @Override
     public void showToast(String text){
         Toast.makeText(getHoldingActivity(),text,Toast.LENGTH_SHORT).show();
     }

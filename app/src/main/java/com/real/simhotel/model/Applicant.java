@@ -2,6 +2,8 @@ package com.real.simhotel.model;
 
 import com.real.simhotel.view.adapter.DynamicListModel;
 
+import java.util.List;
+
 /**
  * Created by liudan on 2016/12/23.
  */
@@ -18,6 +20,9 @@ public class Applicant {
     public int headRes;
 
     public int quotePrice;
+
+    //报价
+    public List<Quote> quotes;
 
     public String getLevelStr(){
         switch (level){

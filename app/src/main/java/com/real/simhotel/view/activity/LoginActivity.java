@@ -134,26 +134,5 @@ public class LoginActivity extends AppActivity implements ILoginView {
         PreferenceUtils.setLastUser(mContext,mNameTf.getText().toString());
     }
 
-    @Override
-    public void showLoading() {
 
-    }
-
-    @Override
-    public void showEmptyView(String msg) {
-
-    }
-
-    @Override
-    public void refreshView() {
-
-
-
-
-    }
-
-    @Override
-    public void showError(String msg) {
-
-    }
 }

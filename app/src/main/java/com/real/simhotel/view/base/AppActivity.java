@@ -9,17 +9,21 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.real.simhotel.MainApplication;
+import com.real.simhotel.view.iview.IBaseView;
+import com.real.simhotel.view.loading.LoadingDialog;
 
 import butterknife.ButterKnife;
 
 /**
  * Created by liudan on 2016/12/7.
  */
-public abstract class AppActivity extends BaseActivity  {
+public abstract class AppActivity extends BaseActivity implements IBaseView {
 
 
 
     protected Context mContext;
+
+    private LoadingDialog mLoadingDialog;
     /**
      * 处理Intent
      *
@@ -73,13 +77,42 @@ public abstract class AppActivity extends BaseActivity  {
     protected abstract void initView();
 
 
+    @Override
     public void showToast(String content){
         Toast.makeText(this,content,Toast.LENGTH_SHORT).show();
     }
 
 
+    @Override
     public void showLoading() {
+
+        if (mLoadingDialog == null){
+
+            mLoadingDialog = new LoadingDialog(this).setMessage("请稍后...");
+        }
+
+        mLoadingDialog.show();
 
     }
 
+    @Override
+    public void disMissLoading(){
+        if (mLoadingDialog != null)
+            mLoadingDialog.dismiss();
+    }
+
+    @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
+    public void showEmptyView(String msg) {
+
+    }
+
+    @Override
+    public void refreshView() {
+
+    }
 }

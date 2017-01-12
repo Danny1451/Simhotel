@@ -39,7 +39,7 @@ public class TeacherControlActivity extends AppActivity {
 
     }
 
-    @OnClick({R.id.cardBtn1,R.id.cardBtn2})
+    @OnClick({R.id.cardBtn1,R.id.cardBtn2,R.id.cardBtn3})
     public void onClick(View view){
 
         switch (view.getId()){
@@ -59,6 +59,15 @@ public class TeacherControlActivity extends AppActivity {
             case R.id.cardBtn3:
 
                 //跳转到客源推送界面
+                showLoading();
+
+                Observable.timer(3,TimeUnit.SECONDS)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aLong -> {
+
+                            disMissLoading();
+
+                        });
 
                 break;
         }

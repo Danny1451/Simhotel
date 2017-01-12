@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:simhotel="http://schemas.android.com/apk/res-auto">
 
+
     <item android:id="@+id/action_state"
-        android:title="等待推送"
+        android:title=""
         simhotel:showAsAction="ifRoom" />
     <item android:id="@+id/action_confirm"
         android:title="推送候选人"

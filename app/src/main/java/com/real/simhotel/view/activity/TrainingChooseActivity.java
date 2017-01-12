@@ -242,26 +242,6 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         navigator.toTrainingControlActivity(this);
     }
 
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void showEmptyView(String msg) {
-
-    }
-
-    @Override
-    public void refreshView() {
-
-
-    }
-
-    @Override
-    public void showError(String msg) {
-
-    }
 
     @Override
     protected void onDestroy() {

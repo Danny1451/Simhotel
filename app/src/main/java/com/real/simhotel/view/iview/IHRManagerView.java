@@ -11,5 +11,13 @@ public interface IHRManagerView extends IBaseView{
 
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 
+    void transToDetailFragment();
 
+    void transToInitListFragment();
+
+    void updateGroupStatus(String value);
+
+    void updateConfirmStatus(String value);
+
+    void removeAddApplicantDialog();
 }

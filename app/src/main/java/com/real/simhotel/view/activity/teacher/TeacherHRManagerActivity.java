@@ -18,7 +18,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
-import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.TeacherHRManagerPresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
@@ -26,24 +25,23 @@ import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.fragment.ApplicantDetailFragment;
+import com.real.simhotel.view.fragment.ApplicantDetailListFragment;
+import com.real.simhotel.view.fragment.DetailFragment;
 import com.real.simhotel.view.iview.IHRManagerView;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
-import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by liudan on 2017/1/11.
  * 教师的人力资源管理界面
  */
 public class TeacherHRManagerActivity extends AppActivity implements IHRManagerView{
-
 
     @Inject
     DynamicListAdapter mAdapter;
@@ -59,13 +57,36 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
 
     TeacherHRManagerPresenter mPresenter;
 
-    ApplicantDetailFragment mDetailFragment;
+    //详情页
+    DetailFragment mDetailFragment;
+
+    MenuItem mGroupStatus;
+    MenuItem mConfirm;
+
+    @Override
+    public void updateGroupStatus(String value) {
+
+        if (mGroupStatus != null)
+            mGroupStatus.setTitle(value);
+
+    }
+
+    @Override
+    public void updateConfirmStatus(String value) {
+        if (mConfirm != null)
+            mConfirm.setTitle(value);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
 
         inflater.inflate(R.menu.teacher_hr_manger_bar_menu,menu);
+
+        mGroupStatus = menu.findItem(R.id.action_state);
+
+        mConfirm = menu.findItem(R.id.action_confirm);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -74,24 +95,37 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
         switch (item.getItemId()){
             case R.id.action_state:{
 
-                //获取小组状态
 
                 //获取小组状态
                 item.setTitle("更新中。。。");
 
-                Observable.timer(3, TimeUnit.SECONDS)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(aLong -> {
 
-                            item.setTitle("小组: 8/10");
-                        });
+                //刷新界面
+                mPresenter.updateResult();
+
 
 
                 return true;
             }
             case R.id.action_confirm:{
 
-                //确认推送
+
+
+                if (mConfirm.getTitle().toString().startsWith("推送")){
+
+                    //确认推送人员信息
+                    mPresenter.pushApplicants();
+
+                }else if (mConfirm.getTitle().toString().contains("二次")){
+
+
+                    showToast("此次招聘结束结束");
+
+                }else {
+                    //推送结果  包括第一轮 和 第二轮
+
+                    mPresenter.pushResult();
+                }
 
 
 
@@ -115,11 +149,12 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
         mAdapter = new DynamicListAdapter(this);
 
 
+
         //绑定触摸相应
         mAdapter.setRowInterface((pos, model)-> {
 
             //刷新人员模板详细
-            mDetailFragment.updateInfo((Applicant) model.ext);
+            mDetailFragment.updateInfo(model.ext);
 
         });
 
@@ -127,14 +162,6 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
         mList.setLayoutManager(new LinearLayoutManager(this));
         mList.addItemDecoration(new DynamicListDecoration(this,DynamicListDecoration.VERTICAL_LIST));
 
-
-        mDetailFragment = new ApplicantDetailFragment();
-        mDetailFragment.setConfirmListener(view -> {
-
-            //点击删除指定位置
-            mPresenter.removeApplicant(mAdapter.getSelectPos());
-
-        });
 
 
     }
@@ -145,7 +172,7 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
         if (mDialog == null) {
             KLog.d("点击了 创建人员模板");
             mDialog = DialogPlus.newDialog(this)
-                    .setContentHolder(new ViewHolder(R.layout.create_training_layout))
+                    .setContentHolder(new ViewHolder(R.layout.dialog_applicant_layout))
                     .setOnClickListener(new OnClickListener() {
                         @Override
                         public void onClick(DialogPlus dialog, View view) {
@@ -153,15 +180,15 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
 
                             View content = dialog.getHolderView();
 
-                            String name = ((EditText) content.findViewById(R.id.training_name_tv)).getText().toString();
-                            String time = ((EditText) content.findViewById(R.id.training_time_tv)).getText().toString();
-                            String hiretime = ((EditText) content.findViewById(R.id.training_hire_time_tv)).getText().toString();
-                            String equiptime = ((EditText) content.findViewById(R.id.training_equip_time_tv)).getText().toString();
+                            String name = ((EditText) content.findViewById(R.id.applicant_name_tv)).getText().toString();
+                            String level = ((EditText) content.findViewById(R.id.applicant_level_tv)).getText().toString();
+                            String price = ((EditText) content.findViewById(R.id.applicant_price_tv)).getText().toString();
+
 
                             switch (view.getId()) {
                                 case R.id.training_create_confirm: {
+                                    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(level) || TextUtils.isEmpty(name) ) {
 
-                                    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(time) || TextUtils.isEmpty(hiretime) || TextUtils.isEmpty(equiptime)) {
                                         Toast.makeText(mContext, "请完整填写人员信息", Toast.LENGTH_SHORT).show();
                                         return;
                                     }
@@ -169,8 +196,9 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
                                     Applicant template = new Applicant();
 
                                     template.name = name;
-                                    template.expectValues = 10000;
-
+                                    template.expectValues = Integer.parseInt(price);
+                                    template.level = Integer.parseInt(level);
+                                    template.quotes = new ArrayList<>();
                                     mPresenter.createApplicant(template);
 
 
@@ -225,21 +253,37 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
         mAdapter.setDataList(applicantsList);
 
         //默认选中第一个
-        mDetailFragment.updateInfo((Applicant) applicantsList.get(0).ext);
+        mDetailFragment.updateInfo(applicantsList.get(0).ext);
+    }
+
+    /**
+     * 切换至详情显示
+     */
+    @Override
+    public void transToDetailFragment(){
+        mDetailFragment = new ApplicantDetailFragment();
+        mDetailFragment.setConfirmListener(view -> {
+
+            //点击删除指定位置
+            mPresenter.removeApplicant(mAdapter.getSelectPos());
+
+        });
+        mAddApplicant.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 切换至列表显示
+     */
+    @Override
+    public void transToInitListFragment(){
+
+        mDetailFragment = new ApplicantDetailListFragment();
+        mAddApplicant.setVisibility(View.GONE);
     }
 
     @Override
-    public void showEmptyView(String msg) {
-
-    }
-
-    @Override
-    public void refreshView() {
-
-    }
-
-    @Override
-    public void showError(String msg) {
-
+    public void removeAddApplicantDialog() {
+        if (mDialog != null)
+            mDialog.dismiss();
     }
 }

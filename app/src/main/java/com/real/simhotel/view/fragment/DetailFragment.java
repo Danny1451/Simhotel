@@ -3,10 +3,10 @@ package com.real.simhotel.view.fragment;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.real.simhotel.R;
-import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.presenter.base.Presenter;
 import com.real.simhotel.view.base.BaseFragment;
@@ -40,6 +40,12 @@ public class DetailFragment<T> extends BaseFragment {
     @Bind(R.id.training_detail_btn_confirm)
     Button confirmBtn;
 
+    @Bind(R.id.normal_detail_layout)
+    LinearLayout normLayout;
+
+    @Bind(R.id.list_detail_layout)
+    LinearLayout listLayout;
+
     public T model;
 
     private View.OnClickListener mConfirmListener;
@@ -54,10 +60,25 @@ public class DetailFragment<T> extends BaseFragment {
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
+
+
+        initView();
+
         confirmBtn.setOnClickListener(mConfirmListener);
+
+
 
         if (model != null)
             updateInfo(model);
+
+
+    }
+
+    public void initView(){
+
+        normLayout.setVisibility(View.GONE);
+        listLayout.setVisibility(View.GONE);
+
     }
 
 
@@ -66,7 +87,7 @@ public class DetailFragment<T> extends BaseFragment {
         model = info;
 
         //避免为初始化的状态
-        if (tvLine1 == null)
+        if (tvLine1 == null || info == null)
             return;
 
 
@@ -90,7 +111,7 @@ public class DetailFragment<T> extends BaseFragment {
 
     @Override
     protected int getLayoutId() {
-        return R.layout.fragment_training_detail_normal;
+        return R.layout.fragment_training_detail;
     }
 
     @Override

@@ -1,11 +1,19 @@
 package com.real.simhotel.view.fragment;
 
+import android.view.View;
+
 import com.real.simhotel.model.Applicant;
 
 /**
  * Created by liudan on 2017/1/11.
  */
 public class ApplicantDetailFragment extends DetailFragment<Applicant> {
+
+    @Override
+    public void initView() {
+        super.initView();
+        normLayout.setVisibility(View.VISIBLE);
+    }
 
     @Override
     public void renderView(Applicant model) {

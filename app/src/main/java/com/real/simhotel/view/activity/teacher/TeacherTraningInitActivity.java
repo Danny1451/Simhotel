@@ -242,18 +242,5 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
     }
 
 
-    @Override
-    public void showEmptyView(String msg) {
 
-    }
-
-    @Override
-    public void refreshView() {
-
-    }
-
-    @Override
-    public void showError(String msg) {
-
-    }
 }

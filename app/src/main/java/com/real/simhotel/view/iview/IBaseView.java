@@ -7,6 +7,8 @@ import java.util.List;
  */
 public interface IBaseView {
     void showLoading();
+
+    void disMissLoading();
 //
     void showEmptyView(String msg);
 //
