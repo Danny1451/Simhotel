@@ -7,7 +7,7 @@ import com.real.simhotel.model.Training;
 /**
  * Created by liudan on 2017/1/11.
  */
-public class TrainingDetailFragment extends DetailFragment<Training> {
+public class TrainingDetailFragment extends BaseDetailFragment<Training> {
 
     @Override
     public void initView() {

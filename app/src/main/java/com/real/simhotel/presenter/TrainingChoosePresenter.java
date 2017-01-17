@@ -37,7 +37,6 @@ public class TrainingChoosePresenter extends BasePresenter {
 
     Subscription mTrainingList;
 
-    Subscription mRepeat;
 
     //展示model
     List<DynamicListModel> viewModelList;
@@ -55,6 +54,7 @@ public class TrainingChoosePresenter extends BasePresenter {
         application.mTraining = training;
 
         mView.enterTrainingForTeacher(training);
+
     }
 
     @Override
@@ -64,8 +64,7 @@ public class TrainingChoosePresenter extends BasePresenter {
         if (mTrainingList != null)
             mTrainingList.unsubscribe();
 
-        if (mRepeat != null)
-            mRepeat.unsubscribe();
+
     }
 
     /**
@@ -97,17 +96,7 @@ public class TrainingChoosePresenter extends BasePresenter {
                     .subscribe(new TeacherTrainingListSubscriber());
 
 
-//            //轮询
-//            mRepeat =  Observable.interval(0,30,TimeUnit.SECONDS)
-//                    .observeOn(Schedulers.io())//都在子线程中
-//                    .subscribeOn(Schedulers.io())
-//                    .subscribe(aLong -> {
-//
-//
-//
-//
-//
-//                    });
+
 //
 //            RxBus.getDefault().post(new Hotel());
 //

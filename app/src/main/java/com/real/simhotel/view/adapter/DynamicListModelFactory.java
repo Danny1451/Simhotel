@@ -11,6 +11,9 @@ import rx.functions.Action1;
 
 /**
  * Created by liudan on 2016/12/28.
+ *
+ * ViewModel 的工厂类
+ *
  */
 public class DynamicListModelFactory {
 

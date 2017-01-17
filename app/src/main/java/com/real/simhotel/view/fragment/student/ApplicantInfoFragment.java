@@ -49,16 +49,27 @@ public class ApplicantInfoFragment extends BaseFragment {
     @Bind(R.id.applicant_confirm_btn)
     Button mConfirm;
 
-    private DynamicListModel mData;
+    private int mSeekBarlValue;
 
+    private Applicant mData;
 
     private View.OnClickListener mConfirmListener;
+
+
+    public interface OnApplicantQuteChanged{
+        void onQuteChanged(int seekValue);
+    }
+
 
 
     public void setConfirmListener(View.OnClickListener listener){
         this.mConfirmListener = listener;
 
 
+    }
+
+    public int getSeekBarValue() {
+        return mSeekBarlValue;
     }
 
     @Override
@@ -70,9 +81,13 @@ public class ApplicantInfoFragment extends BaseFragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
 
+                //更新值
+                mSeekBarlValue = i;
                 //滑动的时候
-                mSelectResultTv.setText(i * 1000 + "/月");
-                ((Applicant)mData.ext).quotePrice = i;
+                mSelectResultTv.setText(mSeekBarlValue * 1000 +  "/月");
+
+
+
             }
 
             @Override
@@ -89,6 +104,8 @@ public class ApplicantInfoFragment extends BaseFragment {
         mConfirm.setOnClickListener(mConfirmListener);
 
 
+        if (mData != null)
+            updateWithModel(mData);
     }
 
     @Override
@@ -96,21 +113,24 @@ public class ApplicantInfoFragment extends BaseFragment {
 
     }
 
-    public void updateWithModel(DynamicListModel model){
+    public void updateWithModel(Applicant model){
 
         mData = model;
 
-        Applicant source =(Applicant)model.ext;
-        //更新progress
-        mSeekBar.setProgress(source.quotePrice);
-        mSelectResultTv.setText(source.quotePrice * 1000 + "/月");
-        //更新数据
-        mNameTv.setText("姓名: "+source.name);
-        mLevelTv.setText("等级: " + source.getLevelStr());
-        mWagesTv.setText("期望工资: " + source.expectValues + "/月");
-        mExperienceTv.setText("工作时间: " + source.year + "年");
+        //避免为初始化的状态
+        if (mNameTv == null )
+            return;
 
-        mHead.setImageResource(source.headRes);
+        //更新progress
+        mSeekBar.setProgress(mData.quotePrice);
+        mSelectResultTv.setText(mData.quotePrice * 1000 + "/月");
+        //更新数据
+        mNameTv.setText("姓名: "+mData.name);
+        mLevelTv.setText("等级: " + mData.getLevelStr());
+        mWagesTv.setText("期望工资: " + mData.expectValues + "/月");
+        mExperienceTv.setText("工作时间: " + mData.year + "年");
+
+        mHead.setImageResource(mData.headRes);
 
         //把Data 作为tag
         mConfirm.setTag(mData);

@@ -30,7 +30,7 @@ public class SplashActivity extends AppActivity {
         new Thread(new Runnable() {
             public void run() {
                 String lastUser = PreferenceUtils.getLastUser(mContext);
-                lastUser = "";
+                lastUser = "stu";
                 if (!TextUtils.isEmpty(lastUser)) {
                     // auto login mode, make sure all group and conversation is loaed before enter the main screen
                     try {

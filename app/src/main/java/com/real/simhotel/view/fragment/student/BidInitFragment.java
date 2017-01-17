@@ -8,11 +8,13 @@ import android.widget.Button;
 
 import com.jakewharton.rxbinding.view.RxView;
 import com.real.simhotel.R;
+import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.BidInitPresenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
+import com.real.simhotel.view.iview.ISHRBidView;
 
 import java.util.List;
 
@@ -26,7 +28,7 @@ import rx.functions.Action1;
 /**
  * Created by liudan on 2016/12/21.
  */
-public class BidInitFragment extends BaseFragment<BidInitPresenter> {
+public class BidInitFragment extends BaseFragment<BidInitPresenter> implements ISHRBidView{
 
 
     @Inject
@@ -54,33 +56,31 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> {
 
         ButterKnife.bind(this,view);
 
+        //设置Adapter
         mAdapter = new DynamicListAdapter(mActivity)
                 .setRowInterface((pos,model)->{
 
-                     mPresenter.onClickApplicantsRow(pos,model);
+                     //刷新左侧的界面
+                     mDetailFragment.updateWithModel((Applicant) model.ext);
 
                 });
 
-
-
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
-
         mList.setAdapter(mAdapter);
         mList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
 
 
+        //初始化话Detail
         mDetailFragment = new ApplicantInfoFragment();
         //绑定按钮事件
-
-
-
-        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
-
         mDetailFragment.setConfirmListener(view1 ->{
-            //点击了确定 通知presenter 刷新list
 
-            mPresenter.updateApplicantsRow((DynamicListModel)view.getTag());
+            //TODO 数据的改动都放在Presenter中操作
+            //回传 Presenter 一个选中的位置 和 滑动的值。
+            mPresenter.updateApplicantsRow(mAdapter.getSelectPos(),mDetailFragment.getSeekBarValue());
+
         });
+
 
     }
 
@@ -101,12 +101,6 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> {
 
     }
 
-    public void loadList(List<DynamicListModel> list){
-
-        if (list != null)
-            mAdapter.setDataList(list);
-
-    }
 
     @Override
     protected int getLayoutId() {
@@ -121,5 +115,35 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> {
     @Override
     protected View getLoaingTargetView() {
         return mList;
+    }
+
+    @Override
+    public void renderApplicantsList(List<DynamicListModel> applicantsList) {
+
+        //替换 fragment
+        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
+
+
+        //清空之前的选中状态
+        for (int i = 0; i < applicantsList.size(); i++) {
+            applicantsList.get(i).isSelected = false;
+        }
+
+        //若第一个有数据的话 刷新这个人的界面
+        if (applicantsList.size() == 0){
+            mAdapter.setDataList(applicantsList);
+            return;
+        }
+
+        //选中第一个
+        applicantsList.get(0).isSelected = true;
+
+
+
+        //更新
+        mAdapter.setDataList(applicantsList);
+
+        //默认选中第一个
+        mDetailFragment.updateWithModel((Applicant)applicantsList.get(0).ext);
     }
 }

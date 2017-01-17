@@ -4,6 +4,8 @@ import java.util.List;
 
 /**
  * Created by liudan on 2016/12/19.
+ *
+ * 为 DynamicListAdapter 做的 ViewModel
  */
 public class DynamicListModel {
 

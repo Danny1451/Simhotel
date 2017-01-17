@@ -48,19 +48,22 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
         return mSelectPos;
     }
 
-    public void setChooseInterface(NormalChooseInterface mChooseInterface) {
+    public DynamicListAdapter setChooseInterface(NormalChooseInterface mChooseInterface) {
         this.mChooseInterface = mChooseInterface;
+        return this;
     }
 
-    public void setRowInterface(DynamicListRowInterface mRowInterface) {
+    public DynamicListAdapter setRowInterface(DynamicListRowInterface mRowInterface) {
         this.mRowInterface = mRowInterface;
+        return this;
     }
 
-    public void setItemChooseInterce(ItemsChooseInterface mItemChooseInterce) {
+    public DynamicListAdapter setItemChooseInterce(ItemsChooseInterface mItemChooseInterce) {
         this.mItemChooseInterce = mItemChooseInterce;
+        return this;
     }
 
-    public void setDataList(List<DynamicListModel> dataList) {
+    public DynamicListAdapter setDataList(List<DynamicListModel> dataList) {
         this.mDataList = dataList;
         this.notifyDataSetChanged();
         for (int i = 0; i < dataList.size(); i++) {
@@ -69,6 +72,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
             }
         }
 
+        return this;
     }
 
     @Inject
@@ -444,25 +448,15 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
 
         @Override
         public void bind(DynamicListModel model) {
+
             name.setText(model.title);
 
             detail.setText(model.info);
 
-//            if (model.selectedValue != 0){
-//
-//                detail.setText(model.selectedValue + "万");
-//
-//
-//            }else{
-//
-//                detail.setText("未报价");
-//
-//            }
-
-
         }
     }
 
+    //带数字的 cell
     public class NumberTitleInfoViewHolder extends DyNamicBaseViewHolder{
 
         @Bind(R.id.row_number_tv)

@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2017/1/5.
  */
-public class DetailFragment<T> extends BaseFragment {
+public class BaseDetailFragment<T> extends BaseFragment {
 
     @Bind(R.id.training_detail_tv_1)
     TextView tvLine1;

@@ -57,6 +57,11 @@ dependencies {
     //dialog
     compile 'com.orhanobut:dialogplus:1.11@aar'
 
+    //chart
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+
+    //eventbus
+    compile 'org.greenrobot:eventbus:3.0.0'
 
 
 }

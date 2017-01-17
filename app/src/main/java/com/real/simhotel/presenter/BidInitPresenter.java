@@ -8,6 +8,7 @@ import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
+import com.real.simhotel.view.iview.ISHRBidView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,12 +18,12 @@ import java.util.List;
  */
 public class BidInitPresenter extends BasePresenter {
 
-    private BidInitFragment mView;
+    private ISHRBidView mView;
 
     private List<DynamicListModel> data;
 
 
-    public BidInitPresenter(BidInitFragment view){
+    public BidInitPresenter(ISHRBidView view){
 
         mView = view;
     }
@@ -31,9 +32,6 @@ public class BidInitPresenter extends BasePresenter {
     public void requestData(Object... o) {
 
         data = new ArrayList<>();
-
-
-
 
 
         //初始化数据
@@ -85,7 +83,7 @@ public class BidInitPresenter extends BasePresenter {
 
 
         //更新数据
-        mView.loadList(data);
+        mView.renderApplicantsList(data);
 
 
 //        onClickApplicantsRow(0,model1);
@@ -98,7 +96,8 @@ public class BidInitPresenter extends BasePresenter {
         String res = "";
         for (DynamicListModel model : data){
 
-            res = res + "名字:" + model.title + "报价:" + model.selectedValue;
+            Applicant applicant = (Applicant) model.ext;
+            res = res + "名字:" + applicant.name + "报价:" + applicant.quotePrice;
 
         }
 
@@ -108,19 +107,24 @@ public class BidInitPresenter extends BasePresenter {
     }
 
     //更新左侧的列表的报价
-    public void updateApplicantsRow(DynamicListModel model){
+    public void updateApplicantsRow(int pos,int seekValue){
 
-        model.selectedValue = ((Applicant) model.ext).quotePrice * 1000;
+        //得到 model 和 选择的value
 
-        mView.loadList(data);
+        DynamicListModel model = data.get(pos);
+        Applicant applicant = (Applicant) model.ext;
+
+
+        //更新值
+        applicant.quotePrice = seekValue;
+
+        //更新界面
+        model.info = applicant.quotePrice * 1000 + "元";
+
+
+        mView.renderApplicantsList(data);
 
     }
 
 
-    //更新右侧的list
-    public void onClickApplicantsRow(int pos , DynamicListModel model){
-
-//        mView.showToast("选择了" + model.title + " " +pos);
-        mView.getDetailFragment().updateWithModel(model);
-    }
 }

@@ -26,8 +26,8 @@ import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.fragment.ApplicantDetailFragment;
 import com.real.simhotel.view.fragment.ApplicantDetailListFragment;
-import com.real.simhotel.view.fragment.DetailFragment;
-import com.real.simhotel.view.iview.IHRManagerView;
+import com.real.simhotel.view.fragment.BaseDetailFragment;
+import com.real.simhotel.view.iview.ITHRManagerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ import butterknife.OnClick;
  * Created by liudan on 2017/1/11.
  * 教师的人力资源管理界面
  */
-public class TeacherHRManagerActivity extends AppActivity implements IHRManagerView{
+public class TeacherHRManagerActivity extends AppActivity implements ITHRManagerView {
 
     @Inject
     DynamicListAdapter mAdapter;
@@ -58,8 +58,9 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
     TeacherHRManagerPresenter mPresenter;
 
     //详情页
-    DetailFragment mDetailFragment;
+    BaseDetailFragment mDetailFragment;
 
+    //上方菜单按钮
     MenuItem mGroupStatus;
     MenuItem mConfirm;
 
@@ -235,6 +236,7 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
     @Override
     public void renderApplicantsList(List<DynamicListModel> applicantsList) {
 
+        //替换 fragment
         this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mDetailFragment).commitAllowingStateLoss();
 
         //清空之前的选中状态
@@ -242,6 +244,7 @@ public class TeacherHRManagerActivity extends AppActivity implements IHRManagerV
             applicantsList.get(i).isSelected = false;
         }
 
+        //若第一个有数据的话 刷新这个人的界面
         if (applicantsList.size() == 0){
             mAdapter.setDataList(applicantsList);
             return;

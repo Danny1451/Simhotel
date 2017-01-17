@@ -7,12 +7,18 @@ import android.view.MenuItem;
 
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
+import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
 import com.real.simhotel.view.fragment.student.BidResultFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -24,8 +30,34 @@ public class StudentMainActivity extends AppActivity{
     private BaseFragment mFragment;
 
 
+    MenuItem mTrainingStatus;
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StatusEvent event) {
+
+        KLog.d(TAG,"receive event " + event.getTrainingStatus() + " " + event.getStatusDes());
+
+        if (mTrainingStatus != null)
+            mTrainingStatus.setTitle(event.getStatusDes());
+    }
+
     @Override
     protected void initData() {
+
+
 
     }
 
@@ -34,11 +66,13 @@ public class StudentMainActivity extends AppActivity{
 
         //获取基础的信息
         mFragment = new CeoInitFragment();
-
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
 
-
-
+        
+        //开始轮询
+        MainApplication app = (MainApplication) getApplication();
+        //获取轮询管理
+        app.broadCastManager.startScheduling();
     }
 
     @Override
@@ -46,6 +80,10 @@ public class StudentMainActivity extends AppActivity{
         MenuInflater inflater = getMenuInflater();
 
         inflater.inflate(R.menu.student_bar_menu,menu);
+
+
+        mTrainingStatus = menu.findItem(R.id.trainging_status);
+        mTrainingStatus.setCheckable(false);
         return super.onCreateOptionsMenu(menu);
     }
 

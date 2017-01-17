@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by liudan on 2017/1/11.
  */
-public interface IHRManagerView extends IBaseView{
+public interface ITHRManagerView extends IBaseView{
 
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 

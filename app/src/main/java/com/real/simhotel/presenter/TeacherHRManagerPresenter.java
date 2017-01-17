@@ -5,7 +5,7 @@ import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
-import com.real.simhotel.view.iview.IHRManagerView;
+import com.real.simhotel.view.iview.ITHRManagerView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class TeacherHRManagerPresenter extends BasePresenter {
 
-    IHRManagerView mView;
+    ITHRManagerView mView;
 
     int finishNum = 0 ;
     private Boolean hasFinishQute = false;
@@ -27,13 +27,14 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     private List<Applicant> mDataList;
     private List<DynamicListModel> mViewModelList;
 
-    public TeacherHRManagerPresenter(IHRManagerView view){
+    public TeacherHRManagerPresenter(ITHRManagerView view){
 
         mView = view;
 
     }
 
 
+    //将报价 展示到界面中
     public List<DynamicListModel> parseQuteToViewModel(List<Quote> quotes){
         List<DynamicListModel> dynamicListModels = new ArrayList<>();
 
@@ -50,6 +51,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         return dynamicListModels;
     }
 
+    // 清空报价
     private void cleanQutes(){
         for (int i = 0 ; i < mDataList.size() ; i++ ){
 
@@ -64,17 +66,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         }
     }
 
-    private void changeToNormal(){
-        for (int i = 0 ; i < mDataList.size() ; i++ ){
-
-            Applicant applicant = mDataList.get(i);
-            DynamicListModel viewModel = mViewModelList.get(i);
-
-            applicant.quotes = new ArrayList<>();
-            viewModel.ext = applicant;
-
-        }
-    }
 
 
 

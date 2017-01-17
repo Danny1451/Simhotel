@@ -8,7 +8,7 @@ import com.real.simhotel.model.HotelTemplate;
 /**
  * Created by liudan on 2017/1/11.
  */
-public class HotelTemplateDetailFragment extends DetailFragment<HotelTemplate> {
+public class HotelTemplateDetailFragment extends BaseDetailFragment<HotelTemplate> {
 
     @Override
     public void initView() {

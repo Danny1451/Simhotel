@@ -1,6 +1,7 @@
 package com.real.simhotel.data;
 
 import com.real.simhotel.config.Constants;
+import com.real.simhotel.events.StatusEvent;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
@@ -114,4 +115,11 @@ public interface ApiService {
                                                 @Query("equip_depre_cycle") int equipDepreCycle
                                                 );
 
+    /**
+     * 获取实例状态
+     * @param trainingName
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_STATUS)
+    Observable<Response<StatusEvent>> getTrainingStatus(@Query("training_id") int trainId);
 }
