@@ -25,6 +25,7 @@
         </activity>
 
         <activity android:name=".view.activity.LoginActivity"></activity>
+        <activity android:name=".view.activity.SeatInitActivity"></activity>
         <activity android:name=".view.activity.HomeActivity"></activity>
         <activity
             android:name=".view.activity.student.StudentMainActivity"

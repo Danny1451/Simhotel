@@ -28,4 +28,22 @@ public class PreferenceUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         return  preferences.getString("lastpassword","");
     }
+
+    public static String getCharacter(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getString("character","");
+    }
+    public static void setCharacter(Context context,String character){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putString("character",character).commit();
+    }
+
+    public static String getTeamNum(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getString("teamnum","");
+    }
+    public static void setTeamNum(Context context,String teamNum){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putString("teamnum",teamNum).commit();
+    }
 }

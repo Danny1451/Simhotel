@@ -27,6 +27,17 @@ public class SplashActivity extends AppActivity {
         //check login
         mContext = this;
 
+
+        //check 是否初始化过小组和角色
+
+        if (TextUtils.isEmpty(PreferenceUtils.getCharacter(mContext))){
+            //没有初始化过
+            startActivity(new Intent(SplashActivity.this, SeatInitActivity.class));
+            finish();
+            return;
+        }
+
+
         new Thread(new Runnable() {
             public void run() {
                 String lastUser = PreferenceUtils.getLastUser(mContext);
@@ -39,7 +50,7 @@ public class SplashActivity extends AppActivity {
                     }
 
                     if (lastUser.startsWith("stu")){
-                        startActivity(new Intent(SplashActivity.this, StudentMainActivity.class));
+                        startActivity(new Intent(SplashActivity.this, StudentMainActivity                                                                                                                                                            .class));
                     }else {
                         startActivity(new Intent(SplashActivity.this, TeacherMainActivity.class));
                     }

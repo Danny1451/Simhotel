@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/linearLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="小组:"
+            android:id="@+id/textView19"
+            android:layout_marginRight="3dp"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/group_spinner"
+            android:spinnerMode="dropdown"
+            android:entries="@array/groups"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="角色:"
+            android:id="@+id/textView20"
+            android:layout_marginRight="3dp"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/character_spinner"
+            android:spinnerMode="dropdown"
+            android:entries="@array/character"
+            android:layout_gravity="center_vertical" />
+    </LinearLayout>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:id="@+id/seat_confirm_btn"
+        android:layout_below="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="第一次打开应用时,设定预设的角色和小组信息"
+        android:id="@+id/textView21"
+        android:layout_above="@+id/linearLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="32dp"
+        android:textSize="28sp" />
+</RelativeLayout>
