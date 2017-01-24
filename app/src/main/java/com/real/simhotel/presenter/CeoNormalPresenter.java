@@ -1,11 +1,17 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.events.StatusEvent;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +35,38 @@ public class CeoNormalPresenter extends BasePresenter{
     }
 
 
+    public void startUpdateStatus(){
+
+        //获取轮询管理 开始轮询
+        application.broadCastManager.startScheduling();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StatusEvent event) {
+
+
+        switch (event.getTrainingStatus()){
+            case EventCode.TEACHER_START_HIRE:
+
+                //开始雇员
+                list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",1));
+
+                break;
+
+
+
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+
+        EventBus.getDefault().unregister(this);
+
+    }
 
     @Override
     public void requestData(Object... o) {

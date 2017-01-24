@@ -16,7 +16,13 @@ public class Constants {
 
     public static final String API_URL_TRAINING_STATUS = "/api/erp/edu/hotel/training_status.json";
 
+    public static final String API_URL_TRAINING_EMPLOU_TEMPLATE = "/api/erp/edu/hotel/list_employ_template.json";
+
+    public static final String API_URL_HR_CREATE_APPLICANT = "/api/erp/edu/hotel/init_employ_template.json";
+
     public static final String API_URL_TRAINING_LIST_TEACHER = "/api/erp/edu/hotel/list_training_for_teacher.json";
+
+    public static final String API_URL_BID_EMPLOY = "/api/erp/edu/hotel/bid_employ.json";
 
     public static final String API_URL_HOTEL_TEMPLATE_CHOOSE = "/api/erp/edu/hotel/choose_hotel.json";
 

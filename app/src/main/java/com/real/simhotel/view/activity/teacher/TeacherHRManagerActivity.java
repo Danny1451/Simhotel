@@ -193,11 +193,12 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
                                         return;
                                     }
 
+                                    //TODO
                                     Applicant template = new Applicant();
-
-                                    template.name = name;
-                                    template.expectValues = Integer.parseInt(price);
-                                    template.level = Integer.parseInt(level);
+//                                    template.setEmployNum(1);
+                                    template.setExpectMonthIncome(Integer.parseInt(price));
+                                    template.setLevel(Integer.parseInt(level));
+                                    template.setExpectWorkPlace(Integer.parseInt(level));
                                     template.quotes = new ArrayList<>();
                                     mPresenter.createApplicant(template);
 

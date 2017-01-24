@@ -2,6 +2,7 @@ package com.real.simhotel.data;
 
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
@@ -117,9 +118,51 @@ public interface ApiService {
 
     /**
      * 获取实例状态
-     * @param trainingName
+     * @param trainId
      * @return
      */
     @GET(Constants.API_URL_TRAINING_STATUS)
     Observable<Response<StatusEvent>> getTrainingStatus(@Query("training_id") int trainId);
+
+
+    /**
+     * 获取雇员列表
+     * @param trainId
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_EMPLOU_TEMPLATE)
+    Observable<Response<List<Applicant>>> getEmployTemplate(@Query("training_id") int trainId);
+
+
+    /**
+     * 建立招聘者
+     * @param trainId
+     * @param level
+     * @param expectIncome
+     * @param expectWorkPlace
+     * @return
+     */
+    @GET(Constants.API_URL_HR_CREATE_APPLICANT)
+    Observable<Response<Integer>> createEmploy(@Query("training_id") int trainId,
+                                               @Query("level") int level,
+                                               @Query("expect_month_income") int expectIncome,
+                                               @Query("expect_work_place") int expectWorkPlace
+                                               );
+
+    /**
+     * 竞拍招聘者
+     * @param groupId
+     * @param employId
+     * @param bidTime
+     * @param bidPrice
+     * @return
+     */
+    @GET(Constants.API_URL_BID_EMPLOY)
+    Observable<Response<String>> bidEmploy(@Query("group_id") int groupId,
+                                           @Query("employ_id") int employId,
+                                           @Query("bidding_time") int bidTime,
+                                           @Query("bidding_price") int bidPrice);
+
+
+
 }

@@ -22,6 +22,7 @@ import rx.schedulers.Schedulers;
 
 /**
  * Created by liudan on 2017/1/17.
+ * 接收酒店状态改变的广播
  */
 public class BroadCastManager {
 
@@ -50,6 +51,7 @@ public class BroadCastManager {
      */
     public void startScheduling(){
 
+        //如果已经开始的话 就不在重新启动
         if (mRepeat == null) {
             isRuning = true;
             //轮询
@@ -58,6 +60,7 @@ public class BroadCastManager {
                     .subscribeOn(Schedulers.io())
                     .subscribe(aLong -> {
 
+                        //判断是否暂停
                         if (isRuning) {
                             //请求
                             mRequest = mApiService
@@ -120,6 +123,7 @@ public class BroadCastManager {
         public void onNext(StatusEvent event) {
             super.onNext(event);
 
+            //直接发送事件
             EventBus.getDefault().post(event);
 
         }

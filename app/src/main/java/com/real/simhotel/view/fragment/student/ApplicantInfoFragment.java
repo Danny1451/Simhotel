@@ -125,12 +125,11 @@ public class ApplicantInfoFragment extends BaseFragment {
         mSeekBar.setProgress(mData.quotePrice);
         mSelectResultTv.setText(mData.quotePrice * 1000 + "/月");
         //更新数据
-        mNameTv.setText("姓名: "+mData.name);
+        mNameTv.setText("姓名: "+mData.getLevelStr());
         mLevelTv.setText("等级: " + mData.getLevelStr());
-        mWagesTv.setText("期望工资: " + mData.expectValues + "/月");
-        mExperienceTv.setText("工作时间: " + mData.year + "年");
+        mWagesTv.setText("期望工资: " + mData.getExpectMonthIncome() + "/月");
+        mExperienceTv.setText("工作时间: " + mData.getExpectWorkPlace() + "年");
 
-        mHead.setImageResource(mData.headRes);
 
         //把Data 作为tag
         mConfirm.setTag(mData);

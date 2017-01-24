@@ -1,8 +1,20 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.R;
+import com.real.simhotel.config.Role;
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.events.StatusEvent;
 import com.real.simhotel.presenter.base.BasePresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.activity.student.StudentMainActivity;
 import com.real.simhotel.view.base.BaseFragment;
+import com.real.simhotel.view.fragment.student.CeoInitFragment;
+import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+import com.real.simhotel.view.iview.IStudentMainView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import rx.Subscription;
 
@@ -11,13 +23,76 @@ import rx.Subscription;
  */
 public class StudentMainPresenter extends BasePresenter {
 
-    private StudentMainActivity mView;
 
 
-    Subscription mBoardCastSubcrib;
 
-    private BaseFragment mRoleFragment;
-    public StudentMainPresenter(StudentMainActivity View){ this.mView = mView;}
+    IStudentMainView mView;
+
+
+
+    BaseFragment mDetailFragment;
+
+    public StudentMainPresenter(IStudentMainView View){ this.mView = mView;}
+
+    public void startUpdateStatus(){
+
+        //获取轮询管理 开始轮询
+        application.broadCastManager.startScheduling();
+
+        EventBus.getDefault().register(this);
+
+
+    }
+
+
+
+    /**
+     * 注册接收广播事件 用来切换界面
+     * @param event
+     */
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(StatusEvent event) {
+
+        KLog.d("receive event " + event.getTrainingStatus() + " " + event.getStatusDes());
+
+        //根据角色 接收不同的广播事件
+        if (application.mRole == Role.ROLE_STU_CEO){
+
+            //角色为CEO
+
+            switch (event.getTrainingStatus()){
+                case EventCode.TRAINING_BUILDING:
+
+                    break;
+                case EventCode.TRAINING_BUILDED:
+                    //实例建完之后 开始初始化
+                    mDetailFragment  = new CeoInitFragment();
+
+
+                    mView.updateDetailFragment(mDetailFragment);
+
+                case EventCode.TRAINING_HOTEL_INITED:
+
+                    mDetailFragment = new CeoNormalFragment();
+
+                    mView.updateDetailFragment(mDetailFragment);
+
+
+                    break;
+            }
+
+
+
+        }else if (application.mRole == Role.ROLE_STU_HR){
+
+        }else if (application.mRole == Role.ROLE_STU_FINANCE){
+
+        }else if (application.mRole == Role.ROLE_STU_MARKET){
+
+        }
+
+    }
+
 
     @Override
     public void requestData(Object... o) {
@@ -31,5 +106,8 @@ public class StudentMainPresenter extends BasePresenter {
     public void destroy() {
         super.destroy();
 
+        EventBus.getDefault().unregister(this);
+
+        application.broadCastManager.stopScheduling();
     }
 }

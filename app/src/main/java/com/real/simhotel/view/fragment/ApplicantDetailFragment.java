@@ -19,12 +19,12 @@ public class ApplicantDetailFragment extends BaseDetailFragment<Applicant> {
     public void renderView(Applicant model) {
 
 
-        tvLine1.setText("人员名称:"+ model.name);
-        tvLine2.setText("等级:" + model.level);
-        tvLine3.setText("期望月薪:" + model.expectValues);
+        tvLine1.setText("人员名称:"+ model.getLevelStr());
+        tvLine2.setText("等级:" + model.getLevel());
+        tvLine3.setText("期望月薪:" + model.getExpectMonthIncome());
 //        tvLine4.setText("教师id:" + model.getTeacherId());
 //        tvLine5.setText("参数5:" + model.getCurrentCycle());
-        tvLine6.setText("工作年限:" + model.year);
+        tvLine6.setText("工作年限:" + model.getExpectWorkPlace());
 
         confirmBtn.setText("删除");
 
