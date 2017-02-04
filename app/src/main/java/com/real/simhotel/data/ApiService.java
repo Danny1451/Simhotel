@@ -22,6 +22,9 @@ import rx.Observable;
  */
 public interface ApiService {
 
+
+    public static final String PARAMS_TRAINING_ID = "training_id";
+
     /**
      * 登录接口
      * @param type 类型 老师或者学生
@@ -36,18 +39,18 @@ public interface ApiService {
 
 
     @GET(Constants.API_URL_HOTEL_LIST)
-    Observable<Response<List<Hotel>>> getHotelList(@Query("training_id") int trainId);
+    Observable<Response<List<Hotel>>> getHotelList(@Query(PARAMS_TRAINING_ID) int trainId);
 
     @GET(Constants.API_URL_GROUP_LIST)
-    Observable<Response<List<Group>>> getGroupList(@Query("training_id") int trainId);
+    Observable<Response<List<Group>>> getGroupList(@Query(PARAMS_TRAINING_ID) int trainId);
 
     @GET(Constants.API_URL_CREATE_GROUP)
-    Observable<Response<String>> createGroup(@Query("training_id") int trainId,
+    Observable<Response<String>> createGroup(@Query(PARAMS_TRAINING_ID) int trainId,
                                              @Query("group_name") String groupname,
                                              @Query("group_des") String des);
 
     @GET(Constants.API_URL_CREATE_HOTEL)
-    Observable<Response<String>> createHotel(@Query("training_id") int trainId,
+    Observable<Response<String>> createHotel(@Query(PARAMS_TRAINING_ID) int trainId,
                                              @Query("location") int location,
                                              @Query("room_least_num") int roomMinNum,
                                              @Query("room_cost") int roomcoast,
@@ -59,7 +62,7 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_HOTEL_TEMPLATE_LIST)
-    Observable<Response<List<HotelTemplate>>> getHotelTemplateList(@Query("training_id") int trainId);
+    Observable<Response<List<HotelTemplate>>> getHotelTemplateList(@Query(PARAMS_TRAINING_ID) int trainId);
 
 
     /**
@@ -122,7 +125,7 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_TRAINING_STATUS)
-    Observable<Response<StatusEvent>> getTrainingStatus(@Query("training_id") int trainId);
+    Observable<Response<StatusEvent>> getTrainingStatus(@Query(PARAMS_TRAINING_ID) int trainId);
 
 
     /**
@@ -131,7 +134,7 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_TRAINING_EMPLOU_TEMPLATE)
-    Observable<Response<List<Applicant>>> getEmployTemplate(@Query("training_id") int trainId);
+    Observable<Response<List<Applicant>>> getEmployTemplate(@Query(PARAMS_TRAINING_ID) int trainId);
 
 
     /**
@@ -143,7 +146,7 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_HR_CREATE_APPLICANT)
-    Observable<Response<Integer>> createEmploy(@Query("training_id") int trainId,
+    Observable<Response<Integer>> createEmploy(@Query(PARAMS_TRAINING_ID) int trainId,
                                                @Query("level") int level,
                                                @Query("expect_month_income") int expectIncome,
                                                @Query("expect_work_place") int expectWorkPlace
@@ -162,6 +165,25 @@ public interface ApiService {
                                            @Query("employ_id") int employId,
                                            @Query("bidding_time") int bidTime,
                                            @Query("bidding_price") int bidPrice);
+
+
+    /**
+     * 删除招聘者
+     * @param groupId
+     * @param employId
+     * @return
+     */
+    @GET(Constants.API_URL_BID_EMPLOY)
+    Observable<Response<String>> deleteEmploy(@Query(PARAMS_TRAINING_ID) int groupId,
+                                              @Query("employ_id") int employId);
+
+
+    /**
+     * 招聘结束
+     * @param trainingId
+     * @return
+     */
+    Observable<Response<String>> finishEmploy(@Query(PARAMS_TRAINING_ID) int trainingId);
 
 
 

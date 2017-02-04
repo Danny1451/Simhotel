@@ -19,7 +19,7 @@ import butterknife.Bind;
  * Created by liudan on 2017/1/11.
  * 列表样式的详情
  */
-public class ApplicantDetailListFragment extends BaseDetailFragment<List<DynamicListModel>> {
+public class ApplicantListDetailFragment extends BaseDetailFragment<List<DynamicListModel>> {
 
 
     @Bind(R.id.detail_info_rv)
@@ -50,6 +50,8 @@ public class ApplicantDetailListFragment extends BaseDetailFragment<List<Dynamic
 
         //刷新数据
         mAdapter.setDataList(model);
+
+
 
     }
 }

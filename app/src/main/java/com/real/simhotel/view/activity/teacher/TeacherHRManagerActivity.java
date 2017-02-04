@@ -19,13 +19,14 @@ import com.orhanobut.dialogplus.ViewHolder;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.TeacherHRManagerPresenter;
+import com.real.simhotel.utils.DialogUitls;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.AppActivity;
-import com.real.simhotel.view.fragment.ApplicantDetailFragment;
-import com.real.simhotel.view.fragment.ApplicantDetailListFragment;
+import com.real.simhotel.view.fragment.ApplicantListDetailFragment;
+import com.real.simhotel.view.fragment.ApplicantInitDetailFragment;
 import com.real.simhotel.view.fragment.BaseDetailFragment;
 import com.real.simhotel.view.iview.ITHRManagerView;
 
@@ -193,14 +194,23 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
                                         return;
                                     }
 
-                                    //TODO
+                                    // 新建 应聘者 TODO
                                     Applicant template = new Applicant();
 //                                    template.setEmployNum(1);
                                     template.setExpectMonthIncome(Integer.parseInt(price));
                                     template.setLevel(Integer.parseInt(level));
                                     template.setExpectWorkPlace(Integer.parseInt(level));
                                     template.quotes = new ArrayList<>();
-                                    mPresenter.createApplicant(template);
+
+
+
+
+                                    DialogUitls.showConfirmDialog(mContext, "确认新建应聘者?",
+                                            (dialogInterface,i)->
+                                                //创建确认
+                                                mPresenter.createApplicant(template)
+                                            );
+
 
 
 
@@ -264,13 +274,15 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
      */
     @Override
     public void transToDetailFragment(){
-        mDetailFragment = new ApplicantDetailFragment();
-        mDetailFragment.setConfirmListener(view -> {
+        mDetailFragment = new ApplicantInitDetailFragment();
 
-            //点击删除指定位置
-            mPresenter.removeApplicant(mAdapter.getSelectPos());
-
-        });
+        //删除
+        mDetailFragment.setConfirmListener(view ->
+            DialogUitls.showConfirmDialog(mContext,"确认删除",(dialog,which)->
+                //点击删除指定位置
+                mPresenter.removeApplicant(mAdapter.getSelectPos())
+            )
+        );
         mAddApplicant.setVisibility(View.VISIBLE);
     }
 
@@ -280,7 +292,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     @Override
     public void transToInitListFragment(){
 
-        mDetailFragment = new ApplicantDetailListFragment();
+        mDetailFragment = new ApplicantListDetailFragment();
         mAddApplicant.setVisibility(View.GONE);
     }
 

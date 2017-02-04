@@ -1,5 +1,6 @@
 package com.real.simhotel.view.activity;
 
+import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.presenter.LoginPresenter;
+import com.real.simhotel.utils.DialogUitls;
 import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.view.iview.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
@@ -60,6 +62,10 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
         //登录
         mLoginPresenter.login(role,name,pwd);
+
+
+
+
 
     }
 

@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -34,7 +35,8 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     private List<DynamicListModel> mViewModelList;
 
     Subscription mApplicantListSub;
-    Subscription mApplicantCreate;
+    Subscription mApplicantCreateSub;
+    Subscription mDeleteApplicantSub;
 
     public TeacherHRManagerPresenter(ITHRManagerView view){
 
@@ -144,31 +146,84 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public Observable<List<Applicant>> call(Response<List<Applicant>> listResponse) {
                         return RetrofitUtils.flatResponse(listResponse);
                     }
-                }).subscribe(new ApplicantListsSubscriber());
+                }).subscribe(new Subscriber<List<Applicant>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Applicant> applicants) {
+
+                    }
+                });
     }
 
     public void removeApplicant(int pos){
 
+        mView.showLoading();
 
-        if (pos > mViewModelList.size() || pos < 0)
+        //删除成功
+        if (pos > mViewModelList.size() || pos < 0) {
+            mView.disMissLoading();
             return;
+        }
 
 
-        mViewModelList.remove(pos);
-        mDataList.remove(pos);
+        //删除候选人
+        mDeleteApplicantSub = apiService
+                .deleteEmploy(application.mTraining.getId(),mDataList.get(pos).getEmployId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                }).subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        mView.disMissLoading();
+                    }
 
-        mView.renderApplicantsList(mViewModelList);
+                    @Override
+                    public void onError(Throwable e) {
+
+                        //删除失败
+                        mView.disMissLoading();
+                        mView.showToast("删除失败");
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        //删除成功
+                        if (pos > mViewModelList.size() || pos < 0)
+                            return;
+
+
+                        mViewModelList.remove(pos);
+                        mDataList.remove(pos);
+
+                        mView.renderApplicantsList(mViewModelList);
+                    }
+                });
 
     }
 
     public void createApplicant(Applicant model){
 
         model.setTrainingId(application.mTraining.getId());
-        mDataList.add(model);
 
+        mView.showLoading();
 
         //请求新建候选人
-        mApplicantCreate = apiService.createEmploy(model.getTrainingId(),model.getLevel(),model.getExpectMonthIncome(),model.getExpectWorkPlace())
+        mApplicantCreateSub = apiService.createEmploy(model.getTrainingId(),model.getLevel(),model.getExpectMonthIncome(),model.getExpectWorkPlace())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<Integer>, Observable<Integer>>() {
@@ -176,8 +231,43 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public Observable<Integer> call(Response<Integer> integerResponse) {
                         return RetrofitUtils.flatResponse(integerResponse);
                     }
-                }).subscribe(new ApplicantCreateSubscriber(model));
+                }).subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
 
+                        mView.disMissLoading();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        mView.disMissLoading();
+                        mView.showToast("新建失败");
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+
+
+                        mDataList.add(model);
+
+                        DynamicListModel viewModel = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+
+                        viewModel.title = model.getLevelStr();
+                        viewModel.info = "期望:" +model.getExpectMonthIncome() ;
+                        viewModel.ext = model;
+
+                        mViewModelList.add(viewModel);
+
+                        //移除弹框
+                        mView.removeAddApplicantDialog();
+
+                        //刷新列表
+                        mView.renderApplicantsList(mViewModelList);
+
+
+                    }
+                });
 
 
     }
@@ -284,48 +374,5 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
     }
 
-    public class ApplicantListsSubscriber extends DefaultSubscriber<List<Applicant>>{
-        @Override
-        public void onNext(List<Applicant> applicants) {
-            super.onNext(applicants);
-        }
 
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-        }
-    }
-
-    public class ApplicantCreateSubscriber extends DefaultSubscriber<Integer>{
-
-        Applicant mModel;
-        public ApplicantCreateSubscriber(Applicant model){
-            super();
-            mModel= model;
-        }
-
-        @Override
-        public void onNext(Integer integer) {
-            super.onNext(integer);
-
-            DynamicListModel viewModel = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-
-            viewModel.title = mModel.getLevelStr();
-            viewModel.info = "期望:" +mModel.getExpectMonthIncome() ;
-            viewModel.ext = mModel;
-
-            mViewModelList.add(viewModel);
-
-            //移除弹框
-            mView.removeAddApplicantDialog();
-
-            mView.renderApplicantsList(mViewModelList);
-
-        }
-
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
-        }
-    }
 }

@@ -14,6 +14,7 @@ import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
+import com.real.simhotel.view.fragment.ApplicantBidDetailFragment;
 import com.real.simhotel.view.iview.ISHRBidView;
 
 import java.util.List;
@@ -41,12 +42,12 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     Button mConfirm;
 
     //详情页面
-    ApplicantInfoFragment mDetailFragment;
+    ApplicantBidDetailFragment mDetailFragment;
 
 
-    public ApplicantInfoFragment getDetailFragment(){
+    public ApplicantBidDetailFragment getDetailFragment(){
         if (mDetailFragment == null){
-            mDetailFragment = new ApplicantInfoFragment();
+            mDetailFragment = new ApplicantBidDetailFragment();
         }
 
         return mDetailFragment;
@@ -58,12 +59,10 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
 
         //设置Adapter
         mAdapter = new DynamicListAdapter(mActivity)
-                .setRowInterface((pos,model)->{
-
+                .setRowInterface((pos,model)->
                      //刷新左侧的界面
-                     mDetailFragment.updateWithModel((Applicant) model.ext);
-
-                });
+                     mDetailFragment.renderView((Applicant) model.ext)
+                );
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
         mList.setAdapter(mAdapter);
@@ -71,7 +70,7 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
 
 
         //初始化话Detail
-        mDetailFragment = new ApplicantInfoFragment();
+        mDetailFragment = new ApplicantBidDetailFragment();
         //绑定按钮事件
         mDetailFragment.setConfirmListener(view1 ->{
 
@@ -144,6 +143,6 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
         mAdapter.setDataList(applicantsList);
 
         //默认选中第一个
-        mDetailFragment.updateWithModel((Applicant)applicantsList.get(0).ext);
+        mDetailFragment.renderView((Applicant)applicantsList.get(0).ext);
     }
 }

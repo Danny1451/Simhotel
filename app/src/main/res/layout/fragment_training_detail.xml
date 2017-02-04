@@ -57,7 +57,44 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="10dp" />
 
-    <Button
+        <LinearLayout
+            android:id="@+id/bid_seekbar_layout"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:visibility="gone">
+
+            <SeekBar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/bid_seekbar"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:indeterminate="false"
+                android:layout_weight="0.7" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="竞价金额"
+                android:id="@+id/textView22" />
+
+            <TextView
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:text="选择"
+                android:id="@+id/tv_bid_result"
+                android:layout_marginRight="10dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:layout_weight="0.3" />
+        </LinearLayout>
+
+        <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="进入实例"

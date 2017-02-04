@@ -7,7 +7,7 @@ import com.real.simhotel.model.Applicant;
 /**
  * Created by liudan on 2017/1/11.
  */
-public class ApplicantDetailFragment extends BaseDetailFragment<Applicant> {
+public class ApplicantInitDetailFragment extends BaseDetailFragment<Applicant> {
 
     @Override
     public void initView() {
