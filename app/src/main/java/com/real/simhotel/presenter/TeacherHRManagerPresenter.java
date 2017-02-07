@@ -2,10 +2,13 @@ package com.real.simhotel.presenter;
 
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.iview.ITHRManagerView;
@@ -93,7 +96,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
             return;
         }
 
-
         //遍历增加报价
         for (int i = 0 ; i < mDataList.size() ; i++ ){
 
@@ -109,7 +111,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
             //转换到显示模型
             viewModel.info = "报价:" + applicant.quotePrice;
             viewModel.ext = parseQuteToViewModel(applicant.quotes);
-
 
 
         }
@@ -131,7 +132,50 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
 
         //请求列表
-        requestApplicantList();
+//        requestApplicantList();
+
+    }
+
+
+    public void requestApplicantListQuotes(int pos){
+
+        //请求候选人的报价
+
+
+        mView.showLoading();
+
+        Applicant model = mDataList.get(pos);
+
+        apiService.getEmployQuotes(model.getEmployId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<List<Quote>>, Observable<List<Quote>>>() {
+                    @Override
+                    public Observable<List<Quote>> call(Response<List<Quote>> listResponse) {
+                        return RetrofitUtils.flatResponse(listResponse);
+                    }
+                })
+                .subscribe(new Subscriber<List<Quote>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.showToast("刷新失败");
+                        mView.disMissLoading();
+                    }
+
+                    @Override
+                    public void onNext(List<Quote> quotes) {
+
+                        mView.disMissLoading();
+
+                        model.quotes = quotes;
+                        mView.renderQuotesList(quotes);
+                    }
+                });
 
     }
 
@@ -159,6 +203,9 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                     @Override
                     public void onNext(List<Applicant> applicants) {
+
+                        //
+                        mDataList = applicants;
 
                     }
                 });
@@ -287,21 +334,36 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         //跳转到客源推送界面
         mView.showLoading();
 
-        //开始获取客源
-        Observable.timer(application.mTraining.getId(),TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
 
+        //推送结果
+        application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+                EventCode.TEACHER_START_HIRE,
+                new TrainingStatusManager.TraingStatusChangeListener() {
+                    @Override
+                    public void OnChangedSuccess() {
 
-                    mView.disMissLoading();
+                        mView.disMissLoading();
 
-                    //更新列表
-                    mView.renderApplicantsList(mViewModelList);
+                        //更新列表
+                        mView.renderApplicantsList(mViewModelList);
 
-                    mView.updateConfirmStatus("发送结果");
+                        mView.updateConfirmStatus("发送结果");
 
-                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+                    }
+
+                    @Override
+                    public void OnChangedFailed(String erro) {
+
+                        mView.disMissLoading();
+
+                        mView.showToast("推送结果失败,请稍后再试");
+
+                        KLog.d(erro);
+                    }
                 });
+
+
 
 
     }
@@ -358,6 +420,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         mView.updateGroupStatus("更新中");
 
         mView.showLoading();
+
         //增加报价
         testAddQutes();
 

@@ -6,6 +6,7 @@ import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
+import com.real.simhotel.model.Quote;
 import com.real.simhotel.model.Training;
 
 
@@ -156,14 +157,12 @@ public interface ApiService {
      * 竞拍招聘者
      * @param groupId
      * @param employId
-     * @param bidTime
      * @param bidPrice
      * @return
      */
     @GET(Constants.API_URL_BID_EMPLOY)
     Observable<Response<String>> bidEmploy(@Query("group_id") int groupId,
                                            @Query("employ_id") int employId,
-                                           @Query("bidding_time") int bidTime,
                                            @Query("bidding_price") int bidPrice);
 
 
@@ -173,18 +172,28 @@ public interface ApiService {
      * @param employId
      * @return
      */
-    @GET(Constants.API_URL_BID_EMPLOY)
+    @GET(Constants.API_URL_DELETE_EMPLOY)
     Observable<Response<String>> deleteEmploy(@Query(PARAMS_TRAINING_ID) int groupId,
                                               @Query("employ_id") int employId);
 
 
     /**
-     * 招聘结束
+     * 更新实训状态
      * @param trainingId
+     * @param trainingStatus
      * @return
      */
-    Observable<Response<String>> finishEmploy(@Query(PARAMS_TRAINING_ID) int trainingId);
+    @GET(Constants.API_URL_UPDATE_TRAINING_STATUS)
+    Observable<Response<String>> updateTrainingStatus(@Query(PARAMS_TRAINING_ID) int trainingId,
+                                                      @Query("training_status") int trainingStatus);
 
 
+    /**
+     * 获取员工的竞拍结果
+     * @param employId
+     * @return
+     */
+    @GET(Constants.API_URL_EMPLOY_RESULT_LIST)
+    Observable<Response<List<Quote>>> getEmployQuotes(@Query("employ_id") int employId);
 
 }

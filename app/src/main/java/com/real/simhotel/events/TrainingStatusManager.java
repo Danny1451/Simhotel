@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -24,7 +25,7 @@ import rx.schedulers.Schedulers;
  * Created by liudan on 2017/1/17.
  * 接收酒店状态改变的广播
  */
-public class BroadCastManager {
+public class TrainingStatusManager {
 
     ApiService mApiService;
     MainApplication mApplication;
@@ -38,7 +39,12 @@ public class BroadCastManager {
      */
     public static final int TIME_INTERVAL = 30;
 
-    public BroadCastManager(ApiService apiService , MainApplication application){
+    public interface TraingStatusChangeListener{
+        void OnChangedSuccess();
+        void OnChangedFailed(String erro);
+    }
+
+    public TrainingStatusManager(ApiService apiService , MainApplication application){
 
         mApiService = apiService;
         mApplication = application;
@@ -73,7 +79,26 @@ public class BroadCastManager {
                                             return RetrofitUtils.flatResponse(statusEventResponse);
                                         }
                                     })
-                                    .subscribe(new TrainingStatusSubscriber());
+                                    .subscribe(new Subscriber<StatusEvent>() {
+                                        @Override
+                                        public void onCompleted() {
+
+                                        }
+
+                                        @Override
+                                        public void onError(Throwable e) {
+
+                                            //获取失败
+                                            KLog.e(e.toString());
+                                        }
+
+                                        @Override
+                                        public void onNext(StatusEvent event) {
+
+                                            //直接发送事件
+                                            EventBus.getDefault().post(event);
+                                        }
+                                    });
                         }
 
 
@@ -116,25 +141,39 @@ public class BroadCastManager {
 
 
     /**
-     * 老师创建实例
+     * 改变实例的状态
+     * @param trainingId
+     * @param traininStatus
+     * @param listener
      */
-    public class TrainingStatusSubscriber extends DefaultSubscriber<StatusEvent> {
-        @Override
-        public void onNext(StatusEvent event) {
-            super.onNext(event);
+    public void changeTrainingStatus(int trainingId, int traininStatus, TraingStatusChangeListener listener){
 
-            //直接发送事件
-            EventBus.getDefault().post(event);
+        Subscription request = mApiService.updateTrainingStatus(trainingId,traininStatus)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
 
-        }
+                    }
 
-        @Override
-        public void onError(Throwable e) {
-            super.onError(e);
+                    @Override
+                    public void onError(Throwable e) {
+                        listener.OnChangedFailed(e.toString());
+                    }
 
-            //获取失败
-            KLog.e(e.toString());
-        }
+                    @Override
+                    public void onNext(String s) {
+
+                        listener.OnChangedSuccess();
+                    }
+                });
     }
 
 

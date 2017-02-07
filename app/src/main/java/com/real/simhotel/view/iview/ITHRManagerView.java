@@ -1,5 +1,6 @@
 package com.real.simhotel.view.iview;
 
+import com.real.simhotel.model.Quote;
 import com.real.simhotel.view.adapter.DynamicListModel;
 
 import java.util.List;
@@ -11,9 +12,13 @@ public interface ITHRManagerView extends IBaseView{
 
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 
+    void renderQuotesList(List<Quote> quoteList);
+
     void transToDetailFragment();
 
     void transToInitListFragment();
+
+
 
     void updateGroupStatus(String value);
 

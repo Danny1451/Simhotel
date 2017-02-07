@@ -98,6 +98,7 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     @Override
     public void loadData() {
 
+        mPresenter.requestData();
     }
 
 

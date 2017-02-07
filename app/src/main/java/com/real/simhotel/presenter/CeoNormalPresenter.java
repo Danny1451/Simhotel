@@ -2,6 +2,7 @@ package com.real.simhotel.presenter;
 
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
@@ -26,6 +27,9 @@ public class CeoNormalPresenter extends BasePresenter{
 
 
 
+    public static final int CEO_DECISION_HIRE = 1;
+    public static final int CEO_DECISION_LOAN = 2;
+
     public CeoNormalPresenter(CeoNormalFragment view){
         mView = view;
     }
@@ -43,6 +47,10 @@ public class CeoNormalPresenter extends BasePresenter{
         EventBus.getDefault().register(this);
     }
 
+    /**
+     * 接收广播
+     * @param event
+     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(StatusEvent event) {
 
@@ -50,8 +58,8 @@ public class CeoNormalPresenter extends BasePresenter{
         switch (event.getTrainingStatus()){
             case EventCode.TEACHER_START_HIRE:
 
-                //开始雇员
-                list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",1));
+                //开始 增加 雇员 信息 TODO 招聘会的时间
+                list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",CEO_DECISION_HIRE));
 
                 break;
 
@@ -79,7 +87,6 @@ public class CeoNormalPresenter extends BasePresenter{
         list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 80 玩 ,支出 10 玩","2016年6月"));
         list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 90 玩 ,支出 30 玩","2016年6月"));
         list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 100 玩 ,支出 30 玩","2016年7月"));
-        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",1));
         list.add(DynamicListModelFactory.modelForCeoDecisionMessage("大哥你要破产了,贷款不?","2016年9月",2));
 
         //加载列表
@@ -91,34 +98,59 @@ public class CeoNormalPresenter extends BasePresenter{
      * 监听list中的选项
      */
     private DynamicListAdapter.NormalChooseInterface mChooseInterface = new DynamicListAdapter.NormalChooseInterface() {
+
         @Override
-        public void confim(DynamicListModel model) {
+        public void onChoose(DynamicListModel model, Boolean hasConfirm) {
 
-            model.hasChoose = true;
-            if ( (int)model.ext == 1) {
+            //修改状态
+            mView.showLoading();
+            int eventCode = 0;
+            if ( (int)model.ext == CEO_DECISION_HIRE) {
 
-                model.butonChooseInfo = "已开始招聘";
+                eventCode = EventCode.CEO_REJECT_HIRE;
+                if (hasConfirm)
+                    eventCode = EventCode.CEO_CONFIRM_HIRE;
 
-                mView.showToast("选择招聘");
+            }else if ((int)model.ext == CEO_DECISION_LOAN){
 
-            }else if ((int)model.ext == 2){
-
-                model.butonChooseInfo = "已经选择贷款";
-                mView.showToast("选择贷款");
+                eventCode = EventCode.CEO_REJECT_LOAN;
+                if (hasConfirm)
+                    eventCode = EventCode.CEO_CONFIRM_LOAN;
 
             }
 
-            mView.reload();
+            application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+                    eventCode,
+                    new TrainingStatusManager.TraingStatusChangeListener() {
+                        @Override
+                        public void OnChangedSuccess() {
+
+                            mView.disMissLoading();
+
+                            if (hasConfirm){
+                                model.butonChooseInfo = "已开始";
+                                mView.showToast("已确认");
+                            }else {
+                                model.butonChooseInfo = "已放弃";
+                                mView.showToast("已放弃");
+                            }
+
+                            model.hasChoose = true;
+                            mView.reload();
+
+                        }
+
+                        @Override
+                        public void OnChangedFailed(String erro) {
+
+                            mView.disMissLoading();
+
+                            mView.showToast("请求失败请稍后再试");
+
+                        }
+                    });
         }
 
-        @Override
-        public void cancel(DynamicListModel model) {
 
-            model.hasChoose = true;
-            model.butonChooseInfo = "已放弃";
-            mView.showToast("选择放弃");
-            mView.reload();
-
-        }
     };
 }

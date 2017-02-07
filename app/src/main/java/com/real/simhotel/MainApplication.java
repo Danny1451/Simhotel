@@ -3,7 +3,7 @@ package com.real.simhotel;
 import android.app.Application;
 import android.content.Context;
 
-import com.real.simhotel.events.BroadCastManager;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.internal.dl.components.ApplicationComponent;
 import com.real.simhotel.internal.dl.components.DaggerApplicationComponent;
 import com.real.simhotel.internal.dl.modules.ApiServiceModule;
@@ -31,7 +31,7 @@ public class MainApplication extends Application {
     //当前的实例
     public Training mTraining;
 
-    public BroadCastManager broadCastManager;
+    public TrainingStatusManager broadCastManager;
 
     public static ApplicationComponent getComponent() {
         return ((MainApplication) mContext.getApplicationContext()).mComponent;
@@ -58,7 +58,7 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(mContext);
 
-        broadCastManager = new BroadCastManager(mComponent.apiService(),this);
+        broadCastManager = new TrainingStatusManager(mComponent.apiService(),this);
     }
 
 

@@ -18,6 +18,7 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
+import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.TeacherHRManagerPresenter;
 import com.real.simhotel.utils.DialogUitls;
 import com.real.simhotel.utils.log.KLog;
@@ -151,8 +152,13 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mAdapter = new DynamicListAdapter(this)
                 .setRowInterface((pos, model)-> {
 
-                //刷新人员模板详细
-                 mDetailFragment.updateInfo(model.ext);
+                    //刷新人员模板详细
+                    mDetailFragment.updateInfo(model.ext);
+                    //如果是列表的话刷新界面
+                    if (mDetailFragment.getClass() == ApplicantListDetailFragment.class){
+                        mPresenter.requestApplicantListQuotes(pos);
+                    }
+
 
                 });
 
@@ -268,6 +274,15 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         //默认选中第一个
         mDetailFragment.updateInfo(applicantsList.get(0).ext);
     }
+
+
+    @Override
+    public void renderQuotesList(List<Quote> quoteList) {
+
+        //刷新界面
+        mDetailFragment.renderView(quoteList);
+    }
+
 
     /**
      * 切换至详情显示

@@ -1,5 +1,6 @@
 package com.real.simhotel.view.adapter;
 
+import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.model.Training;
 
@@ -95,6 +96,28 @@ public class DynamicListModelFactory {
         return result;
     }
 
+
+    /**
+     * 候选人列表专为 ViewModel
+     * @param applicantList
+     * @return
+     */
+    public static List<DynamicListModel> parseFromApplicants(List<Applicant> applicantList){
+
+        List<DynamicListModel> result = new ArrayList<>();
+
+
+        for (Applicant temp: applicantList){
+
+            DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+            model1.title = temp.getLevelStr();
+            model1.info = "未报价";
+            model1.ext = temp;
+            result.add(model1);
+        }
+
+        return result;
+    }
 
     public static DynamicListModel modelForCeoNormalMessage(String info, String time){
         DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_INFO_TIME);

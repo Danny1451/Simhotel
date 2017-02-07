@@ -24,4 +24,9 @@ public class EventCode {
     public static final int TRAINING_BID_RESULT = 25;
 
     public static final int TRAINING_BID_OVER = 26;
+
+
+    public static final int CEO_CONFIRM_LOAN = 31;
+
+    public static final int CEO_REJECT_LOAN = 32;
 }

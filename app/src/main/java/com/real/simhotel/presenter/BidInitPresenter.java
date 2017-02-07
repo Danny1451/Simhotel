@@ -1,17 +1,23 @@
 package com.real.simhotel.presenter;
 
-import android.view.View;
-import android.widget.Toast;
-
-import com.real.simhotel.R;
+import com.real.simhotel.data.Response;
+import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.base.BasePresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
-import com.real.simhotel.view.fragment.student.BidInitFragment;
+import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.iview.ISHRBidView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by liudan on 2016/12/23.
@@ -20,8 +26,11 @@ public class BidInitPresenter extends BasePresenter {
 
     private ISHRBidView mView;
 
-    private List<DynamicListModel> data;
+    private List<DynamicListModel> mViewData;
 
+    private List<Applicant> mData;
+
+    Subscription mApplicantListSubs;
 
     public BidInitPresenter(ISHRBidView view){
 
@@ -31,62 +40,51 @@ public class BidInitPresenter extends BasePresenter {
     @Override
     public void requestData(Object... o) {
 
-        data = new ArrayList<>();
+        mViewData = new ArrayList<>();
+
+        mView.showLoading();
+
+        mApplicantListSubs = apiService.getEmployTemplate(application.mTraining.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<List<Applicant>>, Observable<List<Applicant>>>() {
+                    @Override
+                    public Observable<List<Applicant>> call(Response<List<Applicant>> listResponse) {
+                        return RetrofitUtils.flatResponse(listResponse);
+                    }
+                })
+                .subscribe(new Subscriber<List<Applicant>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        mView.disMissLoading();
+                        mView.showError("加载失败");
+                    }
+
+                    @Override
+                    public void onNext(List<Applicant> applicants) {
 
 
-//        //初始化数据
-//        Applicant app1 = new Applicant();
-//        app1.name = "新垣结衣";
-//        app1.level = 0;
-//        app1.expectValues = 5000;
-//        app1.year = 1;
-//        app1.headRes = R.mipmap.avatar_female_01;
-//
-//        DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-//        model1.title = app1.name;
-//        model1.info = "未报价";
-//        model1.ext = app1;
-//
-//
-//
-//        Applicant app2 = new Applicant();
-//        app2.name = "鹿晗";
-//        app2.level = 1;
-//        app2.expectValues = 6000;
-//        app2.year = 2;
-//        app2.headRes = R.mipmap.avatar_female_02;
-//
-//        DynamicListModel model2 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-//        model2.title = app2.name;
-//        model2.info = "未报价";
-//        model2.ext = app2;
-//
-//
-//        Applicant app3 = new Applicant();
-//        app3.name = "吴亦凡";
-//        app3.level = 2;
-//        app3.expectValues = 7000;
-//        app3.year = 3;
-//        app3.headRes = R.mipmap.avatar_female_03;
-//
-//
-//        DynamicListModel model3 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-//        model3.title = app3.name;
-//        model3.info = "未报价";
-//        model3.ext = app3;
-//
-//
-//        data.add(model1);
-//        data.add(model2);
-//        data.add(model3);
+                        //渲染界面
+
+                        mView.disMissLoading();
+                        mData = applicants;
+
+                        mViewData = DynamicListModelFactory.parseFromApplicants(mData);
 
 
-
-        //更新数据
-        mView.renderApplicantsList(data);
+                        mView.renderApplicantsList(mViewData);
 
 
-//        onClickApplicantsRow(0,model1);
+                    }
+                });
+
+
     }
 
     //开始最终的竞价
@@ -94,14 +92,18 @@ public class BidInitPresenter extends BasePresenter {
 
         //遍历数据
         String res = "";
-        for (DynamicListModel model : data){
+        mView.showLoading();
+        for (DynamicListModel model : mViewData){
 
             Applicant applicant = (Applicant) model.ext;
             res = res + "名字:" + applicant.getLevelStr() + "报价:" + applicant.quotePrice;
 
+            KLog.d(res);
+
+
         }
 
-        mView.showToast(res);
+
 
 
     }
@@ -110,19 +112,57 @@ public class BidInitPresenter extends BasePresenter {
     public void updateApplicantsRow(int pos,int seekValue){
 
         //得到 model 和 选择的value
-
-        DynamicListModel model = data.get(pos);
+        DynamicListModel model = mViewData.get(pos);
         Applicant applicant = (Applicant) model.ext;
 
 
-        //更新值
-        applicant.quotePrice = seekValue;
-
-        //更新界面
-        model.info = applicant.quotePrice * 1000 + "元";
+        mView.showLoading();
 
 
-        mView.renderApplicantsList(data);
+        //报价
+        apiService.bidEmploy(1,applicant.getEmployId(),applicant.quotePrice)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        mView.disMissLoading();
+
+                        mView.showToast("报价失败,请重试");
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        mView.disMissLoading();
+
+                        //更新值
+                        applicant.quotePrice = seekValue;
+
+                        //更新界面
+                        model.info = applicant.quotePrice * 1000 + "元";
+
+                        //刷新界面
+                        mView.renderApplicantsList(mViewData);
+
+                    }
+                });
+
+
 
     }
 
