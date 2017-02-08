@@ -63,10 +63,6 @@ public class LoginActivity extends AppActivity implements ILoginView {
         //登录
         mLoginPresenter.login(role,name,pwd);
 
-
-
-
-
     }
 
     @Override
@@ -102,8 +98,6 @@ public class LoginActivity extends AppActivity implements ILoginView {
     public void loginFaied(String reason) {
 
         showToast("登录失败 " + reason);
-
-
 
     }
 

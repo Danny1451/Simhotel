@@ -101,36 +101,25 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
                 //获取小组状态
                 item.setTitle("更新中。。。");
-
-
                 //刷新界面
-                mPresenter.updateResult();
-
-
+//                mPresenter.updateResult();
 
                 return true;
             }
             case R.id.action_confirm:{
 
-
-
                 if (mConfirm.getTitle().toString().startsWith("推送")){
-
                     //确认推送人员信息
                     mPresenter.pushApplicants();
 
                 }else if (mConfirm.getTitle().toString().contains("二次")){
 
-
                     showToast("此次招聘结束结束");
 
                 }else {
                     //推送结果  包括第一轮 和 第二轮
-
                     mPresenter.pushResult();
                 }
-
-
 
                 return true;
             }
@@ -152,17 +141,10 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mAdapter = new DynamicListAdapter(this)
                 .setRowInterface((pos, model)-> {
 
-                    //刷新人员模板详细
-                    mDetailFragment.updateInfo(model.ext);
-                    //如果是列表的话刷新界面
-                    if (mDetailFragment.getClass() == ApplicantListDetailFragment.class){
-                        mPresenter.requestApplicantListQuotes(pos);
-                    }
-
+                    //刷新详情
+                    updateDetailInfo(model.ext,pos);
 
                 });
-
-
 
 
         mList.setAdapter(mAdapter);
@@ -170,6 +152,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mList.addItemDecoration(new DynamicListDecoration(this,DynamicListDecoration.VERTICAL_LIST));
 
 
+        mPresenter.requestData();
 
     }
 
@@ -208,16 +191,11 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
                                     template.setExpectWorkPlace(Integer.parseInt(level));
                                     template.quotes = new ArrayList<>();
 
-
-
-
                                     DialogUitls.showConfirmDialog(mContext, "确认新建应聘者?",
                                             (dialogInterface,i)->
                                                 //创建确认
                                                 mPresenter.createApplicant(template)
                                             );
-
-
 
 
                                     break;
@@ -272,17 +250,29 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mAdapter.setDataList(applicantsList);
 
         //默认选中第一个
-        mDetailFragment.updateInfo(applicantsList.get(0).ext);
+        updateDetailInfo(applicantsList.get(0).ext,0);
+    }
+
+    private void updateDetailInfo(Object object , int pos){
+
+
+
+        if (mDetailFragment.getClass() == ApplicantListDetailFragment.class){
+            //如果是列表的话 先去请求接口 再刷新界面
+            mPresenter.requestApplicantListQuotes(pos);
+        }else {
+            //刷新人员模板详细
+            mDetailFragment.updateInfo(object);
+        }
     }
 
 
     @Override
-    public void renderQuotesList(List<Quote> quoteList) {
-
+    public void renderQuotesList(List<DynamicListModel> quoteList) {
         //刷新界面
-        mDetailFragment.renderView(quoteList);
+        if (mDetailFragment.getClass() == ApplicantListDetailFragment.class)
+            mDetailFragment.renderView(quoteList);
     }
-
 
     /**
      * 切换至详情显示

@@ -349,8 +349,7 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
     }
 
     public interface NormalChooseInterface{
-        void confim(DynamicListModel model);
-        void cancel(DynamicListModel model);
+        void onChoose(DynamicListModel model, Boolean hasConfirm);
     }
 
     public interface ItemsChooseInterface{
@@ -389,11 +388,11 @@ public class DynamicListAdapter extends RecyclerView.Adapter<DynamicListAdapter.
                 switch (view.getId()){
                     case R.id.normal_cancel_btn:
                         if (mInterface != null )
-                            mInterface.cancel(mModel);
+                            mInterface.onChoose(mModel,false);
                         break;
                     case R.id.normal_cofirm_btn:
                         if (mInterface != null )
-                            mInterface.confim(mModel);
+                            mInterface.onChoose(mModel,true);
                         break;
                 }
             }

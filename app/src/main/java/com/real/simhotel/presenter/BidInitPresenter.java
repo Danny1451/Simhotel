@@ -87,26 +87,23 @@ public class BidInitPresenter extends BasePresenter {
 
     }
 
-    //开始最终的竞价
-    public void requestForBid(){
-
-        //遍历数据
-        String res = "";
-        mView.showLoading();
-        for (DynamicListModel model : mViewData){
-
-            Applicant applicant = (Applicant) model.ext;
-            res = res + "名字:" + applicant.getLevelStr() + "报价:" + applicant.quotePrice;
-
-            KLog.d(res);
-
-
-        }
-
-
-
-
-    }
+//    //开始最终的竞价
+//    public void requestForBid(){
+//
+//        //遍历数据
+//        String res = "";
+//        mView.showLoading();
+//        for (DynamicListModel model : mViewData){
+//
+//            Applicant applicant = (Applicant) model.ext;
+//            res = res + "名字:" + applicant.getLevelStr() + "报价:" + applicant.quotePrice;
+//
+//            KLog.d(res);
+//
+//        }
+//
+//
+//    }
 
     //更新左侧的列表的报价
     public void updateApplicantsRow(int pos,int seekValue){

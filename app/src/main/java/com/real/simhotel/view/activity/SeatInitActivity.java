@@ -46,6 +46,7 @@ public class SeatInitActivity extends AppActivity {
         PreferenceUtils.setCharacter(mContext,characterSpinner.getSelectedItem()+"");
         PreferenceUtils.setTeamNum(mContext,groupSpinner.getSelectedItem()+"");
 
+
         //调整
         navigator.toLoginActivity(mContext);
         finish();

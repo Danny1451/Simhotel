@@ -2,6 +2,7 @@ package com.real.simhotel.view.adapter;
 
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.HotelTemplate;
+import com.real.simhotel.model.Quote;
 import com.real.simhotel.model.Training;
 
 import java.util.ArrayList;
@@ -109,16 +110,37 @@ public class DynamicListModelFactory {
 
         for (Applicant temp: applicantList){
 
-            DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-            model1.title = temp.getLevelStr();
-            model1.info = "未报价";
-            model1.ext = temp;
+            DynamicListModel model1 = modelForApplicant(temp);
             result.add(model1);
         }
 
         return result;
     }
 
+    /**
+     * 转换为 viewmodel
+     * @param quoteList
+     * @return
+     */
+    public static List<DynamicListModel> parseFromQuotes(List<Quote> quoteList){
+        List<DynamicListModel> result = new ArrayList<>();
+        int num = 0;
+        for (Quote temp: quoteList){
+            num++;
+            DynamicListModel model = modelForApplicantsBidResult(num,temp.getGroupName(),temp.getBiddingPrice()+"");
+            result.add(model);
+        }
+        return result;
+    }
+
+    public static DynamicListModel modelForApplicant(Applicant temp){
+        DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+        model1.title = temp.getLevelStr();
+        model1.info = "未报价";
+        model1.ext = temp;
+
+        return model1;
+    }
     public static DynamicListModel modelForCeoNormalMessage(String info, String time){
         DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_INFO_TIME);
         model.info = info;

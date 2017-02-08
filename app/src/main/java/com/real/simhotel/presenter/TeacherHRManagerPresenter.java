@@ -48,22 +48,22 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     }
 
 
-    //将报价 展示到界面中
-    public List<DynamicListModel> parseQuteToViewModel(List<Quote> quotes){
-        List<DynamicListModel> dynamicListModels = new ArrayList<>();
-
-        for (int i = 0 ; i < quotes.size() ; i++ ){
-
-            Quote quote = quotes.get(i);
-
-            //转换到显示model
-            dynamicListModels.add(DynamicListModelFactory.modelForApplicantsBidResult(i+1,quote.hotelName,"报价:" + quote.prcie + ""));
-
-
-        }
-
-        return dynamicListModels;
-    }
+//    //将报价 展示到界面中
+//    public List<DynamicListModel> parseQuteToViewModel(List<Quote> quotes){
+//        List<DynamicListModel> dynamicListModels = new ArrayList<>();
+//
+//        for (int i = 0 ; i < quotes.size() ; i++ ){
+//
+//            Quote quote = quotes.get(i);
+//
+//            //转换到显示model
+//            dynamicListModels.add(DynamicListModelFactory.modelForApplicantsBidResult(i+1,quote.hotelName,"报价:" + quote.prcie + ""));
+//
+//
+//        }
+//
+//        return dynamicListModels;
+//    }
 
     // 清空报价
     private void cleanQutes(){
@@ -83,41 +83,41 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
 
 
-    /**
-     * 获得报价
-     */
-    public void testAddQutes(){
-
-
-        if (finishNum >= mDataList.size()) {
-
-            //报价增加完
-            hasFinishQute = true;
-            return;
-        }
-
-        //遍历增加报价
-        for (int i = 0 ; i < mDataList.size() ; i++ ){
-
-            Applicant applicant = mDataList.get(i);
-            DynamicListModel viewModel = mViewModelList.get(i);
-
-            //增加报价
-            Quote quote = Quote.testQuote("酒店" + finishNum ,applicant.getExpectMonthIncome() + finishNum * 10);
-            applicant.quotes.add(quote);
-
-            applicant.quotePrice = applicant.getExpectMonthIncome();
-
-            //转换到显示模型
-            viewModel.info = "报价:" + applicant.quotePrice;
-            viewModel.ext = parseQuteToViewModel(applicant.quotes);
-
-
-        }
-
-        finishNum ++ ;
-
-    }
+//    /**
+//     * 获得报价
+//     */
+//    public void testAddQutes(){
+//
+//
+//        if (finishNum >= mDataList.size()) {
+//
+//            //报价增加完
+//            hasFinishQute = true;
+//            return;
+//        }
+//
+//        //遍历增加报价
+//        for (int i = 0 ; i < mDataList.size() ; i++ ){
+//
+//            Applicant applicant = mDataList.get(i);
+//            DynamicListModel viewModel = mViewModelList.get(i);
+//
+//            //增加报价
+//            Quote quote = Quote.testQuote("酒店" + finishNum ,applicant.getExpectMonthIncome() + finishNum * 10);
+//            applicant.quotes.add(quote);
+//
+//            applicant.quotePrice = applicant.getExpectMonthIncome();
+//
+//            //转换到显示模型
+//            viewModel.info = "报价:" + applicant.quotePrice;
+//            viewModel.ext = parseQuteToViewModel(applicant.quotes);
+//
+//
+//        }
+//
+//        finishNum ++ ;
+//
+//    }
 
     @Override
     public void requestData(Object... o) {
@@ -125,14 +125,10 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
         mDataList = new ArrayList<>();
         mViewModelList = new ArrayList<>();
-
         //切换至详情状态
         mView.transToDetailFragment();
-
-
-
         //请求列表
-//        requestApplicantList();
+        requestApplicantList();
 
     }
 
@@ -140,8 +136,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     public void requestApplicantListQuotes(int pos){
 
         //请求候选人的报价
-
-
         mView.showLoading();
 
         Applicant model = mDataList.get(pos);
@@ -171,9 +165,8 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public void onNext(List<Quote> quotes) {
 
                         mView.disMissLoading();
-
                         model.quotes = quotes;
-                        mView.renderQuotesList(quotes);
+                        mView.renderQuotesList(DynamicListModelFactory.parseFromQuotes(model.quotes));
                     }
                 });
 
@@ -207,6 +200,8 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                         //
                         mDataList = applicants;
 
+                        mViewModelList = DynamicListModelFactory.parseFromApplicants(mDataList);
+                        mView.renderApplicantsList(mViewModelList);
                     }
                 });
     }
@@ -298,11 +293,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         mDataList.add(model);
 
-                        DynamicListModel viewModel = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-
-                        viewModel.title = model.getLevelStr();
-                        viewModel.info = "期望:" +model.getExpectMonthIncome() ;
-                        viewModel.ext = model;
+                        DynamicListModel viewModel = DynamicListModelFactory.modelForApplicant(model);
 
                         mViewModelList.add(viewModel);
 
@@ -405,37 +396,37 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     }
 
 
-    /*
-    * 刷新界面
-    */
-    public void updateResult(){
-
-        if (hasFinishQute){
-            mView.showToast("已经全部更新完成");
-            return;
-        }
-
-
-        //更新
-        mView.updateGroupStatus("更新中");
-
-        mView.showLoading();
-
-        //增加报价
-        testAddQutes();
-
-        Observable.timer(2, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
-
-                    mView.disMissLoading();
-                    //刷新界面
-                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
-                    mView.renderApplicantsList(mViewModelList);
-
-                });
-
-    }
+//    /*
+//    * 刷新界面
+//    */
+//    public void updateResult(){
+//
+//        if (hasFinishQute){
+//            mView.showToast("已经全部更新完成");
+//            return;
+//        }
+//
+//
+//        //更新
+//        mView.updateGroupStatus("更新中");
+//
+//        mView.showLoading();
+//
+//        //增加报价
+//        testAddQutes();
+//
+//        Observable.timer(2, TimeUnit.SECONDS)
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(aLong -> {
+//
+//                    mView.disMissLoading();
+//                    //刷新界面
+//                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+//                    mView.renderApplicantsList(mViewModelList);
+//
+//                });
+//
+//    }
 
 
 }

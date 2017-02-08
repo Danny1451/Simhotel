@@ -83,11 +83,6 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
 
     }
 
-    @OnClick({R.id.bid_confirm_btn})
-    public void onClick(View view) {
-
-        mPresenter.requestForBid();
-    }
 
     @Override
     protected void initData() {
@@ -138,12 +133,13 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
         //选中第一个
         applicantsList.get(0).isSelected = true;
 
-
-
         //更新
         mAdapter.setDataList(applicantsList);
 
         //默认选中第一个
         mDetailFragment.renderView((Applicant)applicantsList.get(0).ext);
+
     }
+
+
 }

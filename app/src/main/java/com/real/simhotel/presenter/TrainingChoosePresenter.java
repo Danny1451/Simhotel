@@ -206,8 +206,6 @@ public class TrainingChoosePresenter extends BasePresenter {
                 mView.renderTrainingsList(viewModelList);
 
 
-
-
             }
 
 

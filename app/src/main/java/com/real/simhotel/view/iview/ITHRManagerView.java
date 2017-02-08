@@ -12,7 +12,7 @@ public interface ITHRManagerView extends IBaseView{
 
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 
-    void renderQuotesList(List<Quote> quoteList);
+    void renderQuotesList(List<DynamicListModel> quoteList);
 
     void transToDetailFragment();
 

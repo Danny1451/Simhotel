@@ -49,8 +49,6 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
                 //滑动的时候
                 mSelectResultTv.setText(mSeekBarlValue * 1000 +  "/月");
 
-
-
             }
 
             @Override
@@ -77,5 +75,9 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
         tvLine6.setText("工作年限:" + model.getExpectWorkPlace());
 
         confirmBtn.setText("竞价");
+        if (model.quotePrice != 0){
+            confirmBtn.setEnabled(false);
+        }
+
     }
 }

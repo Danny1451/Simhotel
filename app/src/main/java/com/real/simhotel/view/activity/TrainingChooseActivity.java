@@ -101,9 +101,6 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
 
                 });
 
-
-
-
         mList.setAdapter(mAdapter);
         mList.setLayoutManager(new LinearLayoutManager(this));
         mList.addItemDecoration(new DynamicListDecoration(this,DynamicListDecoration.VERTICAL_LIST));
