@@ -1,30 +1,24 @@
 package com.real.simhotel.presenter;
 
-import android.util.Log;
-
 import com.real.simhotel.config.Constants;
+import com.real.simhotel.config.Role;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
-import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
-import com.real.simhotel.rx.RxBus;
+import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.iview.ITrainingView;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -38,10 +32,6 @@ public class TrainingChoosePresenter extends BasePresenter {
     Subscription mTrainingList;
 
 
-    //展示model
-    List<DynamicListModel> viewModelList;
-
-
     public TrainingChoosePresenter(ITrainingView view){
         super();
         mView = view;
@@ -53,7 +43,65 @@ public class TrainingChoosePresenter extends BasePresenter {
         //存到Application中
         application.mTraining = training;
 
-        mView.enterTrainingForTeacher(training);
+
+        if (application.mRole == Role.ROLE_TEACHER) {
+
+            //老师的话
+            mView.enterTrainingForTeacher(training);
+
+        }else {
+
+            //如果是学生的话
+
+            if (training.getGroupDetailVos() == null || training.getGroupDetailVos().size() == 0){
+
+                //先绑定
+                mView.showLoading();
+
+                String deviceNumber = PreferenceUtils.getTeamNum(application) + PreferenceUtils.getCharacter(application);
+                apiService.chooseGroupRole(application.mTraining.getId().toString(),deviceNumber,application.uid)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .flatMap(new Func1<Response<String>, Observable<String>>() {
+                            @Override
+                            public Observable<String> call(Response<String> stringResponse) {
+                                return RetrofitUtils.flatResponse(stringResponse);
+                            }
+                        })
+                        .subscribe(new Subscriber<String>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                                mView.disMissLoading();
+                                mView.showToast("请求失败,请稍后再试");
+                            }
+
+                            @Override
+                            public void onNext(String s) {
+
+                                mView.disMissLoading();
+
+                                mView.showToast("加入成功");
+
+                                mView.enterTrainingForStudent(training,application.mRole);
+                            }
+                        });
+
+
+            }else {
+
+                //直接进入实例
+                mView.enterTrainingForStudent(training,application.mRole);
+
+            }
+
+        }
+
 
     }
 
@@ -93,7 +141,7 @@ public class TrainingChoosePresenter extends BasePresenter {
                             return DynamicListModelFactory.parseFromTraining(trainings);
                         }
                     })
-                    .subscribe(new TeacherTrainingListSubscriber());
+                    .subscribe(new TrainingListSubscriber());
 
 
 
@@ -120,16 +168,27 @@ public class TrainingChoosePresenter extends BasePresenter {
 
         }else {
 
-//            mTrainingList = apiService.getTrainingListForStudent(application.uid)
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribeOn(Schedulers.io())
-//                    .flatMap(new Func1<Response<List<Training>>, Observable<List<Training>>>() {
-//                        @Override
-//                        public Observable<List<Training>> call(Response<List<Training>> listResponse) {
-//                            return RetrofitUtils.flatResponse(listResponse);
-//                        }
-//                    }).subscribe(new TeacherTrainingListSubscriber());
+            //获取位置坐标
+            String pos = PreferenceUtils.getCharacter(application) + PreferenceUtils.getTeamNum(application);
 
+
+            mTrainingList = apiService.getTrainingListForStudent(application.uid , pos)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .flatMap(new Func1<Response<List<Training>>, Observable<List<Training>>>() {
+                        @Override
+                        public Observable<List<Training>> call(Response<List<Training>> listResponse) {
+                            return RetrofitUtils.flatResponse(listResponse);
+                        }
+                    })
+                    .map(new Func1<List<Training>, List<DynamicListModel>>() {
+                        @Override
+                        public List<DynamicListModel> call(List<Training> trainings) {
+
+                            return DynamicListModelFactory.parseFromTraining(trainings);
+                        }
+                    })
+                    .subscribe(new TrainingListSubscriber());
 
         }
 
@@ -140,6 +199,7 @@ public class TrainingChoosePresenter extends BasePresenter {
         KLog.d(" 创建Training " + name + time + hireTime + equipTime);
 
 
+        //默认三个小组
         mTrainingList = apiService.createTraining(
                 application.uid,
                 name,
@@ -148,7 +208,8 @@ public class TrainingChoosePresenter extends BasePresenter {
                 Integer.parseInt(hireTime),
                 Integer.parseInt(equipTime),
                 0.12,
-                Integer.parseInt(equipTime))
+                Integer.parseInt(equipTime),
+                3)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .flatMap(new Func1<Response<String>, Observable<String>>() {
@@ -184,9 +245,9 @@ public class TrainingChoosePresenter extends BasePresenter {
     }
 
     /**
-     * 获取老师的实例列表
+     * 获取实例列表
      */
-    public class TeacherTrainingListSubscriber extends DefaultSubscriber<List<DynamicListModel>>{
+    public class TrainingListSubscriber extends DefaultSubscriber<List<DynamicListModel>>{
         @Override
         public void onNext(List<DynamicListModel> trainings) {
             super.onNext(trainings);
@@ -199,11 +260,9 @@ public class TrainingChoosePresenter extends BasePresenter {
 
                 mView.refreshView();
 
-                //数据转换
-                viewModelList = trainings;
 
                 //渲染界面
-                mView.renderTrainingsList(viewModelList);
+                mView.renderTrainingsList(trainings);
 
 
             }

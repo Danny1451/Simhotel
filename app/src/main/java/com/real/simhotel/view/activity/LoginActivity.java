@@ -108,7 +108,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
         //跳转到学生界面
         showToast("登录成功");
-        navigator.toTrainingDetailActivity(this);
+        navigator.toStudentTrainingDetailActivity(this);
 
         //记住密码
         saveNameAndPwd();
@@ -121,7 +121,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
         //跳转到老师界面
         showToast("登录成功");
-        navigator.toTrainingDetailActivity(this);
+        navigator.toTeacherTrainingDetailActivity(this);
 
         //记住密码
         saveNameAndPwd();

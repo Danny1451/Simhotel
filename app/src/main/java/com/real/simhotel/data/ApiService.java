@@ -12,8 +12,6 @@ import com.real.simhotel.model.Training;
 
 import java.util.List;
 
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -84,17 +82,18 @@ public interface ApiService {
      * @param teacherId
      * @return
      */
-    @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
+    @GET(Constants.API_URL_TRAINING_LIST)
     Observable<Response<List<Training>>> getTrainingListForTeacher(@Query("teacher_id") String teacherId);
 
 
     /**
      * 获取给学生的实例列表
-     * @param teacherId
+     * @param studentId
      * @return
      */
-    @GET(Constants.API_URL_TRAINING_LIST_TEACHER)
-    Observable<Response<List<Training>>> getTrainingListForStudent(@Query("teacher_id") String teacherId);
+    @GET(Constants.API_URL_TRAINING_LIST)
+    Observable<Response<List<Training>>> getTrainingListForStudent(@Query("student_id") String studentId,
+                                                                   @Query("device_number") String deviceNumber);
 
 
     /**
@@ -117,8 +116,23 @@ public interface ApiService {
                                                 @Query("recruit_cycle") int recruitCycle,
                                                 @Query("customer_cycle") int customerCycle,
                                                 @Query("equip_depre_per") Double equipDeprePer,
-                                                @Query("equip_depre_cycle") int equipDepreCycle
+                                                @Query("equip_depre_cycle") int equipDepreCycle,
+                                                @Query("group_num") int groupNum
+
                                                 );
+
+
+    /**
+     * 选择小组角色
+     * @param trainingId
+     * @param deviceNumber
+     * @param studentId
+     * @return
+     */
+    @GET(Constants.API_URL_CHOOSE_GROUP_ROLE)
+    Observable<Response<String>> chooseGroupRole(@Query(PARAMS_TRAINING_ID) String trainingId,
+                                                 @Query("device_number") String deviceNumber,
+                                                 @Query("student_id") String studentId);
 
     /**
      * 获取实例状态
@@ -195,5 +209,7 @@ public interface ApiService {
      */
     @GET(Constants.API_URL_EMPLOY_RESULT_LIST)
     Observable<Response<List<Quote>>> getEmployQuotes(@Query("employ_id") int employId);
+
+
 
 }

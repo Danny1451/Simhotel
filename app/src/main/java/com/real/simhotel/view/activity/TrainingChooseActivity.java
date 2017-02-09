@@ -18,6 +18,7 @@ import com.real.simhotel.R;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.TrainingChoosePresenter;
+import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
 import com.real.simhotel.view.adapter.DynamicListDecoration;
@@ -80,24 +81,18 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     @Override
     protected void initView() {
 
-        //学生的话不显示加号
-        if (mUserType == Constants.USER_TYPE_STUDENT)
+        //学生的话不显示加号 显示座位号
+        if (mUserType == Constants.USER_TYPE_STUDENT) {
+
+            setTitle("实例选择界面" + PreferenceUtils.getCharacter(this) + PreferenceUtils.getTeamNum(this));
             mAddTraining.setVisibility(View.GONE);
+        }
 
         mAdapter = new DynamicListAdapter(this)
                 .setRowInterface((pos, model)-> {
 
-                    //点击了对应的cell
-                    if ( mUserType == Constants.USER_TYPE_STUDENT){
-                        //学生的话 去请求实例信息
+                    renderTrainingDetail((Training) model.ext);
 
-
-
-                    }else {
-                        //老师的话 刷新
-                        //ext 中会 放入原来的数据模型
-                        renderTrainingDetail((Training) model.ext);
-                    }
 
                 });
 
@@ -239,6 +234,11 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         navigator.toTrainingControlActivity(this);
     }
 
+    @Override
+    public void enterTrainingForStudent(Training training, int role) {
+
+        navigator.toStudentMainActivity(this,role);
+    }
 
     @Override
     protected void onDestroy() {

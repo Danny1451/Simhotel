@@ -32,7 +32,7 @@ public class StudentMainPresenter extends BasePresenter {
     BaseFragment mDetailFragment;
 
 
-    public StudentMainPresenter(IStudentMainView View){ this.mView = mView;}
+    public StudentMainPresenter(IStudentMainView view){ mView = view;}
 
     public void startUpdateStatus(){
 

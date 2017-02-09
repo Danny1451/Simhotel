@@ -2,6 +2,8 @@ package com.real.simhotel.presenter;
 
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.base.BasePresenter;
@@ -105,8 +107,30 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
      */
     public void initHotel(){
 
-        //初始化成功
-        mView.initSuccess();
+        //修改状态
+
+        mView.showLoading();
+        application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+                EventCode.TRAINING_BUILDED,
+                new TrainingStatusManager.TraingStatusChangeListener() {
+                    @Override
+                    public void OnChangedSuccess() {
+
+                        mView.disMissLoading();
+                        //初始化成功
+                        mView.initSuccess();
+                    }
+
+                    @Override
+                    public void OnChangedFailed(String erro) {
+
+                        mView.disMissLoading();
+
+                        mView.showToast("初始化失败,稍后再试");
+                    }
+                });
+
+
     }
 
 

@@ -25,4 +25,6 @@ public interface ITrainingView extends IBaseView {
 
 
     void enterTrainingForTeacher(Training training);
+
+    void enterTrainingForStudent(Training training, int role);
 }

@@ -1,7 +1,6 @@
 package com.real.simhotel.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 /**
  * Created by liudan on 2017/1/4.
@@ -9,6 +8,7 @@ import java.util.Map;
 public class Training {
 
     private Integer id;
+    private Integer trainingStatus;
     private Object remark;
     private Integer teacherId;
     private String trainingName;
@@ -21,8 +21,7 @@ public class Training {
     private Integer currentCycle;
     private String insertTime;
     private String updateTime;
-    private Integer trainingStatus;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private List<GroupDetailVo> groupDetailVos = null;
 
     public Integer getId() {
         return id;
@@ -30,6 +29,14 @@ public class Training {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Integer getTrainingStatus() {
+        return trainingStatus;
+    }
+
+    public void setTrainingStatus(Integer trainingStatus) {
+        this.trainingStatus = trainingStatus;
     }
 
     public Object getRemark() {
@@ -128,20 +135,12 @@ public class Training {
         this.updateTime = updateTime;
     }
 
-    public Integer getTrainingStatus() {
-        return trainingStatus;
+    public List<GroupDetailVo> getGroupDetailVos() {
+        return groupDetailVos;
     }
 
-    public void setTrainingStatus(Integer trainingStatus) {
-        this.trainingStatus = trainingStatus;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
+    public void setGroupDetailVos(List<GroupDetailVo> groupDetailVos) {
+        this.groupDetailVos = groupDetailVos;
     }
 
 }

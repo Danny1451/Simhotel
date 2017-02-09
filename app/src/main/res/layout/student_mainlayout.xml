@@ -41,7 +41,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="名字: 李大胆"
-                    android:id="@+id/textView6"
+                    android:id="@+id/tv_student_name"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp" />
 
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="学号: 123456"
-                    android:id="@+id/textView9"
+                    android:id="@+id/tv_student_id"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp" />
 
@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="职位: CEO"
-                    android:id="@+id/textView10"
+                    android:id="@+id/tv_role"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp" />
             </LinearLayout>
@@ -70,8 +70,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="这里是公共数据"
-                    android:id="@+id/textView11"
+                    android:text="酒店未初始化"
+                    android:id="@+id/tv_hotel_status"
                     android:layout_gravity="center" />
             </FrameLayout>
         </LinearLayout>

@@ -1,10 +1,12 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.config.Constants;
+import com.real.simhotel.config.Role;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
+import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.activity.LoginActivity;
 import com.real.simhotel.view.iview.ILoginView;
@@ -72,8 +74,15 @@ public class LoginPresenter extends BasePresenter {
 
             //根据登录结果 回调 view
             if (mUserType == Constants.USER_TYPE_STUDENT) {
+
+                //设定学生的角色
+                application.mRole = Integer.parseInt(PreferenceUtils.getCharacter(application));
+                KLog.d("role  = " + application.mRole);
                 mView.loginStudentSuccess(s);
+
             }else {
+
+                application.mRole = Role.ROLE_TEACHER;
                 mView.loginTeacherSuccess(s);
             }
 

@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
+import com.real.simhotel.config.Constants;
+import com.real.simhotel.config.Role;
 import com.real.simhotel.events.StatusEvent;
 import com.real.simhotel.presenter.StudentMainPresenter;
 import com.real.simhotel.utils.log.KLog;
@@ -16,11 +19,14 @@ import com.real.simhotel.view.fragment.student.BidInitFragment;
 import com.real.simhotel.view.fragment.student.BidResultFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+import com.real.simhotel.view.fragment.student.LoadingFragment;
 import com.real.simhotel.view.iview.IStudentMainView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import butterknife.Bind;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -35,6 +41,16 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     MenuItem mTrainingStatus;
 
     StudentMainPresenter mPresenter;
+
+
+    @Bind(R.id.tv_student_name)
+    TextView nameTv;
+
+    @Bind(R.id.tv_student_id)
+    TextView idTv;
+
+    @Bind(R.id.tv_role)
+    TextView roleTv;
 
 
     @Override
@@ -60,9 +76,14 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     protected void initView() {
 
         //获取基础的信息
-        mFragment = new CeoInitFragment();
+        mFragment = new LoadingFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
 
+
+        MainApplication application = (MainApplication)getApplication();
+        nameTv.setText("姓名:" + application.uid);
+        idTv.setText("学号:" + application.uid);
+        roleTv.setText("角色:" + Role.getRoleString(application.mRole));
 
 
     }
@@ -126,7 +147,7 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
             case R.id.action_update:{
 
-                navigator.toTeacherMainActivity(this);
+//                navigator.toTeacherMainActivity(this);
                 return true;
             }
             case R.id.action_exit:
@@ -152,6 +173,10 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
         super.handleIntent(intent);
 
         //更具role 初始化 fragment
+
+        //判断是 老师 还是学生的登录界面
+        mRole = intent.getIntExtra("user_role", Role.ROLE_STU_CEO);
+
     }
 
 
