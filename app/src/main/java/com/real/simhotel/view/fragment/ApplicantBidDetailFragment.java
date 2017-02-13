@@ -36,6 +36,7 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
     public void initView() {
         super.initView();
 
+        normLayout.setVisibility(View.VISIBLE);
         //显示
         mSeekLayout.setVisibility(View.VISIBLE);
 
@@ -75,7 +76,7 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
         tvLine6.setText("工作年限:" + model.getExpectWorkPlace());
 
         confirmBtn.setText("竞价");
-        if (model.quotePrice != 0){
+        if (model.quotePrice != null ){
             confirmBtn.setEnabled(false);
         }
 

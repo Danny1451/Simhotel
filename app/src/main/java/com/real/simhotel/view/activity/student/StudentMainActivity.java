@@ -4,15 +4,18 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
-import com.real.simhotel.config.Constants;
 import com.real.simhotel.config.Role;
-import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.model.Group;
+import com.real.simhotel.model.GroupDetailVo;
+import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.StudentMainPresenter;
-import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
@@ -21,10 +24,6 @@ import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
 import com.real.simhotel.view.fragment.student.LoadingFragment;
 import com.real.simhotel.view.iview.IStudentMainView;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.Bind;
 
@@ -52,6 +51,25 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     @Bind(R.id.tv_role)
     TextView roleTv;
 
+    @Bind(R.id.tv_group_status)
+    TextView hotelEmptyTv;
+
+    @Bind(R.id.group_detail_layout)
+    RelativeLayout groupDetail;
+
+
+    @Bind(R.id.tv_group_name)
+    TextView groupName;
+
+    @Bind(R.id.tv_group_id)
+    TextView groupId;
+
+    @Bind(R.id.tv_group_roles)
+    TextView groupRoles;
+
+
+
+
 
     @Override
     protected void onDestroy() {
@@ -75,16 +93,36 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     @Override
     protected void initView() {
 
-        //获取基础的信息
-        mFragment = new LoadingFragment();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
-
-
         MainApplication application = (MainApplication)getApplication();
         nameTv.setText("姓名:" + application.uid);
         idTv.setText("学号:" + application.uid);
         roleTv.setText("角色:" + Role.getRoleString(application.mRole));
 
+
+        //更新界面实训详情
+        if (application.training.getTrainingStatus() >= EventCode.TRAINING_BUILDED){
+
+            updateTrainingInfo(application.group);
+        }
+
+        //获取基础的信息
+        mFragment = new LoadingFragment();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_role,mFragment).commitAllowingStateLoss();
+
+    }
+
+    /**
+     * 更新实训详情界面
+     * @param group
+     */
+    public void updateTrainingInfo(GroupDetailVo group){
+
+        hotelEmptyTv.setVisibility(View.INVISIBLE);
+        groupDetail.setVisibility(View.VISIBLE);
+
+        groupName.setText("小组名:"+group.getGroupName());
+        groupId.setText("小组ID:"+group.getId());
+        groupRoles.setText(group.getGroupRoleDetailsString());
 
     }
 
@@ -106,6 +144,7 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     @Override
     public void updateDetailFragment(BaseFragment fragment) {
 
+        mFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
 
     }
@@ -147,6 +186,9 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
             case R.id.action_update:{
 
+                //手动触发一次刷新
+                MainApplication application = (MainApplication)getApplication();
+                application.traingingStatusManager.manualUpdate();
 //                navigator.toTeacherMainActivity(this);
                 return true;
             }
@@ -179,6 +221,8 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
     }
 
-
-
+    @Override
+    public BaseFragment getCurrentDetailFragment() {
+        return mFragment;
+    }
 }

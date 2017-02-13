@@ -37,7 +37,7 @@ public class TeacherMainPresenter extends BasePresenter {
 
     public void createGroup(String groupName, String groupDes){
 
-        int trainsId = application.mTraining.getId();
+        int trainsId = application.training.getId();
 
         subscription = apiService.createGroup(trainsId,groupName,groupDes)
                 .observeOn(AndroidSchedulers.mainThread())

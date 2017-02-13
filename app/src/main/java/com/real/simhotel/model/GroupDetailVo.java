@@ -104,4 +104,30 @@ public class GroupDetailVo {
         this.groupHotelDetailVos = groupHotelDetailVos;
     }
 
+    public String getGroupRoleDetailsString(){
+        String roleDes = "";
+
+        if (getGroupRoleDetailVos() != null && getGroupRoleDetailVos().size() != 0) {
+            for (GroupRoleDetailVo temp : getGroupRoleDetailVos()) {
+
+                roleDes = roleDes + "职位:" + temp.getRoleName() + " 姓名:" + temp.getStudentName() + "\n";
+            }
+        }else {
+            roleDes = "暂无组员";
+        }
+        return roleDes;
+    }
+
+    public boolean checkHasMyPos(int role){
+
+        if (getGroupRoleDetailVos() != null && getGroupRoleDetailVos().size() != 0) {
+            for (GroupRoleDetailVo temp : getGroupRoleDetailVos()) {
+
+                if (temp.getRoleId() == role)
+                    return true;
+
+            }
+        }
+        return false;
+    }
 }

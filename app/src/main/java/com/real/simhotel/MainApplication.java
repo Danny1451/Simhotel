@@ -8,6 +8,7 @@ import com.real.simhotel.internal.dl.components.ApplicationComponent;
 import com.real.simhotel.internal.dl.components.DaggerApplicationComponent;
 import com.real.simhotel.internal.dl.modules.ApiServiceModule;
 import com.real.simhotel.internal.dl.modules.ApplicationModule;
+import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.utils.CrashHandler;
@@ -29,9 +30,14 @@ public class MainApplication extends Application {
     public String uid;
 
     //当前的实例
-    public Training mTraining;
+    public Training training;
 
-    public TrainingStatusManager broadCastManager;
+    //当前的小组
+    public GroupDetailVo group;
+
+    public TrainingStatusManager traingingStatusManager;
+
+
 
     public static ApplicationComponent getComponent() {
         return ((MainApplication) mContext.getApplicationContext()).mComponent;
@@ -47,8 +53,8 @@ public class MainApplication extends Application {
         mHotel = new Hotel();
         mHotel.setId(1234556);
 
-        mTraining = new Training();
-        mTraining.setId(1);
+        training = new Training();
+        training.setId(1);
 
         mComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
@@ -58,7 +64,7 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(mContext);
 
-        broadCastManager = new TrainingStatusManager(mComponent.apiService(),this);
+        traingingStatusManager = new TrainingStatusManager(mComponent.apiService(),this);
     }
 
 

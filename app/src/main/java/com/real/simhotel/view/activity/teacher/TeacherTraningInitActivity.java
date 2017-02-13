@@ -153,51 +153,52 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
         if (mDialog == null) {
             KLog.d("点击了 创建酒店模板");
-            mDialog = DialogPlus.newDialog(this)
-                    .setContentHolder(new ViewHolder(R.layout.create_training_layout))
-                    .setOnClickListener((dialog, view1)-> {
-                            KLog.d(TAG, "CLICK");
-
-                            View content = dialog.getHolderView();
-
-                            String name = ((EditText) content.findViewById(R.id.training_name_tv)).getText().toString();
-                            String time = ((EditText) content.findViewById(R.id.training_time_tv)).getText().toString();
-                            String hiretime = ((EditText) content.findViewById(R.id.training_hire_time_tv)).getText().toString();
-                            String equiptime = ((EditText) content.findViewById(R.id.training_equip_time_tv)).getText().toString();
-
-                            switch (view.getId()) {
-                                case R.id.training_create_confirm: {
-
-                                    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(time) || TextUtils.isEmpty(hiretime) || TextUtils.isEmpty(equiptime)) {
-                                        Toast.makeText(mContext, "请完整填写酒店模板信息", Toast.LENGTH_SHORT).show();
-                                        return;
-                                    }
-
-                                    HotelTemplate template = new HotelTemplate();
-
-                                    template.setLocationName(name);
-                                    template.setId(5);
-                                    mPresenter.createHotelTemplate(template);
-
-
-
-                                    break;
-                                }
-                                case R.id.training_create_cancel: {
-
-                                    dialog.dismiss();
-                                    break;
-                                }
-                            }
-
-                        }
-                    )
-                    .setExpanded(false)
-                    .setGravity(Gravity.CENTER)
-                    .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
-                    .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
-                    .create();
-            mDialog.show();
+            showToast("暂时不支持动态添加,此处为默认");
+//            mDialog = DialogPlus.newDialog(this)
+//                    .setContentHolder(new ViewHolder(R.layout.create_training_layout))
+//                    .setOnClickListener((dialog, view1)-> {
+//                            KLog.d(TAG, "CLICK");
+//
+//                            View content = dialog.getHolderView();
+//
+//                            String name = ((EditText) content.findViewById(R.id.training_name_tv)).getText().toString();
+//                            String time = ((EditText) content.findViewById(R.id.training_time_tv)).getText().toString();
+//                            String hiretime = ((EditText) content.findViewById(R.id.training_hire_time_tv)).getText().toString();
+//                            String equiptime = ((EditText) content.findViewById(R.id.training_equip_time_tv)).getText().toString();
+//
+//                            switch (view.getId()) {
+//                                case R.id.training_create_confirm: {
+//
+//                                    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(time) || TextUtils.isEmpty(hiretime) || TextUtils.isEmpty(equiptime)) {
+//                                        Toast.makeText(mContext, "请完整填写酒店模板信息", Toast.LENGTH_SHORT).show();
+//                                        return;
+//                                    }
+//
+//                                    HotelTemplate template = new HotelTemplate();
+//
+//                                    template.setLocationName(name);
+//                                    template.setId(5);
+//                                    mPresenter.createHotelTemplate(template);
+//
+//
+//
+//                                    break;
+//                                }
+//                                case R.id.training_create_cancel: {
+//
+//                                    dialog.dismiss();
+//                                    break;
+//                                }
+//                            }
+//
+//                        }
+//                    )
+//                    .setExpanded(false)
+//                    .setGravity(Gravity.CENTER)
+//                    .setContentWidth(ViewGroup.LayoutParams.WRAP_CONTENT)
+//                    .setContentHeight(ViewGroup.LayoutParams.WRAP_CONTENT)
+//                    .create();
+//            mDialog.show();
 
         }else {
 

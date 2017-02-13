@@ -14,6 +14,8 @@ public class Role {
         switch (role){
             case ROLE_STU_CEO:
                 return "CEO";
+            case ROLE_STU_HR:
+                return "HR";
             case ROLE_STU_FINANCE:
                 return "财务总监";
             case ROLE_STU_MARKET:

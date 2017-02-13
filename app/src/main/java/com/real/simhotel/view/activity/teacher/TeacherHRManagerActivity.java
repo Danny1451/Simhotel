@@ -152,7 +152,8 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mList.addItemDecoration(new DynamicListDecoration(this,DynamicListDecoration.VERTICAL_LIST));
 
 
-        mPresenter.requestData();
+
+//        mPresenter.requestData();
 
     }
 

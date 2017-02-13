@@ -3,6 +3,8 @@ package com.real.simhotel.presenter;
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.events.EventCode;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.base.BasePresenter;
@@ -17,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -180,5 +183,53 @@ public class CeoInitPresenter extends BasePresenter {
         }
         KLog.d("dad",viewModellist.toString());
         mView.showToast(res);
+
+        mView.showLoading();
+        apiService.createHotel(application.training.getId(),hotelId,roomNums)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        mView.disMissLoading();
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
+                                EventCode.TRAINING_HOTEL_INITED,
+                                new TrainingStatusManager.TraingStatusChangeListener() {
+                                    @Override
+                                    public void OnChangedSuccess() {
+
+
+                                        mView.showToast("创建成功");
+                                    }
+
+                                    @Override
+                                    public void OnChangedFailed(String erro) {
+
+                                    }
+                                });
+
+
+                    }
+                });
+
     }
+
+
 }

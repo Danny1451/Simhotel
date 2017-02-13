@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by liudan on 2017/2/8.
  */
-public interface ISHRBidResultView extends IBaseView {
+public interface ISHrBidResultView extends IBaseView {
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 
     void renderQuotesList(List<DynamicListModel> quoteList);

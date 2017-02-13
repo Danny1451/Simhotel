@@ -8,4 +8,6 @@ import com.real.simhotel.view.base.BaseFragment;
 public interface IStudentMainView extends IBaseView {
 
     void updateDetailFragment(BaseFragment fragment);
+
+    BaseFragment getCurrentDetailFragment();
 }

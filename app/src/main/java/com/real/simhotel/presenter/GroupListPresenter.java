@@ -44,7 +44,7 @@ public class GroupListPresenter extends BasePresenter {
 
         mView.showLoading();
 
-        subscription = apiService.getGroupList(application.mTraining.getId()).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
+        subscription = apiService.getGroupList(application.training.getId()).observeOn(AndroidSchedulers.mainThread()).subscribeOn(Schedulers.io())
                 .flatMap(new Func1<Response<List<Group>>,Observable<List<Group>>>() {
                     @Override
                     public Observable<List<Group>> call(Response<List<Group>> listResponse) {

@@ -1,23 +1,21 @@
 package com.real.simhotel.presenter;
 
-import com.real.simhotel.R;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
-import com.real.simhotel.view.activity.student.StudentMainActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+import com.real.simhotel.view.fragment.student.LoadingFragment;
 import com.real.simhotel.view.iview.IStudentMainView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import rx.Subscription;
 
 /**
  * Created by liudan on 2016/12/9.
@@ -37,7 +35,7 @@ public class StudentMainPresenter extends BasePresenter {
     public void startUpdateStatus(){
 
         //获取轮询管理 开始轮询
-        application.broadCastManager.startScheduling();
+        application.traingingStatusManager.startScheduling();
 
         EventBus.getDefault().register(this);
 
@@ -65,13 +63,37 @@ public class StudentMainPresenter extends BasePresenter {
 
                     break;
                 case EventCode.TRAINING_BUILDED: {
-                    //实例建完之后 开始初始化
-                    mDetailFragment = new CeoInitFragment();
 
+                    //先改变状态 触发界面切换
+                    application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
+                            EventCode.TRAINING_HOTEL_CEO_INITING,
+                            new TrainingStatusManager.TraingStatusChangeListener() {
+                        @Override
+                        public void OnChangedSuccess() {
+                            //实例建完之后 开始初始化
+                            mDetailFragment = new CeoInitFragment();
+                            mView.updateDetailFragment(mDetailFragment);
+                        }
 
-                    mView.updateDetailFragment(mDetailFragment);
+                        @Override
+                        public void OnChangedFailed(String erro) {
+
+                        }
+                    });
+
                     break;
                 }
+                case EventCode.TRAINING_HOTEL_CEO_INITING:{
+
+                    //状态是正在初始化 当前界面是等待界面的话 进入到初始化
+                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+
+                        mDetailFragment = new CeoInitFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                    }
+
+                }
+                    break;
 
                 case EventCode.TRAINING_HOTEL_INITED: {
 
@@ -80,8 +102,16 @@ public class StudentMainPresenter extends BasePresenter {
 
                     mView.updateDetailFragment(mDetailFragment);
 
-
                     break;
+                }
+                default:{
+                    //其他状态默认回到 日常状态
+                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+
+                        mDetailFragment = new CeoNormalFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                    }
+
                 }
             }
 
@@ -90,11 +120,32 @@ public class StudentMainPresenter extends BasePresenter {
 
             switch (event.getTrainingStatus()){
                 case EventCode.CEO_CONFIRM_HIRE:{
-                    // CEO 触发招聘
 
-                    mDetailFragment = new BidInitFragment();
+                    application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
+                            EventCode.TRAINING_BID_ING,
+                            new TrainingStatusManager.TraingStatusChangeListener() {
+                        @Override
+                        public void OnChangedSuccess() {
+                            mDetailFragment = new BidInitFragment();
+                            mView.updateDetailFragment(mDetailFragment);
+                        }
 
-                    mView.updateDetailFragment(mDetailFragment);
+                        @Override
+                        public void OnChangedFailed(String erro) {
+
+                        }
+                    });
+
+
+                }
+
+                case EventCode.TRAINING_BID_ING:{
+                    // CEO 触发招聘 更新状态后刷新界面
+                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+                        mDetailFragment = new BidInitFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                    }
+
                 }
                     break;
             }
@@ -124,6 +175,6 @@ public class StudentMainPresenter extends BasePresenter {
 
         EventBus.getDefault().unregister(this);
 
-        application.broadCastManager.stopScheduling();
+        application.traingingStatusManager.stopScheduling();
     }
 }

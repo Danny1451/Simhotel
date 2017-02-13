@@ -4,17 +4,13 @@ import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.TrainingStatusManager;
-import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
-import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.iview.ITrainingInitView;
-import com.real.simhotel.view.iview.ITrainingView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -73,6 +69,10 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
      */
     public void removeTemplate(int pos){
 
+        //todo 未添加服务端逻辑
+
+        mView.showToast("暂时未添加逻辑");
+
         //删除模板
 
         if (pos > mViewModelList.size() || pos < 0)
@@ -110,7 +110,7 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
         //修改状态
 
         mView.showLoading();
-        application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
                 EventCode.TRAINING_BUILDED,
                 new TrainingStatusManager.TraingStatusChangeListener() {
                     @Override

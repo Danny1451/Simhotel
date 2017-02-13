@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.BidInitPresenter;
@@ -15,7 +14,7 @@ import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.ApplicantBidDetailFragment;
-import com.real.simhotel.view.iview.ISHRBidView;
+import com.real.simhotel.view.iview.ISHrListView;
 
 import java.util.List;
 
@@ -23,13 +22,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import rx.functions.Action1;
 
 /**
  * Created by liudan on 2016/12/21.
  */
-public class BidInitFragment extends BaseFragment<BidInitPresenter> implements ISHRBidView{
+public class BidInitFragment extends BaseFragment<BidInitPresenter> implements ISHrListView {
 
 
     @Inject
@@ -80,6 +77,7 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
 
         });
 
+        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
 
     }
 
@@ -116,7 +114,7 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     public void renderApplicantsList(List<DynamicListModel> applicantsList) {
 
         //替换 fragment
-        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
+//        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
 
 
         //清空之前的选中状态

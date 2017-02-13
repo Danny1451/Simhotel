@@ -4,20 +4,16 @@ import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.ApiService;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
-import com.real.simhotel.rx.DefaultSubscriber;
 import com.real.simhotel.utils.log.KLog;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
 import rx.Observable;
 import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -69,36 +65,8 @@ public class TrainingStatusManager {
                         //判断是否暂停
                         if (isRuning) {
                             //请求
-                            mRequest = mApiService
-                                    .getTrainingStatus(mApplication.mTraining.getId())
-                                    .observeOn(Schedulers.io())
-                                    .subscribeOn(Schedulers.io())
-                                    .flatMap(new Func1<Response<StatusEvent>, Observable<StatusEvent>>() {
-                                        @Override
-                                        public Observable<StatusEvent> call(Response<StatusEvent> statusEventResponse) {
-                                            return RetrofitUtils.flatResponse(statusEventResponse);
-                                        }
-                                    })
-                                    .subscribe(new Subscriber<StatusEvent>() {
-                                        @Override
-                                        public void onCompleted() {
 
-                                        }
-
-                                        @Override
-                                        public void onError(Throwable e) {
-
-                                            //获取失败
-                                            KLog.e(e.toString());
-                                        }
-
-                                        @Override
-                                        public void onNext(StatusEvent event) {
-
-                                            //直接发送事件
-                                            EventBus.getDefault().post(event);
-                                        }
-                                    });
+                            requestStatus();
                         }
 
 
@@ -111,6 +79,38 @@ public class TrainingStatusManager {
     }
 
 
+    private void requestStatus(){
+        mRequest = mApiService
+                .getTrainingStatus(mApplication.training.getId())
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .flatMap(new Func1<Response<StatusEvent>, Observable<StatusEvent>>() {
+                    @Override
+                    public Observable<StatusEvent> call(Response<StatusEvent> statusEventResponse) {
+                        return RetrofitUtils.flatResponse(statusEventResponse);
+                    }
+                })
+                .subscribe(new Subscriber<StatusEvent>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        //获取失败
+                        KLog.e(e.toString());
+                    }
+
+                    @Override
+                    public void onNext(StatusEvent event) {
+
+                        //直接发送事件
+                        EventBus.getDefault().post(event);
+                    }
+                });
+    }
     /**
      * 暂停轮询
      */
@@ -137,6 +137,11 @@ public class TrainingStatusManager {
 
         mRequest = null;
         mRepeat = null;
+    }
+
+
+    public void manualUpdate(){
+        requestStatus();
     }
 
 
@@ -170,7 +175,13 @@ public class TrainingStatusManager {
 
                     @Override
                     public void onNext(String s) {
+                        //直接发送事件
+                        StatusEvent event = new StatusEvent();
+                        event.setStatusDes("");
+                        event.setTrainingStatus(traininStatus);
+                        EventBus.getDefault().post(event);
 
+                        //改变成功之后 手动触发 发送一条事件
                         listener.OnChangedSuccess();
                     }
                 });

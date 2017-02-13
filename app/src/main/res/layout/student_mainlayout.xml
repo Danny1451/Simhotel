@@ -71,8 +71,42 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="酒店未初始化"
-                    android:id="@+id/tv_hotel_status"
-                    android:layout_gravity="center" />
+                    android:id="@+id/tv_group_status"
+                    android:layout_gravity="center"
+                    android:visibility="visible" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="invisible"
+                    android:id="@+id/group_detail_layout">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="小组名称: A组"
+                        android:id="@+id/tv_group_name"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="小组ID: 12"
+                        android:id="@+id/tv_group_id"
+                        android:layout_above="@+id/tv_group_name"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="5dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="经理:小王"
+                        android:id="@+id/tv_group_roles"
+                        android:layout_below="@+id/tv_group_name"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp" />
+                </RelativeLayout>
             </FrameLayout>
         </LinearLayout>
     </LinearLayout>

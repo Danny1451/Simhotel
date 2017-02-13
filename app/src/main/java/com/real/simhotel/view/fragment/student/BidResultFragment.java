@@ -9,12 +9,10 @@ import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.BidResultPresenter;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
-import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
-import com.real.simhotel.view.fragment.ApplicantBidDetailFragment;
 import com.real.simhotel.view.fragment.ApplicantListDetailFragment;
-import com.real.simhotel.view.iview.ISHRBidResultView;
+import com.real.simhotel.view.iview.ISHrBidResultView;
 
 import java.util.List;
 
@@ -26,7 +24,7 @@ import butterknife.ButterKnife;
 /**
  * Created by liudan on 2016/12/21.
  */
-public class BidResultFragment extends BaseFragment<BidResultPresenter> implements ISHRBidResultView{
+public class BidResultFragment extends BaseFragment<BidResultPresenter> implements ISHrBidResultView {
 
 
     @Inject

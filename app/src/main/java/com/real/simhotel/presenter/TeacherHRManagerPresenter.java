@@ -7,7 +7,6 @@ import com.real.simhotel.events.TrainingStatusManager;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.base.BasePresenter;
-import com.real.simhotel.rx.DefaultSubscriber;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
@@ -42,7 +41,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     Subscription mDeleteApplicantSub;
 
     public TeacherHRManagerPresenter(ITHRManagerView view){
-
+        super();
         mView = view;
 
     }
@@ -125,8 +124,17 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
         mDataList = new ArrayList<>();
         mViewModelList = new ArrayList<>();
-        //切换至详情状态
-        mView.transToDetailFragment();
+
+        if (application.training.getTrainingStatus() == EventCode.TRAINING_BID_START ||
+                application.training.getTrainingStatus() == EventCode.TRAINING_BID_ING ){
+
+            //切换至报价列表
+            mView.transToInitListFragment();
+        }else {
+
+            //切换至详情状态
+            mView.transToDetailFragment();
+        }
         //请求列表
         requestApplicantList();
 
@@ -175,7 +183,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     public void requestApplicantList(){
         //请求列表
         mApplicantListSub = apiService
-                .getEmployTemplate(application.mTraining.getId())
+                .getEmployTemplate(application.training.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<List<Applicant>>, Observable<List<Applicant>>>(){
@@ -219,7 +227,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
         //删除候选人
         mDeleteApplicantSub = apiService
-                .deleteEmploy(application.mTraining.getId(),mDataList.get(pos).getEmployId())
+                .deleteEmploy(application.training.getId(),mDataList.get(pos).getEmployId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<String>, Observable<String>>() {
@@ -260,7 +268,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
     public void createApplicant(Applicant model){
 
-        model.setTrainingId(application.mTraining.getId());
+        model.setTrainingId(application.training.getId());
 
         mView.showLoading();
 
@@ -327,7 +335,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
 
         //推送结果
-        application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
                 EventCode.TEACHER_START_HIRE,
                 new TrainingStatusManager.TraingStatusChangeListener() {
                     @Override

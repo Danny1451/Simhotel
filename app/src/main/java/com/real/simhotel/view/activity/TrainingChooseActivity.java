@@ -84,7 +84,7 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         //学生的话不显示加号 显示座位号
         if (mUserType == Constants.USER_TYPE_STUDENT) {
 
-            setTitle("实例选择界面" + PreferenceUtils.getCharacter(this) + PreferenceUtils.getTeamNum(this));
+            setTitle("实例选择界面" + PreferenceUtils.getTeamNum(this) + PreferenceUtils.getCharacter(this));
             mAddTraining.setVisibility(View.GONE);
         }
 

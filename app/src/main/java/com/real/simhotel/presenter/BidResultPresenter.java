@@ -1,6 +1,5 @@
 package com.real.simhotel.presenter;
 
-import com.real.simhotel.R;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Applicant;
@@ -9,7 +8,7 @@ import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.fragment.student.BidResultFragment;
-import com.real.simhotel.view.iview.ISHRBidResultView;
+import com.real.simhotel.view.iview.ISHrBidResultView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ import rx.schedulers.Schedulers;
 public class BidResultPresenter extends BasePresenter {
 
 
-    ISHRBidResultView mView;
+    ISHrBidResultView mView;
 
     Subscription mApplicantListSubs;
     private List<DynamicListModel> mViewData;
@@ -46,7 +45,7 @@ public class BidResultPresenter extends BasePresenter {
 
         mView.showLoading();
 
-        mApplicantListSubs = apiService.getEmployTemplate(application.mTraining.getId())
+        mApplicantListSubs = apiService.getEmployTemplate(application.training.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<List<Applicant>>, Observable<List<Applicant>>>() {

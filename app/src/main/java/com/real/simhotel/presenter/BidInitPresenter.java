@@ -4,10 +4,9 @@ import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.base.BasePresenter;
-import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.adapter.DynamicListModelFactory;
-import com.real.simhotel.view.iview.ISHRBidView;
+import com.real.simhotel.view.iview.ISHrListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +23,7 @@ import rx.schedulers.Schedulers;
  */
 public class BidInitPresenter extends BasePresenter {
 
-    private ISHRBidView mView;
+    private ISHrListView mView;
 
     private List<DynamicListModel> mViewData;
 
@@ -32,7 +31,7 @@ public class BidInitPresenter extends BasePresenter {
 
     Subscription mApplicantListSubs;
 
-    public BidInitPresenter(ISHRBidView view){
+    public BidInitPresenter(ISHrListView view){
 
         mView = view;
     }
@@ -44,7 +43,7 @@ public class BidInitPresenter extends BasePresenter {
 
         mView.showLoading();
 
-        mApplicantListSubs = apiService.getEmployTemplate(application.mTraining.getId())
+        mApplicantListSubs = apiService.getEmployTemplate(application.training.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<List<Applicant>>, Observable<List<Applicant>>>() {
@@ -62,8 +61,10 @@ public class BidInitPresenter extends BasePresenter {
                     @Override
                     public void onError(Throwable e) {
 
+
                         mView.disMissLoading();
-                        mView.showError("加载失败");
+                        e.printStackTrace();
+                        mView.showError("加载失败" + e.getLocalizedMessage());
                     }
 
                     @Override
@@ -73,6 +74,7 @@ public class BidInitPresenter extends BasePresenter {
                         //渲染界面
 
                         mView.disMissLoading();
+                        mView.refreshView();
                         mData = applicants;
 
                         mViewData = DynamicListModelFactory.parseFromApplicants(mData);
@@ -115,7 +117,7 @@ public class BidInitPresenter extends BasePresenter {
 
         mView.showLoading();
 
-
+        applicant.quotePrice = seekValue;
         //报价
         apiService.bidEmploy(1,applicant.getEmployId(),applicant.quotePrice)
                 .subscribeOn(Schedulers.io())
@@ -139,7 +141,7 @@ public class BidInitPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
-                        mView.showToast("报价失败,请重试");
+                        mView.showToast("报价失败");
                     }
 
                     @Override
@@ -147,6 +149,7 @@ public class BidInitPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
+                        mView.refreshView();
                         //更新值
                         applicant.quotePrice = seekValue;
 

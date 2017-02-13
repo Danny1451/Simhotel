@@ -6,6 +6,24 @@ public class GroupRoleDetailVo {
     private String studentName;
     private String roleName;
     private String studentNo;
+    private Integer roleId;
+    private Integer studentId;
+
+    public void setStudentId(Integer studentId) {
+        this.studentId = studentId;
+    }
+
+    public Integer getStudentId() {
+        return studentId;
+    }
+
+    public void setRoleId(Integer roleId) {
+        this.roleId = roleId;
+    }
+
+    public Integer getRoleId() {
+        return roleId;
+    }
 
     public String getStudentName() {
         return studentName;

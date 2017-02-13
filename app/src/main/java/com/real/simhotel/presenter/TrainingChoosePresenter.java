@@ -41,7 +41,7 @@ public class TrainingChoosePresenter extends BasePresenter {
     public void confirmEnterTraining(Training training){
 
         //存到Application中
-        application.mTraining = training;
+        application.training = training;
 
 
         if (application.mRole == Role.ROLE_TEACHER) {
@@ -53,50 +53,63 @@ public class TrainingChoosePresenter extends BasePresenter {
 
             //如果是学生的话
 
-            if (training.getGroupDetailVos() == null || training.getGroupDetailVos().size() == 0){
+            if (training.getGroupDetailVos() != null && training.getGroupDetailVos().size() != 0){
 
-                //先绑定
-                mView.showLoading();
 
-                String deviceNumber = PreferenceUtils.getTeamNum(application) + PreferenceUtils.getCharacter(application);
-                apiService.chooseGroupRole(application.mTraining.getId().toString(),deviceNumber,application.uid)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .flatMap(new Func1<Response<String>, Observable<String>>() {
-                            @Override
-                            public Observable<String> call(Response<String> stringResponse) {
-                                return RetrofitUtils.flatResponse(stringResponse);
-                            }
-                        })
-                        .subscribe(new Subscriber<String>() {
-                            @Override
-                            public void onCompleted() {
 
-                            }
+                if(training.getGroupDetailVos().get(0).checkHasMyPos(Integer.parseInt(PreferenceUtils.getCharacter(application)))){
 
-                            @Override
-                            public void onError(Throwable e) {
+                    //直接进入实例
+                    mView.enterTrainingForStudent(training,application.mRole);
 
-                                mView.disMissLoading();
-                                mView.showToast("请求失败,请稍后再试");
-                            }
+                    //更新group
+                    application.group = application.training.getGroupDetailVos().get(0);
 
-                            @Override
-                            public void onNext(String s) {
+                }else {
 
-                                mView.disMissLoading();
+                    //先绑定
+                    mView.showLoading();
+                    String deviceNumber = PreferenceUtils.getTeamNum(application) + PreferenceUtils.getCharacter(application);
+                    apiService.chooseGroupRole(application.training.getId().toString(),deviceNumber,application.uid)
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .flatMap(new Func1<Response<String>, Observable<String>>() {
+                                @Override
+                                public Observable<String> call(Response<String> stringResponse) {
+                                    return RetrofitUtils.flatResponse(stringResponse);
+                                }
+                            })
+                            .subscribe(new Subscriber<String>() {
+                                @Override
+                                public void onCompleted() {
 
-                                mView.showToast("加入成功");
+                                }
 
-                                mView.enterTrainingForStudent(training,application.mRole);
-                            }
-                        });
+                                @Override
+                                public void onError(Throwable e) {
+
+                                    mView.disMissLoading();
+                                    mView.showToast("请求失败,请稍后再试");
+                                }
+
+                                @Override
+                                public void onNext(String s) {
+
+                                    mView.disMissLoading();
+
+                                    mView.showToast("加入成功");
+
+                                    mView.enterTrainingForStudent(training,application.mRole);
+                                }
+                            });
+                }
+
+
 
 
             }else {
 
-                //直接进入实例
-                mView.enterTrainingForStudent(training,application.mRole);
+                mView.showToast("对不起,没有权限进入");
 
             }
 
@@ -169,7 +182,7 @@ public class TrainingChoosePresenter extends BasePresenter {
         }else {
 
             //获取位置坐标
-            String pos = PreferenceUtils.getCharacter(application) + PreferenceUtils.getTeamNum(application);
+            String pos = PreferenceUtils.getTeamNum(application) + PreferenceUtils.getCharacter(application);
 
 
             mTrainingList = apiService.getTrainingListForStudent(application.uid , pos)

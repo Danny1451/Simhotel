@@ -42,7 +42,7 @@ public class CeoNormalPresenter extends BasePresenter{
     public void startUpdateStatus(){
 
         //获取轮询管理 开始轮询
-        application.broadCastManager.startScheduling();
+        application.traingingStatusManager.startScheduling();
 
         EventBus.getDefault().register(this);
     }
@@ -58,8 +58,21 @@ public class CeoNormalPresenter extends BasePresenter{
         switch (event.getTrainingStatus()){
             case EventCode.TEACHER_START_HIRE:
 
-                //开始 增加 雇员 信息 TODO 招聘会的时间
-                list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?","2016年8月",CEO_DECISION_HIRE));
+                application.traingingStatusManager.changeTrainingStatus(application.training.getId(), EventCode.CEO_THINKING_HIRE, new TrainingStatusManager.TraingStatusChangeListener() {
+                    @Override
+                    public void OnChangedSuccess() {
+                        //开始 增加 雇员 信息 TODO 招聘会的时间
+                        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
+                                application.training.getCurrentCycle()+"",CEO_DECISION_HIRE));
+                        //加载列表
+                        mView.loadList(list);
+                    }
+
+                    @Override
+                    public void OnChangedFailed(String erro) {
+
+                    }
+                });
 
                 break;
 
@@ -84,13 +97,24 @@ public class CeoNormalPresenter extends BasePresenter{
 
         list = new ArrayList();
 
-        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 80 玩 ,支出 10 玩","2016年6月"));
-        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 90 玩 ,支出 30 玩","2016年6月"));
-        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 100 玩 ,支出 30 玩","2016年7月"));
-        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("大哥你要破产了,贷款不?","2016年9月",2));
+        if (application.training.getTrainingStatus() == EventCode.CEO_THINKING_HIRE){
+            //增加一条招聘信息
+
+            list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
+                    application.training.getCurrentCycle()+"",
+                    CEO_DECISION_HIRE));
+
+        }
+
+//        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 80 玩 ,支出 10 玩","2016年6月"));
+//        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 90 玩 ,支出 30 玩","2016年6月"));
+//        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 100 玩 ,支出 30 玩","2016年7月"));
+//        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("大哥你要破产了,贷款不?","2016年9月",2));
 
         //加载列表
         mView.loadList(list);
+
+        startUpdateStatus();
 
     }
 
@@ -119,7 +143,7 @@ public class CeoNormalPresenter extends BasePresenter{
 
             }
 
-            application.broadCastManager.changeTrainingStatus(application.mTraining.getId(),
+            application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
                     eventCode,
                     new TrainingStatusManager.TraingStatusChangeListener() {
                         @Override

@@ -48,12 +48,7 @@ public interface ApiService {
                                              @Query("group_name") String groupname,
                                              @Query("group_des") String des);
 
-    @GET(Constants.API_URL_CREATE_HOTEL)
-    Observable<Response<String>> createHotel(@Query(PARAMS_TRAINING_ID) int trainId,
-                                             @Query("location") int location,
-                                             @Query("room_least_num") int roomMinNum,
-                                             @Query("room_cost") int roomcoast,
-                                             @Query("room_income")int income );
+
 
     /**
      * 获取酒店模板的接口

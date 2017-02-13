@@ -48,20 +48,8 @@ public class TrainingDetailFragment extends BaseDetailFragment<Training> {
                 GroupDetailVo group = model.getGroupDetailVos().get(0);
 
                 tvLine5.setText("小组信息:" + group.getGroupName());
-
-                String roleDes = "";
-
-                if (group.getGroupRoleDetailVos() != null && group.getGroupRoleDetailVos().size() != 0) {
-                    for (GroupRoleDetailVo temp : group.getGroupRoleDetailVos()) {
-
-                        roleDes = roleDes + " 角色:" + temp.getRoleName() + " 姓名:" + temp.getStudentName() + "\n";
-                    }
-                }else {
-                    roleDes = "暂无组员";
-                }
-
                 //显示组员信息
-                tvLine6.setText(roleDes);
+                tvLine6.setText(group.getGroupRoleDetailsString());
                 tvLine6.setVisibility(View.VISIBLE);
 
                 confirmBtn.setText("回到实例");
