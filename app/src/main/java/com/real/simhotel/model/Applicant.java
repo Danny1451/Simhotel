@@ -20,6 +20,7 @@ public class Applicant {
     private Integer employNum;
     private String insertTime;
     private String updateTime;
+    private Integer biddingPrice;
 
     public List<Quote> quotes;
     public Integer quotePrice;
@@ -61,6 +62,15 @@ public class Applicant {
     public void setTrainingId(Integer trainingId) {
         this.trainingId = trainingId;
     }
+
+    public Integer getBiddingPrice() {
+        return biddingPrice;
+    }
+
+    public void setBiddingPrice(Integer biddingPrice) {
+        this.biddingPrice = biddingPrice;
+    }
+
 
     public Integer getCurrentCycle() {
         return currentCycle;

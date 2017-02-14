@@ -1,8 +1,8 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.events.StatusEvent;
-import com.real.simhotel.events.TrainingStatusManager;
+import com.real.simhotel.events.TrainStatus;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
@@ -52,27 +52,30 @@ public class CeoNormalPresenter extends BasePresenter{
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(StatusEvent event) {
+    public void onMessageEvent(TrainStatus event) {
 
 
         switch (event.getTrainingStatus()){
-            case EventCode.TEACHER_START_HIRE:
+            case EventCode.TraingingCode.TRAINING_HIRE_START:
 
-                application.traingingStatusManager.changeTrainingStatus(application.training.getId(), EventCode.CEO_THINKING_HIRE, new TrainingStatusManager.TraingStatusChangeListener() {
-                    @Override
-                    public void OnChangedSuccess() {
-                        //开始 增加 雇员 信息 TODO 招聘会的时间
-                        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
-                                application.training.getCurrentCycle()+"",CEO_DECISION_HIRE));
-                        //加载列表
-                        mView.loadList(list);
-                    }
+                if (application.group.getGroupStatus() < EventCode.GroupCode.GROUP_CEO_HIRE_ING) {
+                    application.traingingStatusManager.changeGroupStatus(
+                            EventCode.GroupCode.GROUP_CEO_HIRE_ING, new StatusManager.StatusChangeListener() {
+                                @Override
+                                public void OnChangedSuccess() {
+                                    //开始 增加 雇员 信息 TODO 招聘会的时间
+                                    list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
+                                            application.training.getCurrentCycle() + "", CEO_DECISION_HIRE));
+                                    //加载列表
+                                    mView.loadList(list);
+                                }
 
-                    @Override
-                    public void OnChangedFailed(String erro) {
+                                @Override
+                                public void OnChangedFailed(String erro) {
 
-                    }
-                });
+                                }
+                            });
+                }
 
                 break;
 
@@ -97,7 +100,7 @@ public class CeoNormalPresenter extends BasePresenter{
 
         list = new ArrayList();
 
-        if (application.training.getTrainingStatus() == EventCode.CEO_THINKING_HIRE){
+        if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HIRE_ING){
             //增加一条招聘信息
 
             list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
@@ -131,21 +134,21 @@ public class CeoNormalPresenter extends BasePresenter{
             int eventCode = 0;
             if ( (int)model.ext == CEO_DECISION_HIRE) {
 
-                eventCode = EventCode.CEO_REJECT_HIRE;
+                eventCode = EventCode.GroupCode.GROUP_CEO_HIRE_REJECT;
                 if (hasConfirm)
-                    eventCode = EventCode.CEO_CONFIRM_HIRE;
+                    eventCode = EventCode.GroupCode.GROUP_CEO_HIRE_CONFIRM;
 
             }else if ((int)model.ext == CEO_DECISION_LOAN){
 
-                eventCode = EventCode.CEO_REJECT_LOAN;
+                eventCode = EventCode.GroupCode.GROUP_CEO_LOAN_REJECT;
                 if (hasConfirm)
-                    eventCode = EventCode.CEO_CONFIRM_LOAN;
+                    eventCode = EventCode.GroupCode.GROUP_CEO_LOAN_CONFIRM;
 
             }
 
-            application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
+            application.traingingStatusManager.changeGroupStatus(
                     eventCode,
-                    new TrainingStatusManager.TraingStatusChangeListener() {
+                    new StatusManager.StatusChangeListener() {
                         @Override
                         public void OnChangedSuccess() {
 

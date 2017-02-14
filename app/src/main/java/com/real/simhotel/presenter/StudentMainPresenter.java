@@ -1,15 +1,17 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.config.Role;
+import com.real.simhotel.events.BaseStatus;
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.events.StatusEvent;
-import com.real.simhotel.events.TrainingStatusManager;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
+import com.real.simhotel.view.fragment.student.BidResultFragment;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.fragment.student.CeoNormalFragment;
+import com.real.simhotel.view.fragment.student.HrNormalFragment;
 import com.real.simhotel.view.fragment.student.LoadingFragment;
 import com.real.simhotel.view.iview.IStudentMainView;
 
@@ -49,64 +51,89 @@ public class StudentMainPresenter extends BasePresenter {
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(StatusEvent event) {
+    public void onMessageEvent(BaseStatus event) {
 
-        KLog.d("receive event " + event.getTrainingStatus() + " " + event.getStatusDes());
+        KLog.d("receive event " + event.getStatus() + " " + event.getDes());
+
+        int status = event.getStatus();
 
         //根据角色 接收不同的广播事件
         if (application.mRole == Role.ROLE_STU_CEO){
 
             //角色为CEO
 
-            switch (event.getTrainingStatus()){
-                case EventCode.TRAINING_BUILDING:
+            switch (status){
+                case EventCode.TraingingCode.TRAINING_BUILDING:
 
                     break;
-                case EventCode.TRAINING_BUILDED: {
+                case EventCode.TraingingCode.TRAINING_BUILDED: {
 
-                    //先改变状态 触发界面切换
-                    application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
-                            EventCode.TRAINING_HOTEL_CEO_INITING,
-                            new TrainingStatusManager.TraingStatusChangeListener() {
-                        @Override
-                        public void OnChangedSuccess() {
-                            //实例建完之后 开始初始化
+
+
+                    //老师实训完成
+                    if (application.group.getGroupStatus() == 0 ) {
+                        //改变小组 状态 触发界面切换
+                        application.traingingStatusManager.changeGroupStatus(
+                                EventCode.GroupCode.GROUP_CEO_HOTEL_INITING,
+                                new StatusManager.StatusChangeListener() {
+                                    @Override
+                                    public void OnChangedSuccess() {
+                                        //实例建完之后 开始初始化
+                                        mDetailFragment = new CeoInitFragment();
+                                        mView.updateDetailFragment(mDetailFragment);
+                                    }
+
+                                    @Override
+                                    public void OnChangedFailed(String erro) {
+
+                                    }
+                                });
+                    }else if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HOTEL_INITING){
+
+                        //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
+                        if (mView.getCurrentDetailFragment().getClass() != CeoInitFragment.class) {
+
                             mDetailFragment = new CeoInitFragment();
                             mView.updateDetailFragment(mDetailFragment);
                         }
+                    }else if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED){
+                        //正常状态
+                        if (mView.getCurrentDetailFragment().getClass() != CeoNormalFragment.class) {
 
-                        @Override
-                        public void OnChangedFailed(String erro) {
-
+                            mDetailFragment = new CeoNormalFragment();
+                            mView.updateDetailFragment(mDetailFragment);
                         }
-                    });
-
-                    break;
-                }
-                case EventCode.TRAINING_HOTEL_CEO_INITING:{
-
-                    //状态是正在初始化 当前界面是等待界面的话 进入到初始化
-                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
-
-                        mDetailFragment = new CeoInitFragment();
-                        mView.updateDetailFragment(mDetailFragment);
                     }
 
-                }
-                    break;
-
-                case EventCode.TRAINING_HOTEL_INITED: {
-
-                    //酒店实例化完成了 切换界面
-                    mDetailFragment = new CeoNormalFragment();
-
-                    mView.updateDetailFragment(mDetailFragment);
-
                     break;
                 }
+
+//                case EventCode.GroupCode.GROUP_CEO_HOTEL_INITING:{
+//
+//                    //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
+//                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+//
+//                        mDetailFragment = new CeoInitFragment();
+//                        mView.updateDetailFragment(mDetailFragment);
+//                    }
+//
+//                }
+//                    break;
+//                case EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED:{
+//
+//                    //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
+//                    if (mView.getCurrentDetailFragment().getClass() != CeoNormalFragment.class){
+//
+//                        mDetailFragment = new CeoNormalFragment();
+//                        mView.updateDetailFragment(mDetailFragment);
+//                    }
+//                }
+//                    break;
+
                 default:{
                     //其他状态默认回到 日常状态
-                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class &&
+                            application.training.getTrainingStatus() >= EventCode.TraingingCode.TRAINING_BUILDED){
 
                         mDetailFragment = new CeoNormalFragment();
                         mView.updateDetailFragment(mDetailFragment);
@@ -118,34 +145,80 @@ public class StudentMainPresenter extends BasePresenter {
 
         }else if (application.mRole == Role.ROLE_STU_HR){
 
-            switch (event.getTrainingStatus()){
-                case EventCode.CEO_CONFIRM_HIRE:{
+            switch (status){
+                case EventCode.TraingingCode.TRAINING_BUILDED:{
 
-                    application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
-                            EventCode.TRAINING_BID_ING,
-                            new TrainingStatusManager.TraingStatusChangeListener() {
-                        @Override
-                        public void OnChangedSuccess() {
+
+
+                    break;
+                }
+                case EventCode.GroupCode.GROUP_CEO_HIRE_CONFIRM:
+                case EventCode.GroupCode.GROUP_HR_HIRE_BIDDING :{
+
+                    if (application.group.getGroupStatus() != EventCode.GroupCode.GROUP_HR_HIRE_BIDDING) {
+                        //CEO 决定招聘
+                        application.traingingStatusManager.changeGroupStatus(
+                                EventCode.GroupCode.GROUP_HR_HIRE_BIDDING,
+                                new StatusManager.StatusChangeListener() {
+                                    @Override
+                                    public void OnChangedSuccess() {
+                                        mDetailFragment = new BidInitFragment();
+                                        mView.updateDetailFragment(mDetailFragment);
+                                    }
+
+                                    @Override
+                                    public void OnChangedFailed(String erro) {
+
+                                    }
+                                });
+                    }else {
+                        if (mView.getCurrentDetailFragment().getClass() != BidInitFragment.class){
+
                             mDetailFragment = new BidInitFragment();
                             mView.updateDetailFragment(mDetailFragment);
                         }
+                    }
 
-                        @Override
-                        public void OnChangedFailed(String erro) {
+                    break;
+                }
 
+
+                case EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT:{
+
+                    if (application.group.getGroupStatus() != EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW) {
+                        //正在展示结果
+                        application.traingingStatusManager.changeGroupStatus(
+                                EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW,
+                                new StatusManager.StatusChangeListener() {
+                                    @Override
+                                    public void OnChangedSuccess() {
+
+                                        mDetailFragment = new BidResultFragment();
+                                        mView.updateDetailFragment(mDetailFragment);
+                                    }
+
+                                    @Override
+                                    public void OnChangedFailed(String erro) {
+
+                                    }
+                                }
+                        );
+                    }else {
+                        if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
+
+                            mDetailFragment = new BidResultFragment();
+                            mView.updateDetailFragment(mDetailFragment);
                         }
-                    });
-
+                    }
 
                 }
 
-                case EventCode.TRAINING_BID_ING:{
-                    // CEO 触发招聘 更新状态后刷新界面
-                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
-                        mDetailFragment = new BidInitFragment();
+                case EventCode.TraingingCode.TRAINING_HIRE_FINISHED:{
+                    if (mView.getCurrentDetailFragment().getClass() != HrNormalFragment.class){
+
+                        mDetailFragment = new HrNormalFragment();
                         mView.updateDetailFragment(mDetailFragment);
                     }
-
                 }
                     break;
             }

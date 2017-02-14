@@ -3,7 +3,7 @@ package com.real.simhotel.presenter;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.events.TrainingStatusManager;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.base.BasePresenter;
@@ -31,7 +31,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     ITHRManagerView mView;
 
     int finishNum = 0 ;
-    private Boolean hasFinishQute = false;
 
     private List<Applicant> mDataList;
     private List<DynamicListModel> mViewModelList;
@@ -45,24 +44,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         mView = view;
 
     }
-
-
-//    //将报价 展示到界面中
-//    public List<DynamicListModel> parseQuteToViewModel(List<Quote> quotes){
-//        List<DynamicListModel> dynamicListModels = new ArrayList<>();
-//
-//        for (int i = 0 ; i < quotes.size() ; i++ ){
-//
-//            Quote quote = quotes.get(i);
-//
-//            //转换到显示model
-//            dynamicListModels.add(DynamicListModelFactory.modelForApplicantsBidResult(i+1,quote.hotelName,"报价:" + quote.prcie + ""));
-//
-//
-//        }
-//
-//        return dynamicListModels;
-//    }
 
     // 清空报价
     private void cleanQutes(){
@@ -81,43 +62,6 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
 
 
-
-//    /**
-//     * 获得报价
-//     */
-//    public void testAddQutes(){
-//
-//
-//        if (finishNum >= mDataList.size()) {
-//
-//            //报价增加完
-//            hasFinishQute = true;
-//            return;
-//        }
-//
-//        //遍历增加报价
-//        for (int i = 0 ; i < mDataList.size() ; i++ ){
-//
-//            Applicant applicant = mDataList.get(i);
-//            DynamicListModel viewModel = mViewModelList.get(i);
-//
-//            //增加报价
-//            Quote quote = Quote.testQuote("酒店" + finishNum ,applicant.getExpectMonthIncome() + finishNum * 10);
-//            applicant.quotes.add(quote);
-//
-//            applicant.quotePrice = applicant.getExpectMonthIncome();
-//
-//            //转换到显示模型
-//            viewModel.info = "报价:" + applicant.quotePrice;
-//            viewModel.ext = parseQuteToViewModel(applicant.quotes);
-//
-//
-//        }
-//
-//        finishNum ++ ;
-//
-//    }
-
     @Override
     public void requestData(Object... o) {
         super.requestData(o);
@@ -125,8 +69,10 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         mDataList = new ArrayList<>();
         mViewModelList = new ArrayList<>();
 
-        if (application.training.getTrainingStatus() == EventCode.TRAINING_BID_START ||
-                application.training.getTrainingStatus() == EventCode.TRAINING_BID_ING ){
+        //判断是否已经有报价的结果了
+        if (application.training.getTrainingStatus() == EventCode.TraingingCode.TRAINING_HIRE_START ||
+                application.training.getTrainingStatus() == EventCode.TraingingCode.TRAINING_HIRE_PUSH_APPLICANT||
+                application.training.getTrainingStatus() == EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT){
 
             //切换至报价列表
             mView.transToInitListFragment();
@@ -319,7 +265,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     }
 
     /**
-     * 推送候选人
+     * 第一轮推送候选人
      */
     public void pushApplicants(){
 
@@ -334,10 +280,10 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         mView.showLoading();
 
 
-        //推送结果
-        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
-                EventCode.TEACHER_START_HIRE,
-                new TrainingStatusManager.TraingStatusChangeListener() {
+        //开始招聘
+        application.traingingStatusManager.changeTrainingStatus(
+                EventCode.TraingingCode.TRAINING_HIRE_START,
+                new StatusManager.StatusChangeListener() {
                     @Override
                     public void OnChangedSuccess() {
 
@@ -356,7 +302,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
-                        mView.showToast("推送结果失败,请稍后再试");
+                        mView.showToast("请求失败,请稍后再试");
 
                         KLog.d(erro);
                     }
@@ -373,68 +319,115 @@ public class TeacherHRManagerPresenter extends BasePresenter {
     public void pushResult(){
 
 
+        //跳转到客源推送界面
+        mView.showLoading();
+        application.traingingStatusManager.changeTrainingStatus(EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT,
+                new StatusManager.StatusChangeListener() {
+                    @Override
+                    public void OnChangedSuccess() {
+                        mView.disMissLoading();
+
+                        mView.showToast("推送成功");
+                    }
+
+                    @Override
+                    public void OnChangedFailed(String erro) {
+                        mView.disMissLoading();
+
+                        mView.showToast("推送失败");
+                    }
+                });
+    }
+
+    /**
+     *  重新开始招聘
+     */
+    public void restartBid(){
+        //转换至等待结果
+        mView.transToInitListFragment();
+        //数据viewModel 的 ext的模型切换 为 viewModel 的 list
+
         //清空报价
         cleanQutes();
-
-        //清空报价状态
-        finishNum = 0;
-        hasFinishQute = false;
-
 
         //跳转到客源推送界面
         mView.showLoading();
 
-        Observable.timer(2,TimeUnit.SECONDS)
+        apiService.restartBidEmploy(application.training.getId())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(aLong -> {
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
 
-                    mView.disMissLoading();
+                    @Override
+                    public void onError(Throwable e) {
+                        mView.disMissLoading();
 
-                    //更新显示
-                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+                        mView.showToast("请求失败,请稍后再试");
 
-                    //更新列表
-                    mView.renderApplicantsList(mViewModelList);
+                        e.printStackTrace();
+                    }
 
-                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
-                    mView.updateConfirmStatus("发送二次报价结果");
+                    @Override
+                    public void onNext(String s) {
+                        mView.disMissLoading();
+
+                        //更新列表
+                        mView.renderApplicantsList(mViewModelList);
+
+                        mView.updateConfirmStatus("发送结果");
+
+                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+                    }
                 });
+
 
     }
 
 
-//    /*
-//    * 刷新界面
-//    */
-//    public void updateResult(){
-//
-//        if (hasFinishQute){
-//            mView.showToast("已经全部更新完成");
-//            return;
-//        }
-//
-//
-//        //更新
-//        mView.updateGroupStatus("更新中");
-//
-//        mView.showLoading();
-//
-//        //增加报价
-//        testAddQutes();
-//
-//        Observable.timer(2, TimeUnit.SECONDS)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(aLong -> {
-//
-//                    mView.disMissLoading();
-//                    //刷新界面
-//                    mView.updateGroupStatus(finishNum + "/" + mDataList.size());
-//                    mView.renderApplicantsList(mViewModelList);
-//
-//                });
-//
-//    }
+
+    public void finishBid(){
+
+        //跳转到客源推送界面
+        mView.showLoading();
+
+
+        //结束招聘
+        application.traingingStatusManager.changeTrainingStatus(
+                EventCode.TraingingCode.TRAINING_HIRE_FINISHED,
+                new StatusManager.StatusChangeListener() {
+                    @Override
+                    public void OnChangedSuccess() {
+
+                        mView.disMissLoading();
+
+                        mView.showToast("招聘结束");
+
+                        mView.finishHire();
+                    }
+
+                    @Override
+                    public void OnChangedFailed(String erro) {
+
+                        mView.disMissLoading();
+
+                        mView.showToast("请求失败,请稍后再试");
+
+                        KLog.d(erro);
+                    }
+                });
+    }
+
+
 
 
 }

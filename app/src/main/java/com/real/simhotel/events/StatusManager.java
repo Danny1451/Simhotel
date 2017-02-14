@@ -21,26 +21,27 @@ import rx.schedulers.Schedulers;
  * Created by liudan on 2017/1/17.
  * 接收酒店状态改变的广播
  */
-public class TrainingStatusManager {
+public class StatusManager {
 
     ApiService mApiService;
     MainApplication mApplication;
 
     Subscription mRepeat;
-    Subscription mRequest;
+    Subscription mRequesTrainingStatus;
+    Subscription mRequesGroupStatus;
 
     Boolean isRuning = false;
     /**
      * 轮询间隔
      */
-    public static final int TIME_INTERVAL = 30;
+    public static final int TIME_INTERVAL = 10;
 
-    public interface TraingStatusChangeListener{
+    public interface StatusChangeListener {
         void OnChangedSuccess();
         void OnChangedFailed(String erro);
     }
 
-    public TrainingStatusManager(ApiService apiService , MainApplication application){
+    public StatusManager(ApiService apiService , MainApplication application){
 
         mApiService = apiService;
         mApplication = application;
@@ -80,17 +81,17 @@ public class TrainingStatusManager {
 
 
     private void requestStatus(){
-        mRequest = mApiService
+        mRequesTrainingStatus = mApiService
                 .getTrainingStatus(mApplication.training.getId())
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .flatMap(new Func1<Response<StatusEvent>, Observable<StatusEvent>>() {
+                .flatMap(new Func1<Response<TrainStatus>, Observable<TrainStatus>>() {
                     @Override
-                    public Observable<StatusEvent> call(Response<StatusEvent> statusEventResponse) {
+                    public Observable<TrainStatus> call(Response<TrainStatus> statusEventResponse) {
                         return RetrofitUtils.flatResponse(statusEventResponse);
                     }
                 })
-                .subscribe(new Subscriber<StatusEvent>() {
+                .subscribe(new Subscriber<TrainStatus>() {
                     @Override
                     public void onCompleted() {
 
@@ -104,10 +105,38 @@ public class TrainingStatusManager {
                     }
 
                     @Override
-                    public void onNext(StatusEvent event) {
+                    public void onNext(TrainStatus event) {
 
                         //直接发送事件
                         EventBus.getDefault().post(event);
+                    }
+                });
+
+
+        mRequesGroupStatus = mApiService.getGroupStatus(mApplication.group.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
+                .flatMap(new Func1<Response<GroupStatus>, Observable<GroupStatus>>() {
+                    @Override
+                    public Observable<GroupStatus> call(Response<GroupStatus> groupStatusResponse) {
+                        return RetrofitUtils.flatResponse(groupStatusResponse);
+                    }
+                })
+                .subscribe(new Subscriber<GroupStatus>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(GroupStatus groupStatus) {
+                        //直接发送事件
+                        EventBus.getDefault().post(groupStatus);
                     }
                 });
     }
@@ -118,8 +147,8 @@ public class TrainingStatusManager {
 
         isRuning = false;
 
-        if (mRequest != null)
-            mRequest.unsubscribe();
+        if (mRequesTrainingStatus != null)
+            mRequesTrainingStatus.unsubscribe();
 
     }
 
@@ -135,7 +164,7 @@ public class TrainingStatusManager {
         if (mRepeat != null)
             mRepeat.unsubscribe();
 
-        mRequest = null;
+        mRequesTrainingStatus = null;
         mRepeat = null;
     }
 
@@ -151,7 +180,7 @@ public class TrainingStatusManager {
      * @param traininStatus
      * @param listener
      */
-    public void changeTrainingStatus(int trainingId, int traininStatus, TraingStatusChangeListener listener){
+    public void changeTrainingStatus(int trainingId, int traininStatus, StatusChangeListener listener){
 
         Subscription request = mApiService.updateTrainingStatus(trainingId,traininStatus)
                 .subscribeOn(Schedulers.io())
@@ -176,16 +205,83 @@ public class TrainingStatusManager {
                     @Override
                     public void onNext(String s) {
                         //直接发送事件
-                        StatusEvent event = new StatusEvent();
+                        TrainStatus event = new TrainStatus();
                         event.setStatusDes("");
                         event.setTrainingStatus(traininStatus);
                         EventBus.getDefault().post(event);
 
+                        //更新本地training的状态
+                        mApplication.training.setTrainingStatus(traininStatus);
                         //改变成功之后 手动触发 发送一条事件
                         listener.OnChangedSuccess();
                     }
                 });
     }
 
+    /**
+     *
+     * @param status
+     * @param listener
+     */
+    public void changeTrainingStatus(int status,StatusChangeListener listener){
+        changeTrainingStatus(mApplication.training.getId(),status,listener);
+    }
 
+
+    /**
+     *
+     * @param status
+     * @param listener
+     */
+    public void changeGroupStatus(int status,StatusChangeListener listener){
+        changeGroupStatus(mApplication.group.getId(),status,listener);
+    }
+
+    /**
+     *
+     * @param groupId
+     * @param status
+     * @param listener
+     */
+    public void changeGroupStatus(int groupId,int status,StatusChangeListener listener){
+
+        Subscription subs = mApiService.updateGroupStatus(groupId,status)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        //更新成功
+                        //直接发送事件
+                        GroupStatus event = new GroupStatus();
+                        event.setStatusDes("");
+                        event.setGrouoStatus(status);
+                        EventBus.getDefault().post(event);
+
+                        //更新本地Group的状态
+                        mApplication.group.setGroupStatus(status);
+                        //改变成功之后 手动触发 发送一条事件
+                        listener.OnChangedSuccess();
+
+                    }
+                });
+
+    }
 }

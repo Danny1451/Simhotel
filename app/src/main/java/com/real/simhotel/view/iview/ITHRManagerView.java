@@ -25,4 +25,6 @@ public interface ITHRManagerView extends IBaseView{
     void updateConfirmStatus(String value);
 
     void removeAddApplicantDialog();
+
+    void finishHire();
 }

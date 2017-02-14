@@ -1,9 +1,11 @@
 package com.real.simhotel.data;
 
 import com.real.simhotel.config.Constants;
-import com.real.simhotel.events.StatusEvent;
+import com.real.simhotel.events.GroupStatus;
+import com.real.simhotel.events.TrainStatus;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.model.Group;
+import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.model.Quote;
@@ -22,7 +24,8 @@ import rx.Observable;
 public interface ApiService {
 
 
-    public static final String PARAMS_TRAINING_ID = "training_id";
+    String PARAMS_TRAINING_ID = "training_id";
+    String PARAMS_GROUP_ID = "group_id";
 
     /**
      * 登录接口
@@ -67,7 +70,7 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_CREATE_HOTEL)
-    Observable<Response<String>> createHotel(@Query("group_id") int groupId,
+    Observable<Response<String>> createHotel(@Query(PARAMS_GROUP_ID) int groupId,
                                              @Query("hotel_id") int hotelId,
                                              @Query("room_num") int roomNum);
 
@@ -125,9 +128,9 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_CHOOSE_GROUP_ROLE)
-    Observable<Response<String>> chooseGroupRole(@Query(PARAMS_TRAINING_ID) String trainingId,
-                                                 @Query("device_number") String deviceNumber,
-                                                 @Query("student_id") String studentId);
+    Observable<Response<GroupDetailVo>> chooseGroupRole(@Query(PARAMS_TRAINING_ID) String trainingId,
+                                                        @Query("device_number") String deviceNumber,
+                                                        @Query("student_id") String studentId);
 
     /**
      * 获取实例状态
@@ -135,8 +138,27 @@ public interface ApiService {
      * @return
      */
     @GET(Constants.API_URL_TRAINING_STATUS)
-    Observable<Response<StatusEvent>> getTrainingStatus(@Query(PARAMS_TRAINING_ID) int trainId);
+    Observable<Response<TrainStatus>> getTrainingStatus(@Query(PARAMS_TRAINING_ID) int trainId);
 
+
+    /**
+     * 更新小组状态
+     * @param groupId
+     * @return
+     */
+    @GET(Constants.API_URL_GROUP_STATUS)
+    Observable<Response<GroupStatus>> getGroupStatus(@Query(PARAMS_GROUP_ID) int groupId);
+
+
+    /**
+     * 更新小组状态
+     * @param groupId
+     * @param status
+     * @return
+     */
+    @GET(Constants.API_URL_UPDATE_GROUP_STATUS)
+    Observable<Response<String>> updateGroupStatus(@Query(PARAMS_GROUP_ID) int groupId,
+                                                   @Query("group_status") int status);
 
     /**
      * 获取雇员列表
@@ -206,5 +228,12 @@ public interface ApiService {
     Observable<Response<List<Quote>>> getEmployQuotes(@Query("employ_id") int employId);
 
 
+    /**
+     * 重新竞拍
+     * @param trainId
+     * @return
+     */
+    @GET(Constants.API_URL_RESTART_BID)
+    Observable<Response<String>> restartBidEmploy(@Query(PARAMS_TRAINING_ID) int trainId);
 
 }

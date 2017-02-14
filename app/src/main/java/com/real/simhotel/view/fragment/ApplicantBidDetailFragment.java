@@ -75,9 +75,12 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
 //        tvLine5.setText("参数5:" + model.getCurrentCycle());
         tvLine6.setText("工作年限:" + model.getExpectWorkPlace());
 
+        tvLine5.setText("报价:" + model.getBiddingPrice());
         confirmBtn.setText("竞价");
-        if (model.quotePrice != null ){
+        if (model.quotePrice != null || model.getBiddingPrice() != 0 ){
             confirmBtn.setEnabled(false);
+        }else {
+            confirmBtn.setEnabled(true);
         }
 
     }

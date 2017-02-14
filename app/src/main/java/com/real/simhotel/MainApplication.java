@@ -3,7 +3,7 @@ package com.real.simhotel;
 import android.app.Application;
 import android.content.Context;
 
-import com.real.simhotel.events.TrainingStatusManager;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.internal.dl.components.ApplicationComponent;
 import com.real.simhotel.internal.dl.components.DaggerApplicationComponent;
 import com.real.simhotel.internal.dl.modules.ApiServiceModule;
@@ -35,7 +35,7 @@ public class MainApplication extends Application {
     //当前的小组
     public GroupDetailVo group;
 
-    public TrainingStatusManager traingingStatusManager;
+    public StatusManager traingingStatusManager;
 
 
 
@@ -64,7 +64,7 @@ public class MainApplication extends Application {
         CrashHandler crashHandler = CrashHandler.getInstance();
         crashHandler.init(mContext);
 
-        traingingStatusManager = new TrainingStatusManager(mComponent.apiService(),this);
+        traingingStatusManager = new StatusManager(mComponent.apiService(),this);
     }
 
 

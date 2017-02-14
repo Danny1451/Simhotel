@@ -4,6 +4,7 @@ import com.real.simhotel.config.Constants;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
@@ -73,13 +74,13 @@ public class TrainingChoosePresenter extends BasePresenter {
                     apiService.chooseGroupRole(application.training.getId().toString(),deviceNumber,application.uid)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
-                            .flatMap(new Func1<Response<String>, Observable<String>>() {
+                            .flatMap(new Func1<Response<GroupDetailVo>, Observable<GroupDetailVo>>() {
                                 @Override
-                                public Observable<String> call(Response<String> stringResponse) {
+                                public Observable<GroupDetailVo> call(Response<GroupDetailVo> stringResponse) {
                                     return RetrofitUtils.flatResponse(stringResponse);
                                 }
                             })
-                            .subscribe(new Subscriber<String>() {
+                            .subscribe(new Subscriber<GroupDetailVo>() {
                                 @Override
                                 public void onCompleted() {
 
@@ -93,11 +94,13 @@ public class TrainingChoosePresenter extends BasePresenter {
                                 }
 
                                 @Override
-                                public void onNext(String s) {
+                                public void onNext(GroupDetailVo s) {
 
                                     mView.disMissLoading();
 
                                     mView.showToast("加入成功");
+
+                                    application.group = s;
 
                                     mView.enterTrainingForStudent(training,application.mRole);
                                 }

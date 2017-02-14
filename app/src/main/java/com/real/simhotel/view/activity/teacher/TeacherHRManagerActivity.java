@@ -18,7 +18,6 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.ViewHolder;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
-import com.real.simhotel.model.Quote;
 import com.real.simhotel.presenter.TeacherHRManagerPresenter;
 import com.real.simhotel.utils.DialogUitls;
 import com.real.simhotel.utils.log.KLog;
@@ -63,14 +62,14 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     BaseDetailFragment mDetailFragment;
 
     //上方菜单按钮
-    MenuItem mGroupStatus;
+    MenuItem mFinish;
     MenuItem mConfirm;
 
     @Override
     public void updateGroupStatus(String value) {
 
-        if (mGroupStatus != null)
-            mGroupStatus.setTitle(value);
+        if (mFinish != null)
+            mFinish.setTitle(value);
 
     }
 
@@ -86,9 +85,10 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
         inflater.inflate(R.menu.teacher_hr_manger_bar_menu,menu);
 
-        mGroupStatus = menu.findItem(R.id.action_state);
+        mFinish = menu.findItem(R.id.action_finish);
 
         mConfirm = menu.findItem(R.id.action_confirm);
+
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -96,31 +96,62 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_state:{
+            case R.id.action_confirm:{
+
+                //推送的话
+
+                if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
+
+                    DialogUitls.showConfirmDialog(mContext, "确认推送?",
+                            (dialogInterface,i)->
+                                    //确认推送人员信息
+                                    mPresenter.pushApplicants()
+                    );
+
+                }else {
+
+                    DialogUitls.showConfirmDialog(mContext, "确认开启新报价?",
+                            (dialogInterface,i)->
+                                    //重新报价
+                                    mPresenter.restartBid()
+                    );
 
 
-                //获取小组状态
-                item.setTitle("更新中。。。");
-                //刷新界面
-//                mPresenter.updateResult();
+                }
 
                 return true;
             }
-            case R.id.action_confirm:{
+            case R.id.action_finish:{
 
-                if (mConfirm.getTitle().toString().startsWith("推送")){
-                    //确认推送人员信息
-                    mPresenter.pushApplicants();
+                //结束报价
+                if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
 
-                }else if (mConfirm.getTitle().toString().contains("二次")){
+                    DialogUitls.showConfirmDialog(mContext, "确认退出?",
+                            (dialogInterface,i)->
+                                    //返回
+                                    this.finish()
+                    );
 
-                    showToast("此次招聘结束结束");
+
 
                 }else {
-                    //推送结果  包括第一轮 和 第二轮
-                    mPresenter.pushResult();
+                    DialogUitls.showConfirmDialog(mContext, "确认结束招聘?",
+                            (dialogInterface,i)->
+                                    //结束
+                                    mPresenter.finishBid()
+                    );
+
+
                 }
 
+
+                return true;
+            }
+            case R.id.action_result:{
+                DialogUitls.showConfirmDialog(mContext,"确认推送结果?",(dialogInterface,i)->
+                        //重新报价
+                        mPresenter.pushResult()
+                );
                 return true;
             }
             default:
@@ -153,7 +184,6 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
 
 
-//        mPresenter.requestData();
 
     }
 
@@ -282,6 +312,10 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     public void transToDetailFragment(){
         mDetailFragment = new ApplicantInitDetailFragment();
 
+        if (mConfirm != null) {
+            mConfirm.setTitle("开启招聘");
+            mFinish.setTitle("退出招聘");
+        }
         //删除
         mDetailFragment.setConfirmListener(view ->
             DialogUitls.showConfirmDialog(mContext,"确认删除",(dialog,which)->
@@ -298,6 +332,11 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     @Override
     public void transToInitListFragment(){
 
+        if (mConfirm != null) {
+            mConfirm.setTitle("开启下轮");
+            mFinish.setTitle("结束招聘");
+        }
+
         mDetailFragment = new ApplicantListDetailFragment();
         mAddApplicant.setVisibility(View.GONE);
     }
@@ -306,5 +345,10 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     public void removeAddApplicantDialog() {
         if (mDialog != null)
             mDialog.dismiss();
+    }
+
+    @Override
+    public void finishHire(){
+        this.finish();
     }
 }

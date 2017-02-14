@@ -3,10 +3,13 @@
     xmlns:simhotel="http://schemas.android.com/apk/res-auto">
 
 
-    <item android:id="@+id/action_state"
-        android:title=""
-        simhotel:showAsAction="ifRoom" />
     <item android:id="@+id/action_confirm"
-        android:title="推送候选人"
+        android:title="推送人员"
+        simhotel:showAsAction="ifRoom" />
+    <item android:id="@+id/action_result"
+        android:title="推送结果"
+        simhotel:showAsAction="ifRoom" />
+    <item android:id="@+id/action_finish"
+        android:title="结束"
         simhotel:showAsAction="ifRoom" />
 </menu>

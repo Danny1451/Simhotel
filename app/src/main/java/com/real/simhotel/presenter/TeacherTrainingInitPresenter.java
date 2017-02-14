@@ -3,7 +3,7 @@ package com.real.simhotel.presenter;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.events.TrainingStatusManager;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
@@ -110,9 +110,9 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
         //修改状态
 
         mView.showLoading();
-        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
-                EventCode.TRAINING_BUILDED,
-                new TrainingStatusManager.TraingStatusChangeListener() {
+        application.traingingStatusManager.changeTrainingStatus(
+                EventCode.TraingingCode.TRAINING_BUILDED,
+                new StatusManager.StatusChangeListener() {
                     @Override
                     public void OnChangedSuccess() {
 

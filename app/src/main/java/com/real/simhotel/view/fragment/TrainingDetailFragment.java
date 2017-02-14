@@ -7,6 +7,7 @@ import com.real.simhotel.config.Role;
 import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.GroupRoleDetailVo;
 import com.real.simhotel.model.Training;
+import com.real.simhotel.utils.PreferenceUtils;
 
 /**
  * Created by liudan on 2017/1/11.
@@ -37,13 +38,7 @@ public class TrainingDetailFragment extends BaseDetailFragment<Training> {
         if(application.mRole != Role.ROLE_TEACHER){
 
             //是学生
-            if (model.getGroupDetailVos() == null || model.getGroupDetailVos().size() == 0){
-                //没加入小组
-                tvLine5.setText("小组信息:尚未加入该实例");
-
-                confirmBtn.setText("加入实例");
-
-            }else {
+            if(application.training.getGroupDetailVos() != null && application.training.getGroupDetailVos().get(0).checkHasMyPos(Integer.parseInt(PreferenceUtils.getCharacter(application)))){
 
                 GroupDetailVo group = model.getGroupDetailVos().get(0);
 
@@ -51,9 +46,15 @@ public class TrainingDetailFragment extends BaseDetailFragment<Training> {
                 //显示组员信息
                 tvLine6.setText(group.getGroupRoleDetailsString());
                 tvLine6.setVisibility(View.VISIBLE);
-
                 confirmBtn.setText("回到实例");
 
+
+            }else {
+
+                //没加入小组
+                tvLine5.setText("小组信息:尚未加入该实例");
+
+                confirmBtn.setText("加入实例");
             }
 
 

@@ -100,7 +100,7 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
 
         //更新界面实训详情
-        if (application.training.getTrainingStatus() >= EventCode.TRAINING_BUILDED){
+        if (application.training.getTrainingStatus() >= EventCode.TraingingCode.TRAINING_BUILDED){
 
             updateTrainingInfo(application.group);
         }

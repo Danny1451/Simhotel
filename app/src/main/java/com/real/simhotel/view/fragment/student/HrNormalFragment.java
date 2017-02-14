@@ -3,6 +3,7 @@ package com.real.simhotel.view.fragment.student;
 import android.os.Bundle;
 import android.view.View;
 
+import com.real.simhotel.R;
 import com.real.simhotel.presenter.HrNormalPresenter;
 import com.real.simhotel.presenter.base.Presenter;
 import com.real.simhotel.view.adapter.DynamicListModel;
@@ -32,7 +33,7 @@ public class HrNormalFragment extends BaseFragment<HrNormalPresenter> implements
 
     @Override
     protected int getLayoutId() {
-        return 0;
+        return R.layout.fragment_hr_normal;
     }
 
     @Override

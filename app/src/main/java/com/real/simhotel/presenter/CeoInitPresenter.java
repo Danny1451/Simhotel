@@ -1,11 +1,9 @@
 package com.real.simhotel.presenter;
 
-import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.events.TrainingStatusManager;
-import com.real.simhotel.model.Hotel;
+import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.rx.DefaultSubscriber;
@@ -15,7 +13,6 @@ import com.real.simhotel.view.adapter.DynamicListModelFactory;
 import com.real.simhotel.view.fragment.student.CeoInitFragment;
 import com.real.simhotel.view.iview.ICeoInitView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
@@ -209,9 +206,9 @@ public class CeoInitPresenter extends BasePresenter {
                     @Override
                     public void onNext(String s) {
 
-                        application.traingingStatusManager.changeTrainingStatus(application.training.getId(),
-                                EventCode.TRAINING_HOTEL_INITED,
-                                new TrainingStatusManager.TraingStatusChangeListener() {
+                        application.traingingStatusManager.changeGroupStatus(
+                                EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED,
+                                new StatusManager.StatusChangeListener() {
                                     @Override
                                     public void OnChangedSuccess() {
 
