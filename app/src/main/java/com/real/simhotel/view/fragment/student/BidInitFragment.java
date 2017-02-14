@@ -35,8 +35,6 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     @Bind(R.id.bid_applicants_rv)
     RecyclerView mList;
 
-    @Bind(R.id.bid_confirm_btn)
-    Button mConfirm;
 
     //详情页面
     ApplicantBidDetailFragment mDetailFragment;

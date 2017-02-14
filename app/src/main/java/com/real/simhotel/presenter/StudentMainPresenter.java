@@ -4,6 +4,7 @@ import com.real.simhotel.config.Role;
 import com.real.simhotel.events.BaseStatus;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.StatusManager;
+import com.real.simhotel.events.TrainStatus;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.BaseFragment;
@@ -25,16 +26,17 @@ import org.greenrobot.eventbus.ThreadMode;
 public class StudentMainPresenter extends BasePresenter {
 
 
-
-
     IStudentMainView mView;
 
     BaseFragment mDetailFragment;
 
 
-    public StudentMainPresenter(IStudentMainView view){ mView = view;}
+    public StudentMainPresenter(IStudentMainView view) {
+        mView = view;
+        mDetailFragment = new LoadingFragment();
+    }
 
-    public void startUpdateStatus(){
+    public void startUpdateStatus() {
 
         //获取轮询管理 开始轮询
         application.traingingStatusManager.startScheduling();
@@ -45,125 +47,234 @@ public class StudentMainPresenter extends BasePresenter {
     }
 
 
-
     /**
      * 注册接收广播事件 用来切换界面
+     *
      * @param event
      */
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(BaseStatus event) {
 
-        KLog.d("receive event " + event.getStatus() + " " + event.getDes());
+        KLog.e("receive event " + event.getStatus() + " " + event.getDes());
 
         int status = event.getStatus();
 
         //根据角色 接收不同的广播事件
-        if (application.mRole == Role.ROLE_STU_CEO){
+        if (application.mRole == Role.ROLE_STU_CEO) {
 
             //角色为CEO
 
-            switch (status){
-                case EventCode.TraingingCode.TRAINING_BUILDING:
+            if (event.getClass() == TrainStatus.class) {
+                //实训事件
+                switch (status) {
+                    case EventCode.TraingingCode.TRAINING_BUILDING:
+                        mDetailFragment = new LoadingFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                        application.traingingStatusManager.consumeStatus(event);
 
-                    break;
-                case EventCode.TraingingCode.TRAINING_BUILDED: {
+                        break;
+                    case EventCode.TraingingCode.TRAINING_BUILDED:
+
+                        //还会建立完成的话是初始化界面
+                        if (application.traingingStatusManager.getCurrentGroupStatus() <
+                                EventCode.GroupCode.GROUP_CEO_HOTEL_INITING) {
+                            //修改状态
+                            application.traingingStatusManager.changeGroupStatus(
+                                    EventCode.GroupCode.GROUP_CEO_HOTEL_INITING,
+                                    new StatusManager.StatusChangeListener() {
+                                        @Override
+                                        public void OnChangedSuccess() {
 
 
+                                            //消费事件
+                                            application.traingingStatusManager.consumeStatus(event);
+                                        }
 
-                    //老师实训完成
-                    if (application.group.getGroupStatus() == 0 ) {
-                        //改变小组 状态 触发界面切换
-                        application.traingingStatusManager.changeGroupStatus(
-                                EventCode.GroupCode.GROUP_CEO_HOTEL_INITING,
-                                new StatusManager.StatusChangeListener() {
-                                    @Override
-                                    public void OnChangedSuccess() {
-                                        //实例建完之后 开始初始化
-                                        mDetailFragment = new CeoInitFragment();
-                                        mView.updateDetailFragment(mDetailFragment);
-                                    }
+                                        @Override
+                                        public void OnChangedFailed(String erro) {
 
-                                    @Override
-                                    public void OnChangedFailed(String erro) {
-
-                                    }
-                                });
-                    }else if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HOTEL_INITING){
-
-                        //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
-                        if (mView.getCurrentDetailFragment().getClass() != CeoInitFragment.class) {
-
-                            mDetailFragment = new CeoInitFragment();
-                            mView.updateDetailFragment(mDetailFragment);
+                                        }
+                                    });
+                        }else {
+                            application.traingingStatusManager.consumeStatus(event);
                         }
-                    }else if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED){
-                        //正常状态
-                        if (mView.getCurrentDetailFragment().getClass() != CeoNormalFragment.class) {
 
+                        break;
+                    case EventCode.TraingingCode.TRAINING_HIRE_START: {
+
+
+                        //还会建立完成的话是初始化界面
+                        if (application.traingingStatusManager.getCurrentGroupStatus() ==
+                                EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED) {
+                            //修改状态
+                            application.traingingStatusManager.changeGroupStatus(
+                                    EventCode.GroupCode.GROUP_CEO_HIRE_ING,
+                                    new StatusManager.StatusChangeListener() {
+                                        @Override
+                                        public void OnChangedSuccess() {
+
+
+                                            //消费事件
+                                            application.traingingStatusManager.consumeStatus(event);
+                                        }
+
+                                        @Override
+                                        public void OnChangedFailed(String erro) {
+
+                                        }
+                                    });
+                        }else {
+                            application.traingingStatusManager.consumeStatus(event);
+                        }
+
+
+                    }
+                    break;
+                    default:
+//                        //其他情况默认为日常
+                        mDetailFragment = new CeoNormalFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+//                        //消费事件
+                        application.traingingStatusManager.consumeStatus(event);
+                }
+
+            } else {
+
+                switch (status){
+                    case EventCode.GroupCode.GROUP_CEO_HOTEL_INITING:{
+                        //切换到酒店创建页面 或者 日常界面
+                        mDetailFragment = new CeoInitFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                        //消费事件
+                        application.traingingStatusManager.consumeStatus(event);
+                        break;
+                    }
+
+                    case EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED:{
+
+                        //酒店初始化完成
+                        mDetailFragment = new CeoNormalFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                        //消费事件
+                        application.traingingStatusManager.consumeStatus(event);
+                        break;
+                    }
+                    case EventCode.GroupCode.GROUP_CEO_HIRE_ING:{
+                        //正在处理招聘
+                        if (mDetailFragment.getClass() == CeoNormalFragment.class){
+                            //招聘中
+                            mDetailFragment.handlerStatus(event);
+                        }else {
+                            //更新界面再刷新
+                            mDetailFragment = new CeoNormalFragment();
+                            mView.updateDetailFragment(mDetailFragment);
+                            mDetailFragment.handlerStatus(event);
+                        }
+                    }
+                    default:
+                        if (mDetailFragment.getClass() != CeoNormalFragment.class){
+                            //回到日常
                             mDetailFragment = new CeoNormalFragment();
                             mView.updateDetailFragment(mDetailFragment);
                         }
-                    }
+                        //消费事件
+                        application.traingingStatusManager.consumeStatus(event);
 
-                    break;
-                }
-
-//                case EventCode.GroupCode.GROUP_CEO_HOTEL_INITING:{
-//
-//                    //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
-//                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
-//
-//                        mDetailFragment = new CeoInitFragment();
-//                        mView.updateDetailFragment(mDetailFragment);
-//                    }
-//
-//                }
-//                    break;
-//                case EventCode.GroupCode.GROUP_CEO_HOTEL_INITTED:{
-//
-//                    //状态是小组状态 初始化 当前界面是等待界面的话 进入到初始化
-//                    if (mView.getCurrentDetailFragment().getClass() != CeoNormalFragment.class){
-//
-//                        mDetailFragment = new CeoNormalFragment();
-//                        mView.updateDetailFragment(mDetailFragment);
-//                    }
-//                }
-//                    break;
-
-                default:{
-                    //其他状态默认回到 日常状态
-                    if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class &&
-                            application.training.getTrainingStatus() >= EventCode.TraingingCode.TRAINING_BUILDED){
-
-                        mDetailFragment = new CeoNormalFragment();
-                        mView.updateDetailFragment(mDetailFragment);
-                    }
 
                 }
+
             }
 
 
-        }else if (application.mRole == Role.ROLE_STU_HR){
+        } else if (application.mRole == Role.ROLE_STU_HR) {
 
-            switch (status){
-                case EventCode.TraingingCode.TRAINING_BUILDED:{
+            if (event.getClass() == TrainStatus.class) {
+                //实例状态
 
+                switch (status) {
+                    case EventCode.TraingingCode.TRAINING_HIRE_PUSH_APPLICANT:{
+                        //推送候选人 用户后几轮竞价
+                        //正在竞价
+                        if (application.traingingStatusManager.getCurrentGroupStatus() ==
+                                EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW) {
+                            //进入展示
+                            application.traingingStatusManager.changeGroupStatus(
+                                    EventCode.GroupCode.GROUP_HR_HIRE_BIDDING,
+                                    new StatusManager.StatusChangeListener() {
+                                        @Override
+                                        public void OnChangedSuccess() {
+                                            application.traingingStatusManager.consumeStatus(event);
 
+                                        }
 
+                                        @Override
+                                        public void OnChangedFailed(String erro) {
+
+                                        }
+                                    }
+                            );
+                        }else {
+                            application.traingingStatusManager.consumeStatus(event);
+                        }
+                    }
                     break;
-                }
-                case EventCode.GroupCode.GROUP_CEO_HIRE_CONFIRM:
-                case EventCode.GroupCode.GROUP_HR_HIRE_BIDDING :{
+                    case EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT: {
+                        //正在展示候选人结果
+                        if (application.traingingStatusManager.getCurrentGroupStatus() ==
+                                EventCode.GroupCode.GROUP_HR_HIRE_BIDDING) {
+                            //进入展示
+                            application.traingingStatusManager.changeGroupStatus(
+                                    EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW,
+                                    new StatusManager.StatusChangeListener() {
+                                        @Override
+                                        public void OnChangedSuccess() {
+                                            application.traingingStatusManager.consumeStatus(event);
 
-                    if (application.group.getGroupStatus() != EventCode.GroupCode.GROUP_HR_HIRE_BIDDING) {
+                                        }
+
+                                        @Override
+                                        public void OnChangedFailed(String erro) {
+
+                                        }
+                                    }
+                            );
+                        }else {
+                            application.traingingStatusManager.consumeStatus(event);
+                        }
+                        break;
+
+                    }
+
+//                    case EventCode.TraingingCode.TRAINING_HIRE_FINISHED: {
+//                        //招聘结束 显示日常
+//                        mDetailFragment = new HrNormalFragment();
+//                        mView.updateDetailFragment(mDetailFragment);
+//                        application.traingingStatusManager.consumeStatus(event);
+//                        break;
+//                    }
+
+                    default: {
+                        //和自己无关的事件 直接消费 不做任何处理
+
+                        application.traingingStatusManager.consumeStatus(event);
+
+                    }
+
+                }
+            } else {
+
+                switch (status){
+                    case EventCode.GroupCode.GROUP_CEO_HIRE_CONFIRM: {
+
                         //CEO 决定招聘
                         application.traingingStatusManager.changeGroupStatus(
                                 EventCode.GroupCode.GROUP_HR_HIRE_BIDDING,
                                 new StatusManager.StatusChangeListener() {
                                     @Override
                                     public void OnChangedSuccess() {
-                                        mDetailFragment = new BidInitFragment();
-                                        mView.updateDetailFragment(mDetailFragment);
+
+                                        application.traingingStatusManager.consumeStatus(event);
+
                                     }
 
                                     @Override
@@ -171,63 +282,42 @@ public class StudentMainPresenter extends BasePresenter {
 
                                     }
                                 });
-                    }else {
-                        if (mView.getCurrentDetailFragment().getClass() != BidInitFragment.class){
 
-                            mDetailFragment = new BidInitFragment();
-                            mView.updateDetailFragment(mDetailFragment);
-                        }
+
                     }
-
                     break;
-                }
+                    case EventCode.GroupCode.GROUP_HR_HIRE_BIDDING: {
 
+                        //正在竞价
+                        mDetailFragment = new BidInitFragment();
+                        mView.updateDetailFragment(mDetailFragment);
 
-                case EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT:{
+                        application.traingingStatusManager.consumeStatus(event);
+                        break;
 
-                    if (application.group.getGroupStatus() != EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW) {
-                        //正在展示结果
-                        application.traingingStatusManager.changeGroupStatus(
-                                EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW,
-                                new StatusManager.StatusChangeListener() {
-                                    @Override
-                                    public void OnChangedSuccess() {
-
-                                        mDetailFragment = new BidResultFragment();
-                                        mView.updateDetailFragment(mDetailFragment);
-                                    }
-
-                                    @Override
-                                    public void OnChangedFailed(String erro) {
-
-                                    }
-                                }
-                        );
-                    }else {
-                        if (mView.getCurrentDetailFragment().getClass() == LoadingFragment.class){
-
-                            mDetailFragment = new BidResultFragment();
-                            mView.updateDetailFragment(mDetailFragment);
-                        }
                     }
+                    case EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW:{
+                        //正在展示结果
 
-                }
-
-                case EventCode.TraingingCode.TRAINING_HIRE_FINISHED:{
-                    if (mView.getCurrentDetailFragment().getClass() != HrNormalFragment.class){
-
+                        mDetailFragment = new BidResultFragment();
+                        mView.updateDetailFragment(mDetailFragment);
+                        break;
+                    }
+                    case EventCode.GroupCode.GROUP_HR_HIRE_FINISH: {
+                        //招聘结束 显示日常
                         mDetailFragment = new HrNormalFragment();
                         mView.updateDetailFragment(mDetailFragment);
+                        application.traingingStatusManager.consumeStatus(event);
+                        break;
                     }
+
                 }
-                    break;
             }
 
 
+        } else if (application.mRole == Role.ROLE_STU_FINANCE) {
 
-        }else if (application.mRole == Role.ROLE_STU_FINANCE){
-
-        }else if (application.mRole == Role.ROLE_STU_MARKET){
+        } else if (application.mRole == Role.ROLE_STU_MARKET) {
 
         }
 
@@ -237,7 +327,6 @@ public class StudentMainPresenter extends BasePresenter {
     @Override
     public void requestData(Object... o) {
         super.requestData(o);
-
 
 
     }

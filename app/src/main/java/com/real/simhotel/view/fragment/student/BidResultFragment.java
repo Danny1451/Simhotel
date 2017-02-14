@@ -8,7 +8,9 @@ import android.view.View;
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
 import com.real.simhotel.presenter.BidResultPresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.adapter.DynamicListAdapter;
+import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.ApplicantListDetailFragment;
@@ -38,14 +40,6 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
     ApplicantListDetailFragment mDetailFragment;
 
 
-    public ApplicantListDetailFragment getDetailFragment(){
-        if (mDetailFragment == null){
-            mDetailFragment = new ApplicantListDetailFragment();
-        }
-
-        return mDetailFragment;
-    }
-
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
 
@@ -63,18 +57,12 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
 
         mList.setLayoutManager(new LinearLayoutManager(mActivity));
         mList.setAdapter(mAdapter);
+        mList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
 
 
         //初始化话Detail
         mDetailFragment = new ApplicantListDetailFragment();
-//        bitResultList.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
-
-
-//
-//        mDetailAdapter = new DynamicListAdapter(mActivity);
-//        bitResultDetail.setLayoutManager(new LinearLayoutManager(mActivity));
-//        bitResultDetail.setAdapter(mDetailAdapter);
-//        bitResultDetail.addItemDecoration(new DynamicListDecoration(mActivity,DynamicListDecoration.VERTICAL_LIST));
+        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
 
     }
 
@@ -89,16 +77,7 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
 
         mPresenter.requestData();
     }
-    /**
-     * 加载候选人的列表
-     * @param lists
-     */
-    public void loadApplicantList(List<DynamicListModel> lists){
 
-
-
-
-    }
 
     @Override
     public void renderQuotesList(List<DynamicListModel> quoteList) {
@@ -110,8 +89,9 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
 
     @Override
     public void renderApplicantsList(List<DynamicListModel> applicantsList) {
+        KLog.d(applicantsList.toString());
         //替换 fragment
-        this.getHoldingActivity().getSupportFragmentManager().beginTransaction().replace(R.id.bid_applicant_detail,mDetailFragment).commitAllowingStateLoss();
+//
 
 
         //清空之前的选中状态
@@ -137,20 +117,7 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
         mPresenter.requestDetailList((Applicant) applicantsList.get(0).ext);
     }
 
-//    /**
-//     * 加载公司报价的列表
-//     * @param pos 位置
-//     * @param lists 竞价结果列表
-//     */
-//    public void loadBidResultList(int pos , List<DynamicListModel> lists){
-//        //1.选中候选人
-//
-//        mList.getLayoutManager().smoothScrollToPosition(mList,null,pos);
-//        //2.刷新酒店对候选人报价
-//
-//        mAdapter.setDataList(lists);
-//
-//    }
+
 
     @Override
     protected int getLayoutId() {

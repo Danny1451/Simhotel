@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.real.simhotel.events.BaseStatus;
+import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.presenter.base.Presenter;
 import com.real.simhotel.view.iview.IBaseView;
 import com.real.simhotel.view.loading.VaryViewHelperController;
@@ -178,5 +180,9 @@ public abstract class BaseFragment<T extends Presenter> extends Fragment impleme
     @Override
     public void showToast(String text){
         Toast.makeText(getHoldingActivity(),text,Toast.LENGTH_SHORT).show();
+    }
+
+    public void handlerStatus(BaseStatus status){
+
     }
 }

@@ -16,6 +16,7 @@ import com.real.simhotel.model.Group;
 import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.StudentMainPresenter;
+import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.student.BidInitFragment;
@@ -144,6 +145,10 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     @Override
     public void updateDetailFragment(BaseFragment fragment) {
 
+        if (fragment.getClass() == mFragment.getClass()){
+            KLog.d(TAG,"已经是该界面了,请勿重复切换");
+            return;
+        }
         mFragment = fragment;
         getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
 

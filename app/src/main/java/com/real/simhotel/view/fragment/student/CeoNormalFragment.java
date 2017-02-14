@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.real.simhotel.R;
+import com.real.simhotel.events.BaseStatus;
 import com.real.simhotel.presenter.CeoInitPresenter;
 import com.real.simhotel.presenter.CeoNormalPresenter;
 import com.real.simhotel.presenter.base.Presenter;
@@ -82,5 +83,11 @@ public class CeoNormalFragment extends BaseFragment{
     @Override
     protected View getLoaingTargetView() {
         return mList;
+    }
+
+    @Override
+    public void handlerStatus(BaseStatus status) {
+        super.handlerStatus(status);
+        getChildPresenter().handleStatus(status);
     }
 }

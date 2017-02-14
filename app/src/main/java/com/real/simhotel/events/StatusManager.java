@@ -4,6 +4,8 @@ import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.ApiService;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
+import com.real.simhotel.model.Group;
+import com.real.simhotel.model.Training;
 import com.real.simhotel.utils.log.KLog;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,10 +33,48 @@ public class StatusManager {
     Subscription mRequesGroupStatus;
 
     Boolean isRuning = false;
+
     /**
      * 轮询间隔
      */
     public static final int TIME_INTERVAL = 10;
+
+    private int mCurrentTrainingStatus = 0;
+    private int mCurrentGroupStatus = 0;
+
+    //只提供读取方法 修改方法内部控制
+    public int getCurrentGroupStatus() {
+        return mCurrentGroupStatus;
+    }
+
+    public int getCurrentTrainingStatus() {
+        return mCurrentTrainingStatus;
+    }
+
+
+    /**
+     * 消费掉状态事件
+     * @param status
+     */
+    public void consumeStatus(BaseStatus status){
+
+        KLog.e(" status consemed !" + status.getStatus() + " " + status.getDes());
+        if (status.getClass() == GroupStatus.class){
+
+            mCurrentGroupStatus = status.getStatus();
+
+            //更新本地 group 的状态量
+            mApplication.group.setGroupStatus(mCurrentGroupStatus);
+
+        }else if (status.getClass() == TrainStatus.class){
+
+            mCurrentTrainingStatus = status.getStatus();
+
+            //更新本地 application 的状态量
+            mApplication.training.setTrainingStatus(mCurrentTrainingStatus);
+        }
+
+    }
 
     public interface StatusChangeListener {
         void OnChangedSuccess();
@@ -81,6 +121,8 @@ public class StatusManager {
 
 
     private void requestStatus(){
+
+        //实例监听
         mRequesTrainingStatus = mApiService
                 .getTrainingStatus(mApplication.training.getId())
                 .observeOn(Schedulers.io())
@@ -107,12 +149,15 @@ public class StatusManager {
                     @Override
                     public void onNext(TrainStatus event) {
 
-                        //直接发送事件
-                        EventBus.getDefault().post(event);
+
+                        if (mCurrentTrainingStatus != event.getStatus())
+                            //直接发送事件
+                            EventBus.getDefault().post(event);
                     }
                 });
 
 
+        //小组监听
         mRequesGroupStatus = mApiService.getGroupStatus(mApplication.group.getId())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -135,8 +180,9 @@ public class StatusManager {
 
                     @Override
                     public void onNext(GroupStatus groupStatus) {
-                        //直接发送事件
-                        EventBus.getDefault().post(groupStatus);
+                        if (mCurrentGroupStatus != groupStatus.getStatus())
+                            //直接发送事件
+                            EventBus.getDefault().post(groupStatus);
                     }
                 });
     }
@@ -170,6 +216,10 @@ public class StatusManager {
 
 
     public void manualUpdate(){
+
+        mCurrentGroupStatus = 0;
+        mCurrentTrainingStatus = 0;
+
         requestStatus();
     }
 
@@ -182,6 +232,10 @@ public class StatusManager {
      */
     public void changeTrainingStatus(int trainingId, int traininStatus, StatusChangeListener listener){
 
+        if (mCurrentGroupStatus == traininStatus) {
+            listener.OnChangedFailed("已经消费过该实例事件状态");
+            return;
+        }
         Subscription request = mApiService.updateTrainingStatus(trainingId,traininStatus)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -204,14 +258,13 @@ public class StatusManager {
 
                     @Override
                     public void onNext(String s) {
+
                         //直接发送事件
                         TrainStatus event = new TrainStatus();
                         event.setStatusDes("");
                         event.setTrainingStatus(traininStatus);
                         EventBus.getDefault().post(event);
 
-                        //更新本地training的状态
-                        mApplication.training.setTrainingStatus(traininStatus);
                         //改变成功之后 手动触发 发送一条事件
                         listener.OnChangedSuccess();
                     }
@@ -245,6 +298,12 @@ public class StatusManager {
      */
     public void changeGroupStatus(int groupId,int status,StatusChangeListener listener){
 
+        if (mCurrentGroupStatus == status) {
+            KLog.d("已经消费过该小组事件状态");
+            listener.OnChangedSuccess();
+            return;
+        }
+
         Subscription subs = mApiService.updateGroupStatus(groupId,status)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -275,8 +334,6 @@ public class StatusManager {
                         event.setGrouoStatus(status);
                         EventBus.getDefault().post(event);
 
-                        //更新本地Group的状态
-                        mApplication.group.setGroupStatus(status);
                         //改变成功之后 手动触发 发送一条事件
                         listener.OnChangedSuccess();
 

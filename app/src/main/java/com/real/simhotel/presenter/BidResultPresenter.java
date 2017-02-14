@@ -65,6 +65,7 @@ public class BidResultPresenter extends BasePresenter {
 
                         mView.disMissLoading();
                         mView.showError("加载失败");
+
                     }
 
                     @Override
@@ -74,6 +75,7 @@ public class BidResultPresenter extends BasePresenter {
                         //渲染界面
 
                         mView.disMissLoading();
+                        mView.refreshView();
                         mData = applicants;
 
                         mViewData = DynamicListModelFactory.parseFromApplicants(mData);
@@ -88,35 +90,8 @@ public class BidResultPresenter extends BasePresenter {
 
 
 
-        //默认选中1
-//        onClickApplicantsRow(0,model1);
-
     }
 
-//    //更新右侧的list
-//    public void onClickApplicantsRow(int pos , DynamicListModel model){
-//
-////        mView.getDetailFragment().updateWithModel(model);
-//
-//        //获取结果
-//
-//        int quoteprice = ((Applicant)model.ext).quotePrice;
-//
-//
-//        List<DynamicListModel> res = new ArrayList<>();
-//
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(1,"万达喜来登酒店",quoteprice + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(2,"希尔顿酒店",quoteprice - 100 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(3,"如家酒店",quoteprice - 200 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(4,"怡莱酒店",quoteprice - 300 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(5,"汉庭酒店",quoteprice - 400 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(6,"好的酒店",quoteprice - 500 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(7,"苏果酒店",quoteprice - 600 + ""));
-//        res.add(DynamicListModelFactory.modelForApplicantsBidResult(8,"大润发酒店",quoteprice - 700 + ""));
-//
-////        mView.loadBidResultList(pos,res);
-//
-//    }
 
 
     public void requestDetailList(Applicant applicant){

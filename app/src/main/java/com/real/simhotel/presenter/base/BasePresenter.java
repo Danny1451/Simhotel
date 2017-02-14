@@ -2,6 +2,7 @@ package com.real.simhotel.presenter.base;
 
 import com.real.simhotel.MainApplication;
 import com.real.simhotel.data.ApiService;
+import com.real.simhotel.events.BaseStatus;
 
 import javax.inject.Inject;
 
@@ -40,6 +41,10 @@ public class BasePresenter  implements Presenter {
 
     @Override
     public void requestData(Object... o) {
+
+    }
+
+    public void handleStatus(BaseStatus status){
 
     }
 }

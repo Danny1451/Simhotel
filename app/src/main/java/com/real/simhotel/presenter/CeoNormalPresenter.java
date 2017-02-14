@@ -1,5 +1,6 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.events.BaseStatus;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.TrainStatus;
 import com.real.simhotel.events.StatusManager;
@@ -39,50 +40,29 @@ public class CeoNormalPresenter extends BasePresenter{
     }
 
 
-    public void startUpdateStatus(){
+    @Override
+    public void handleStatus(BaseStatus event) {
+        switch (event.getStatus()){
 
-        //获取轮询管理 开始轮询
-        application.traingingStatusManager.startScheduling();
+            case EventCode.GroupCode.GROUP_CEO_HIRE_ING:
+                //开始 增加 雇员 信息 TODO 招聘会的时间
 
-        EventBus.getDefault().register(this);
-    }
-
-    /**
-     * 接收广播
-     * @param event
-     */
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(TrainStatus event) {
-
-
-        switch (event.getTrainingStatus()){
-            case EventCode.TraingingCode.TRAINING_HIRE_START:
-
-                if (application.group.getGroupStatus() < EventCode.GroupCode.GROUP_CEO_HIRE_ING) {
-                    application.traingingStatusManager.changeGroupStatus(
-                            EventCode.GroupCode.GROUP_CEO_HIRE_ING, new StatusManager.StatusChangeListener() {
-                                @Override
-                                public void OnChangedSuccess() {
-                                    //开始 增加 雇员 信息 TODO 招聘会的时间
-                                    list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
-                                            application.training.getCurrentCycle() + "", CEO_DECISION_HIRE));
-                                    //加载列表
-                                    mView.loadList(list);
-                                }
-
-                                @Override
-                                public void OnChangedFailed(String erro) {
-
-                                }
-                            });
+                if (list == null){
+                    list = new ArrayList<>();
                 }
 
-                break;
+                list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
+                        application.training.getCurrentCycle() + "", CEO_DECISION_HIRE));
+                //加载列表
+                mView.loadList(list);
 
+                application.traingingStatusManager.consumeStatus(event);
+                break;
 
 
         }
     }
+
 
     @Override
     public void destroy() {
@@ -96,18 +76,18 @@ public class CeoNormalPresenter extends BasePresenter{
     public void requestData(Object... o) {
         super.requestData(o);
 
-        KLog.d("id = " + application.mHotel.getId());
+//        KLog.d("id = " + application.mHotel.getId());
 
-        list = new ArrayList();
+//        list = new ArrayList();
 
-        if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HIRE_ING){
-            //增加一条招聘信息
-
-            list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
-                    application.training.getCurrentCycle()+"",
-                    CEO_DECISION_HIRE));
-
-        }
+//        if (application.group.getGroupStatus() == EventCode.GroupCode.GROUP_CEO_HIRE_ING){
+//            //增加一条招聘信息
+//
+//            list.add(DynamicListModelFactory.modelForCeoDecisionMessage("本季度招聘会即将开始是否招聘?",
+//                    application.training.getCurrentCycle()+"",
+//                    CEO_DECISION_HIRE));
+//
+//        }
 
 //        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 80 玩 ,支出 10 玩","2016年6月"));
 //        list.add(DynamicListModelFactory.modelForCeoNormalMessage("本月的收入 90 玩 ,支出 30 玩","2016年6月"));
@@ -115,9 +95,8 @@ public class CeoNormalPresenter extends BasePresenter{
 //        list.add(DynamicListModelFactory.modelForCeoDecisionMessage("大哥你要破产了,贷款不?","2016年9月",2));
 
         //加载列表
-        mView.loadList(list);
+//        mView.loadList(list);
 
-        startUpdateStatus();
 
     }
 
