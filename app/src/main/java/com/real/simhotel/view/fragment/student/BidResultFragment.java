@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
@@ -35,6 +36,8 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
     @Bind(R.id.bid_applicants_rv)
     RecyclerView mList;
 
+    @Bind(R.id.title_tv)
+    TextView mTitle;
 
     //详情页面
     ApplicantListDetailFragment mDetailFragment;
@@ -45,6 +48,7 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
 
         ButterKnife.bind(this,view);
 
+        mTitle.setText(this.getString(R.string.hr_trainging_reslut));
 
         mAdapter = new DynamicListAdapter(mActivity)
                 .setRowInterface((pos,model)->{
@@ -82,8 +86,16 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
     @Override
     public void renderQuotesList(List<DynamicListModel> quoteList) {
 
-        if (mDetailFragment != null)
-            mDetailFragment.renderView(quoteList);
+        mDetailFragment.refreshView();
+
+
+        if (mDetailFragment != null) {
+            if (quoteList.size() == 0 ){
+                mDetailFragment.showEmptyView("没有报价");
+            }else {
+                mDetailFragment.renderView(quoteList);
+            }
+        }
 
     }
 

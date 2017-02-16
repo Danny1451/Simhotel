@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.real.simhotel.R;
 import com.real.simhotel.model.Applicant;
@@ -36,6 +37,9 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     RecyclerView mList;
 
 
+    @Bind(R.id.title_tv)
+    TextView mTitle;
+
     //详情页面
     ApplicantBidDetailFragment mDetailFragment;
 
@@ -51,6 +55,8 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
     protected void initView(View view, Bundle savedInstanceState) {
 
         ButterKnife.bind(this,view);
+
+        mTitle.setText(this.getString(R.string.hr_trainging_bidding));
 
         //设置Adapter
         mAdapter = new DynamicListAdapter(mActivity)

@@ -14,6 +14,7 @@ import com.real.simhotel.config.Role;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.model.Group;
 import com.real.simhotel.model.GroupDetailVo;
+import com.real.simhotel.model.Student;
 import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.StudentMainPresenter;
 import com.real.simhotel.utils.log.KLog;
@@ -34,11 +35,8 @@ import butterknife.Bind;
 public class StudentMainActivity extends AppActivity implements IStudentMainView{
 
 
-    private int mRole;
     private BaseFragment mFragment;
 
-
-    MenuItem mTrainingStatus;
 
     StudentMainPresenter mPresenter;
 
@@ -88,6 +86,8 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
         mPresenter = new StudentMainPresenter(this);
         mPresenter.startUpdateStatus();
+        //更新学生详情
+        mPresenter.updateStudentInfo();
 
     }
 
@@ -95,10 +95,10 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     protected void initView() {
 
         MainApplication application = (MainApplication)getApplication();
-        nameTv.setText("姓名:" + application.uid);
-        idTv.setText("学号:" + application.uid);
-        roleTv.setText("角色:" + Role.getRoleString(application.mRole));
 
+
+        //禁止返回
+        setBanBack(true);
 
         //更新界面实训详情
         if (application.training.getTrainingStatus() >= EventCode.TraingingCode.TRAINING_BUILDED){
@@ -134,8 +134,7 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
         inflater.inflate(R.menu.student_bar_menu,menu);
 
 
-        mTrainingStatus = menu.findItem(R.id.trainging_status);
-        mTrainingStatus.setCheckable(false);
+
 
 
         return super.onCreateOptionsMenu(menu);
@@ -157,37 +156,6 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.action_ceo_init:
-            {
-                BaseFragment fragment = new CeoInitFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
-                return true;
-            }
-
-            case R.id.action_ceo_normal:{
-                BaseFragment fragment = new CeoNormalFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
-                return true;
-            }
-
-            case R.id.action_hr_bit:{
-                BaseFragment fragment = new BidInitFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
-
-                return true;
-            }
-
-            case R.id.action_hr_normal:{
-
-                BaseFragment fragment = new BidResultFragment();
-
-                getSupportFragmentManager().beginTransaction().replace(R.id.content_role,fragment).commitAllowingStateLoss();
-
-                return true;
-            }
 
             case R.id.action_update:{
 
@@ -221,9 +189,17 @@ public class StudentMainActivity extends AppActivity implements IStudentMainView
 
         //更具role 初始化 fragment
 
-        //判断是 老师 还是学生的登录界面
-        mRole = intent.getIntExtra("user_role", Role.ROLE_STU_CEO);
 
+
+
+    }
+
+    @Override
+    public void updateStudentInfo(Student student) {
+
+        nameTv.setText("姓名:" + student.getStudentName());
+        idTv.setText("学号:" + student.getStudentNumber());
+        roleTv.setText("角色:" + Role.getRoleString(getMainApplication().mRole));
     }
 
     @Override

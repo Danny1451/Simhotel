@@ -1,10 +1,13 @@
 package com.real.simhotel.presenter;
 
 import com.real.simhotel.config.Role;
+import com.real.simhotel.data.Response;
+import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.BaseStatus;
 import com.real.simhotel.events.EventCode;
 import com.real.simhotel.events.StatusManager;
 import com.real.simhotel.events.TrainStatus;
+import com.real.simhotel.model.Student;
 import com.real.simhotel.presenter.base.BasePresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.BaseFragment;
@@ -19,6 +22,12 @@ import com.real.simhotel.view.iview.IStudentMainView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by liudan on 2016/12/9.
@@ -328,6 +337,42 @@ public class StudentMainPresenter extends BasePresenter {
     public void requestData(Object... o) {
         super.requestData(o);
 
+
+
+    }
+
+    /**
+     * 更新学生信息
+     */
+    public void updateStudentInfo(){
+
+        apiService.getStudentInfo(Integer.parseInt(application.uid))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<Student>, Observable<Student>>() {
+                    @Override
+                    public Observable<Student> call(Response<Student> studentResponse) {
+                        return RetrofitUtils.flatResponse(studentResponse);
+                    }
+                })
+                .subscribe(new Subscriber<Student>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Student student) {
+
+                        //刷新学生
+                        mView.updateStudentInfo(student);
+                    }
+                });
 
     }
 

@@ -3,6 +3,7 @@ package com.real.simhotel.view.fragment;
 import android.view.View;
 
 import com.real.simhotel.MainApplication;
+import com.real.simhotel.R;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.GroupRoleDetailVo;
@@ -24,9 +25,9 @@ public class TrainingDetailFragment extends BaseDetailFragment<Training> {
         super.renderView(model);
 
         tvLine1.setText(model.getTrainingName());
-        tvLine2.setText("创建时间:" + model.getInsertTime());
-        tvLine3.setText("更新时间:" + model.getUpdateTime());
-        tvLine4.setText("教师id:" + model.getTeacherId());
+        tvLine2.setText(getString(R.string.trainging_detail_create_time,model.getInsertTime()));
+        tvLine3.setText(getString(R.string.trainging_detail_update_time,model.getInsertTime()));
+        tvLine4.setText(getString(R.string.trainging_detail_teacher_id,model.getTeacherId()));
 
         tvLine6.setVisibility(View.GONE);
 //        tvLine5.setText("参数5:" + model.getCurrentCycle());
@@ -38,7 +39,7 @@ public class TrainingDetailFragment extends BaseDetailFragment<Training> {
         if(application.mRole != Role.ROLE_TEACHER){
 
             //是学生
-            if(application.training.getGroupDetailVos() != null && application.training.getGroupDetailVos().get(0).checkHasMyPos(Integer.parseInt(PreferenceUtils.getCharacter(application)))){
+            if(model.getGroupDetailVos() != null && model.getGroupDetailVos().get(0).checkHasMyPos(Integer.parseInt(PreferenceUtils.getCharacter(application)))){
 
                 GroupDetailVo group = model.getGroupDetailVos().get(0);
 

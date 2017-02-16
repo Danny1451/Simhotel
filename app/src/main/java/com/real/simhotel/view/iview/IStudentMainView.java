@@ -1,5 +1,6 @@
 package com.real.simhotel.view.iview;
 
+import com.real.simhotel.model.Student;
 import com.real.simhotel.view.base.BaseFragment;
 
 /**
@@ -9,5 +10,6 @@ public interface IStudentMainView extends IBaseView {
 
     void updateDetailFragment(BaseFragment fragment);
 
+    void updateStudentInfo(Student student);
     BaseFragment getCurrentDetailFragment();
 }

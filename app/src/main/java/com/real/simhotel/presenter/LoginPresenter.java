@@ -33,6 +33,7 @@ public class LoginPresenter extends BasePresenter {
     public void login(int userType , String userName, String pwd){
         //请求网络
 
+        mView.showLoading();
         subscription = apiService.login(userType,userName,pwd)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -68,6 +69,8 @@ public class LoginPresenter extends BasePresenter {
         public void onNext(Integer s) {
             super.onNext(s);
 
+
+            mView.disMissLoading();
             //保存uid
             application.uid = s + "";
             KLog.d("uid = " + s);
@@ -92,6 +95,7 @@ public class LoginPresenter extends BasePresenter {
         public void onError(Throwable e) {
             super.onError(e);
 
+            mView.disMissLoading();
             //加载失败
             mView.loginFaied(e.toString());
 

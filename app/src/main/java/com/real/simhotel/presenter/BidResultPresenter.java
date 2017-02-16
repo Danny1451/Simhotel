@@ -29,7 +29,7 @@ public class BidResultPresenter extends BasePresenter {
     ISHrBidResultView mView;
 
     Subscription mApplicantListSubs;
-    private List<DynamicListModel> mViewData;
+    List<DynamicListModel> mViewData;
     List<Applicant> mData;
 
     public BidResultPresenter(BidResultFragment view){
@@ -64,6 +64,7 @@ public class BidResultPresenter extends BasePresenter {
                     public void onError(Throwable e) {
 
                         mView.disMissLoading();
+                        mView.refreshView();
                         mView.showError("加载失败");
 
                     }
@@ -115,14 +116,16 @@ public class BidResultPresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.showToast("刷新失败");
+                        mView.showToast("获取报价失败");
                         mView.disMissLoading();
+                        mView.refreshView();
                     }
 
                     @Override
                     public void onNext(List<Quote> quotes) {
 
                         mView.disMissLoading();
+                        mView.refreshView();
                         applicant.quotes = quotes;
                         //转为viewmodel 然后渲染
                         mView.renderQuotesList(DynamicListModelFactory.parseFromQuotes(applicant.quotes));

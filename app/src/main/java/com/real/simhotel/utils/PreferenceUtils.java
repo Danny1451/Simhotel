@@ -46,4 +46,15 @@ public class PreferenceUtils {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putString("teamnum",teamNum).commit();
     }
+
+    public static Boolean getIsTeacher(Context context){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        return  preferences.getBoolean("isteacher",false);
+    }
+
+    public static void setIsTeacher(Context context, Boolean isTeacher){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putBoolean("isteacher",isTeacher).commit();
+    }
+
 }

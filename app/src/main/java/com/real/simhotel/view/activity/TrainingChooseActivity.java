@@ -1,6 +1,7 @@
 package com.real.simhotel.view.activity;
 
 import android.content.Intent;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -47,6 +48,10 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
     @Bind(R.id.training_rv)
     RecyclerView mList;
 
+
+    @Bind(R.id.list_update_layout)
+    SwipeRefreshLayout refreshLayout;
+
     @Bind(R.id.add_training_btn)
     Button mAddTraining;
 
@@ -55,6 +60,8 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
 
     //角色类型
     private int mUserType;
+
+    private Boolean isRefresh = false;
 
     private TrainingChoosePresenter mPresenter;
 
@@ -112,6 +119,22 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         });
 
 
+        //下拉刷新
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                if (!isRefresh){
+                    isRefresh = true;
+                    //刷新
+                    mPresenter.requestTrainingList(mUserType);
+
+
+                }
+
+            }
+        });
     }
 
     @OnClick({R.id.add_training_btn})
@@ -197,6 +220,15 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
      */
     @Override
     public void renderTrainingsList(List<DynamicListModel> trainingsList) {
+
+        //正在刷新的话
+        if (isRefresh){
+
+            KLog.d(TAG,"刷新完成");
+            refreshLayout.setRefreshing(false);
+            isRefresh = false;
+
+        }
 
         this.getSupportFragmentManager().beginTransaction().replace(R.id.detail_frame,mTrainingDetail).commitAllowingStateLoss();
 

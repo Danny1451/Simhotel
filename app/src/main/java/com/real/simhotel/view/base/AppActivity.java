@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -24,12 +25,37 @@ public abstract class AppActivity extends BaseActivity implements IBaseView {
     protected Context mContext;
 
     private LoadingDialog mLoadingDialog;
+
+
+    private Boolean banBack = false;
     /**
      * 处理Intent
      *
      * @param intent
      */
     protected void handleIntent(Intent intent) {
+    }
+
+
+    protected void setBanBack(Boolean value){
+        banBack = value;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        switch (keyCode){
+            case KeyEvent.KEYCODE_BACK:
+                if (banBack)
+                    return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
     }
 
     @Override
@@ -114,5 +140,9 @@ public abstract class AppActivity extends BaseActivity implements IBaseView {
     @Override
     public void refreshView() {
 
+    }
+
+    public MainApplication getMainApplication(){
+        return(MainApplication)getApplication();
     }
 }

@@ -9,6 +9,7 @@ import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Hotel;
 import com.real.simhotel.model.HotelTemplate;
 import com.real.simhotel.model.Quote;
+import com.real.simhotel.model.Student;
 import com.real.simhotel.model.Training;
 
 
@@ -38,6 +39,15 @@ public interface ApiService {
     Observable<Response<Integer>> login(@Query("user_type") int type,
                                         @Query("login_account") String account,
                                         @Query("password") String pwd);
+
+
+    /**
+     * 获取学生详情
+     * @param id
+     * @return
+     */
+    @GET(Constants.API_URL_STUDENT_DETAIL)
+    Observable<Response<Student>> getStudentInfo(@Query("student_id") int id);
 
 
     @GET(Constants.API_URL_HOTEL_LIST)
