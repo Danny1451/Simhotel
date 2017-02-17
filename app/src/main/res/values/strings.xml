@@ -11,6 +11,7 @@
 
     <string name="hr_trainging_reslut">竞价结果</string>
     <string name="hr_trainging_bidding">竞价中</string>
+    <string name="hr_trainging_normal">人员日常</string>
     
     <string name="trainging_detail_create_time">创建时间: %1$s</string>
     <string name="trainging_detail_update_time">更新时间: %1$s</string>

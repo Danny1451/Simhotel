@@ -246,4 +246,13 @@ public interface ApiService {
     @GET(Constants.API_URL_RESTART_BID)
     Observable<Response<String>> restartBidEmploy(@Query(PARAMS_TRAINING_ID) int trainId);
 
+
+    /**
+     * 已经招聘的员工
+     * @param groupId
+     * @return
+     */
+    @GET(Constants.API_URL_EMPLOYED_LIST)
+    Observable<Response<List<Applicant>>> getEmployedList(@Query(PARAMS_GROUP_ID) int groupId);
+
 }

@@ -117,6 +117,21 @@ public class DynamicListModelFactory {
         return result;
     }
 
+    public static List<DynamicListModel> parseFromEmployed(List<Applicant> applicantList){
+        List<DynamicListModel> result = new ArrayList<>();
+
+
+        for (Applicant temp: applicantList){
+
+            DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+            model1.title = temp.getLevelStr();
+            model1.info = temp.getBiddingPrice() + "元";
+            result.add(model1);
+        }
+
+        return result;
+    }
+
     /**
      * 转换为 viewmodel
      * @param quoteList

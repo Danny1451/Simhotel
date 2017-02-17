@@ -41,6 +41,8 @@ public class Constants {
 
     public static final String API_URL_CHOOSE_GROUP_ROLE = "/api/erp/edu/hotel/choose_group_role.json";
 
+    public static final String API_URL_EMPLOYED_LIST = "/api/erp/edu/hotel/list_group_employed.json";
+
     public static final String API_URL_HOTEL_TEMPLATE_CHOOSE = "/api/erp/edu/hotel/choose_hotel.json";
 
     public static final String API_URL_GET_USER_DETAILS = "user_";
