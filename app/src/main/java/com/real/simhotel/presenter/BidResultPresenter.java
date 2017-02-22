@@ -119,6 +119,7 @@ public class BidResultPresenter extends BasePresenter {
                         mView.showToast("获取报价失败");
                         mView.disMissLoading();
                         mView.refreshView();
+                        e.printStackTrace();
                     }
 
                     @Override

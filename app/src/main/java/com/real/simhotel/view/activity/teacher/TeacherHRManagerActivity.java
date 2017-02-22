@@ -148,10 +148,17 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
                 return true;
             }
             case R.id.action_result:{
+
+                if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
+                    showToast("尚未开始报价,不能推送结果");
+                    return true;
+                }
+
                 DialogUitls.showConfirmDialog(mContext,"确认推送结果?",(dialogInterface,i)->
                         //重新报价
                         mPresenter.pushResult()
                 );
+
                 return true;
             }
             default:
@@ -300,6 +307,9 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
     @Override
     public void renderQuotesList(List<DynamicListModel> quoteList) {
+
+
+
         //刷新界面
         if (mDetailFragment.getClass() == ApplicantListDetailFragment.class)
             mDetailFragment.renderView(quoteList);

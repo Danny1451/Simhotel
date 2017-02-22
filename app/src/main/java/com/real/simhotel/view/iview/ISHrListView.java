@@ -1,6 +1,7 @@
 package com.real.simhotel.view.iview;
 
 import com.real.simhotel.view.adapter.DynamicListModel;
+import com.real.simhotel.view.fragment.BaseDetailFragment;
 
 import java.util.List;
 
@@ -11,5 +12,5 @@ public interface ISHrListView extends IBaseView {
 
     void renderApplicantsList(List<DynamicListModel> applicantsList);
 
-
+    BaseDetailFragment getDetailFragment();
 }

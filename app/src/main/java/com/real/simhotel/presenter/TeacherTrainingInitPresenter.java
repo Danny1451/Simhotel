@@ -14,6 +14,7 @@ import com.real.simhotel.view.iview.ITrainingInitView;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
@@ -90,16 +91,50 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
      */
     public void createHotelTemplate(HotelTemplate template){
 
-        mDataList.add(template);
+//        mDataList.add(template);
+//
+//        DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
+//        model.title = template.getLocationName();
+//        model.info = template.getUpdateTime();
+//        model.ext = template;
+//        mViewModelList.add(model);
+//
+//        mView.renderTemlplateList(mViewModelList);
 
-        DynamicListModel model = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
-        model.title = template.getLocationName();
-        model.info = template.getUpdateTime();
-        model.ext = template;
-        mViewModelList.add(model);
+        mView.showLoading();
 
-        mView.renderTemlplateList(mViewModelList);
+        apiService.createHotelTemplate(application.training.getId(),template.getLocation(),template.getRoomLeastNum(),
+                template.getRoomCost(),template.getRoomIncome(),template.getCleanNum(),template.getEquipDepreCycle(),12)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                        mView.disMissLoading();
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                        mView.disMissLoading();
+
+                        //重新请求列表
+                        requestData();
+                    }
+                });
     }
 
     /**

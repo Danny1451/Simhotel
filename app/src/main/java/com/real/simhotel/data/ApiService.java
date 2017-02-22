@@ -72,17 +72,7 @@ public interface ApiService {
     Observable<Response<List<HotelTemplate>>> getHotelTemplateList(@Query(PARAMS_TRAINING_ID) int trainId);
 
 
-    /**
-     * 创建酒店的接口
-     * @param groupId
-     * @param hotelId
-     * @param roomNum
-     * @return
-     */
-    @GET(Constants.API_URL_CREATE_HOTEL)
-    Observable<Response<String>> createHotel(@Query(PARAMS_GROUP_ID) int groupId,
-                                             @Query("hotel_id") int hotelId,
-                                             @Query("room_num") int roomNum);
+
 
 
     /**
@@ -131,6 +121,58 @@ public interface ApiService {
 
 
     /**
+     * 新建酒店模板
+     * @param trainId
+     * @param location 位置 1、2、3
+     * @param minNum 最小房间数
+     * @param cost 房间价格
+     * @param income 房间收入
+     * @param cleanNum 最少清洁人数
+     * @param depreper 设备损耗率
+     * @param circle 周期
+     * @return
+     */
+    @GET(Constants.API_URL_HOTEL_TEMPLATE_CREATE)
+    Observable<Response<String>> createHotelTemplate(@Query(PARAMS_TRAINING_ID) int trainId,
+                                                     @Query("location") int location,
+                                                     @Query("room_least_num") int minNum,
+                                                     @Query("room_cost") int cost,
+                                                     @Query("room_income") int income,
+                                                     @Query("clean_num") int cleanNum,
+                                                     @Query("equip_depre_per") float depreper,
+                                                     @Query("equip_depre_cycle") int circle);
+
+
+    /**
+     * 创建酒店的接口
+     * @param groupId
+     * @param hotelId
+     * @param roomNum
+     * @return
+     */
+    @GET(Constants.API_URL_CREATE_HOTEL)
+    Observable<Response<String>> createHotel(@Query(PARAMS_GROUP_ID) int groupId,
+                                             @Query("hotel_id") int hotelId,
+                                             @Query("room_num") int roomNum);
+
+
+    /**
+     * 建立招聘者
+     * @param trainId
+     * @param level
+     * @param expectIncome
+     * @param expectWorkPlace
+     * @return
+     */
+    @GET(Constants.API_URL_HR_CREATE_APPLICANT)
+    Observable<Response<Integer>> createEmploy(@Query(PARAMS_TRAINING_ID) int trainId,
+                                               @Query("level") int level,
+                                               @Query("expect_month_income") int expectIncome,
+                                               @Query("expect_work_place") int expectWorkPlace
+    );
+
+    /**
+     *
      * 选择小组角色
      * @param trainingId
      * @param deviceNumber
@@ -179,20 +221,7 @@ public interface ApiService {
     Observable<Response<List<Applicant>>> getEmployTemplate(@Query(PARAMS_TRAINING_ID) int trainId);
 
 
-    /**
-     * 建立招聘者
-     * @param trainId
-     * @param level
-     * @param expectIncome
-     * @param expectWorkPlace
-     * @return
-     */
-    @GET(Constants.API_URL_HR_CREATE_APPLICANT)
-    Observable<Response<Integer>> createEmploy(@Query(PARAMS_TRAINING_ID) int trainId,
-                                               @Query("level") int level,
-                                               @Query("expect_month_income") int expectIncome,
-                                               @Query("expect_work_place") int expectWorkPlace
-                                               );
+
 
     /**
      * 竞拍招聘者
@@ -254,5 +283,14 @@ public interface ApiService {
      */
     @GET(Constants.API_URL_EMPLOYED_LIST)
     Observable<Response<List<Applicant>>> getEmployedList(@Query(PARAMS_GROUP_ID) int groupId);
+
+
+    /**
+     * 获取实训详情
+     * @param trainId
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_DETAIL)
+    Observable<Response<Training>> getTrainingDetail(@Query(PARAMS_TRAINING_ID) int trainId);
 
 }

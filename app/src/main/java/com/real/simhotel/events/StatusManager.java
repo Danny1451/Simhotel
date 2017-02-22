@@ -86,6 +86,7 @@ public class StatusManager {
         mApiService = apiService;
         mApplication = application;
 
+
     }
 
 
@@ -93,6 +94,7 @@ public class StatusManager {
      * 开始轮询
      */
     public void startScheduling(){
+
 
         //如果已经开始的话 就不在重新启动
         if (mRepeat == null) {

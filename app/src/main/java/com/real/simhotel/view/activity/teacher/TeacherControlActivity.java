@@ -7,7 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
+import com.real.simhotel.events.EventCode;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 
@@ -45,8 +47,12 @@ public class TeacherControlActivity extends AppActivity {
         switch (view.getId()){
             case R.id.cardBtn1:
 
-                //跳转到酒店管理界面
-                navigator.toTrainingInitActivity(this);
+                if (getMainApplication().training.getTrainingStatus() < EventCode.TraingingCode.TRAINING_BUILDED) {
+                    //跳转到酒店管理界面
+                    navigator.toTrainingInitActivity(this);
+                }else {
+                    showToast("已经初始化过了");
+                }
 
                 break;
             case R.id.cardBtn2:

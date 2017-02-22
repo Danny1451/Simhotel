@@ -19,6 +19,8 @@ public class Constants {
 
     public static final String API_URL_TRAINING_STATUS = "/api/erp/edu/hotel/training_status.json";
 
+    public static final String API_URL_TRAINING_DETAIL = "/api/erp/edu/hotel/training_detail.json";
+
     public static final String API_URL_GROUP_STATUS = "/api/erp/edu/hotel/group_status.json";
 
     public static final String API_URL_UPDATE_GROUP_STATUS = "/api/erp/edu/hotel/update_group_status.json";
@@ -42,6 +44,8 @@ public class Constants {
     public static final String API_URL_CHOOSE_GROUP_ROLE = "/api/erp/edu/hotel/choose_group_role.json";
 
     public static final String API_URL_EMPLOYED_LIST = "/api/erp/edu/hotel/list_group_employed.json";
+
+    public static final String API_URL_HOTEL_TEMPLATE_CREATE = "/api/erp/edu/hotel/init_hotel_model.json";
 
     public static final String API_URL_HOTEL_TEMPLATE_CHOOSE = "/api/erp/edu/hotel/choose_hotel.json";
 

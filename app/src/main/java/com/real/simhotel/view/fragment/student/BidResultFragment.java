@@ -86,7 +86,7 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
     @Override
     public void renderQuotesList(List<DynamicListModel> quoteList) {
 
-        mDetailFragment.refreshView();
+//        mDetailFragment.refreshView();
 
 
         if (mDetailFragment != null) {

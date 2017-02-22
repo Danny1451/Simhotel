@@ -254,13 +254,32 @@ public class StudentMainPresenter extends BasePresenter {
 
                     }
 
-//                    case EventCode.TraingingCode.TRAINING_HIRE_FINISHED: {
-//                        //招聘结束 显示日常
-//                        mDetailFragment = new HrNormalFragment();
-//                        mView.updateDetailFragment(mDetailFragment);
-//                        application.traingingStatusManager.consumeStatus(event);
-//                        break;
-//                    }
+                    case EventCode.TraingingCode.TRAINING_HIRE_FINISHED: {
+                        //招聘结束 显示日常
+                        //正在展示候选人结果
+                        if (application.traingingStatusManager.getCurrentGroupStatus() ==
+                                EventCode.GroupCode.GROUP_HR_HIRE_RESULT_SHOW ||
+                                application.traingingStatusManager.getCurrentGroupStatus() == 0) {
+                            //进入展示
+                            application.traingingStatusManager.changeGroupStatus(
+                                    EventCode.GroupCode.GROUP_HR_HIRE_FINISH,
+                                    new StatusManager.StatusChangeListener() {
+                                        @Override
+                                        public void OnChangedSuccess() {
+                                            application.traingingStatusManager.consumeStatus(event);
+
+                                        }
+
+                                        @Override
+                                        public void OnChangedFailed(String erro) {
+
+                                        }
+                                    }
+                            );
+                        }else {
+                            application.traingingStatusManager.consumeStatus(event);
+                        }
+                    }
 
                     default: {
                         //和自己无关的事件 直接消费 不做任何处理
@@ -310,6 +329,7 @@ public class StudentMainPresenter extends BasePresenter {
 
                         mDetailFragment = new BidResultFragment();
                         mView.updateDetailFragment(mDetailFragment);
+                        application.traingingStatusManager.consumeStatus(event);
                         break;
                     }
                     case EventCode.GroupCode.GROUP_HR_HIRE_FINISH: {

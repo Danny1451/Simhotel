@@ -30,7 +30,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
     ITHRManagerView mView;
 
-    int finishNum = 0 ;
+//    int finishNum = 0 ;
 
     private List<Applicant> mDataList;
     private List<DynamicListModel> mViewModelList;
@@ -292,9 +292,9 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                         //更新列表
                         mView.renderApplicantsList(mViewModelList);
 
-                        mView.updateConfirmStatus("发送结果");
+                        mView.updateConfirmStatus("重新竞价");
 
-                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+//                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
                     }
 
                     @Override
@@ -321,7 +321,8 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
         //跳转到客源推送界面
         mView.showLoading();
-        application.traingingStatusManager.changeTrainingStatus(EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT,
+        application.traingingStatusManager.
+                changeTrainingStatus(EventCode.TraingingCode.TRAINING_HIRE_PUSH_RESULT,
                 new StatusManager.StatusChangeListener() {
                     @Override
                     public void OnChangedSuccess() {
@@ -384,9 +385,9 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                         //更新列表
                         mView.renderApplicantsList(mViewModelList);
 
-                        mView.updateConfirmStatus("发送结果");
+//                        mView.updateConfirmStatus("发送结果");
 
-                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
+//                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
                     }
                 });
 

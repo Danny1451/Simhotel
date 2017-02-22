@@ -25,6 +25,8 @@ public class Applicant {
     public List<Quote> quotes;
     public Integer quotePrice;
 
+    public Boolean hasFired;
+
     public String getLevelStr(){
         switch (level){
             case 1:

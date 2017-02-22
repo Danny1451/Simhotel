@@ -29,4 +29,6 @@ public class ApplicantInitDetailFragment extends BaseDetailFragment<Applicant> {
         confirmBtn.setText("删除");
 
     }
+
+
 }

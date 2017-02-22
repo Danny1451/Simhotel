@@ -2,9 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:simhotel="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/action_state"
-        android:title="小组: 7/10"
-        simhotel:showAsAction="ifRoom" />
+
     <item android:id="@+id/action_end_init"
         android:title="初始化完成"
         simhotel:showAsAction="ifRoom" />

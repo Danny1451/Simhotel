@@ -15,6 +15,7 @@ import com.real.simhotel.view.adapter.DynamicListDecoration;
 import com.real.simhotel.view.adapter.DynamicListModel;
 import com.real.simhotel.view.base.BaseFragment;
 import com.real.simhotel.view.fragment.ApplicantNormalDetailFragment;
+import com.real.simhotel.view.fragment.BaseDetailFragment;
 import com.real.simhotel.view.iview.ISHrListView;
 
 import java.util.List;
@@ -41,6 +42,12 @@ public class HrNormalFragment extends BaseFragment<HrNormalPresenter> implements
     TextView mTitle;
 
     ApplicantNormalDetailFragment mDetailFragment;
+
+
+    @Override
+    public BaseDetailFragment getDetailFragment() {
+        return mDetailFragment;
+    }
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
@@ -115,8 +122,12 @@ public class HrNormalFragment extends BaseFragment<HrNormalPresenter> implements
         //若第一个有数据的话 刷新这个人的界面
         if (applicantsList.size() == 0){
             mAdapter.setDataList(applicantsList);
+
+            mDetailFragment.showEmptyView("暂时没有员工");
+
             return;
         }
+
 
         //选中第一个
         applicantsList.get(0).isSelected = true;

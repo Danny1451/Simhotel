@@ -50,6 +50,7 @@ public class BaseDetailFragment<T> extends BaseFragment {
 
     private View.OnClickListener mConfirmListener;
 
+    private View mView;
 
     public void setConfirmListener(View.OnClickListener listener){
         this.mConfirmListener = listener;
@@ -61,7 +62,7 @@ public class BaseDetailFragment<T> extends BaseFragment {
     protected void initView(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this,view);
 
-
+        mView= view;
         initView();
 
         confirmBtn.setOnClickListener(mConfirmListener);
@@ -121,7 +122,7 @@ public class BaseDetailFragment<T> extends BaseFragment {
 
     @Override
     protected View getLoaingTargetView() {
-        return null;
+        return mView;
     }
 
 

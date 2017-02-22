@@ -28,7 +28,6 @@ public class HrNormalPresenter extends BasePresenter {
 
     private List<DynamicListModel> mViewData;
 
-    private List<Applicant> mData;
 
     Subscription mApplicantListSubs;
 
@@ -76,10 +75,10 @@ public class HrNormalPresenter extends BasePresenter {
 
                         mView.disMissLoading();
                         mView.refreshView();
-                        mData = applicantList;
+
 
                         //已经招聘人员表
-                        mViewData = DynamicListModelFactory.parseFromEmployed(mData);
+                        mViewData = DynamicListModelFactory.parseFromEmployed(applicantList);
 
 
                         mView.renderApplicantsList(mViewData);
@@ -89,7 +88,11 @@ public class HrNormalPresenter extends BasePresenter {
 
     public void fireApplicant(int pos){
 
-        Applicant applicant = mData.get(pos);
+        Applicant applicant = (Applicant)mViewData.get(pos).ext;
+
+
+
+        mView.getDetailFragment().showLoading();
 
         apiService.deleteEmploy(application.group.getId(),applicant.getEmployId())
                 .subscribeOn(Schedulers.io())
@@ -109,12 +112,20 @@ public class HrNormalPresenter extends BasePresenter {
                     @Override
                     public void onError(Throwable e) {
 
+                        mView.showToast("解雇失败");
+                        mView.getDetailFragment().refreshView();
+
                     }
 
                     @Override
                     public void onNext(String s) {
 
+                        mView.disMissLoading();
+                        mView.getDetailFragment().refreshView();
                         //删除成功
+                        applicant.hasFired = true;
+                        //刷新
+                        mView.renderApplicantsList(mViewData);
                     }
                 });
 

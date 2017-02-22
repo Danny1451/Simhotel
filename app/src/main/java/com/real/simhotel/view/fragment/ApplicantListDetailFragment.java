@@ -48,10 +48,23 @@ public class ApplicantListDetailFragment extends BaseDetailFragment<List<Dynamic
     public void renderView(List<DynamicListModel> model) {
         super.renderView(model);
 
-        //刷新数据
-        mAdapter.setDataList(model);
+
+        refreshView();
+
+        if (model.size() == 0){
+            showEmptyView("报价为空");
+        }else {
+
+            //刷新数据
+            mAdapter.setDataList(model);
+        }
 
 
 
+    }
+
+    @Override
+    protected View getLoaingTargetView() {
+        return mList;
     }
 }

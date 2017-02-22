@@ -126,6 +126,7 @@ public class DynamicListModelFactory {
             DynamicListModel model1 = new DynamicListModel(DynamicListModel.TYPE_TITLE_INFO);
             model1.title = temp.getLevelStr();
             model1.info = temp.getBiddingPrice() + "元";
+            model1.ext = temp;
             result.add(model1);
         }
 
