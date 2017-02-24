@@ -139,7 +139,7 @@ public interface ApiService {
                                                      @Query("room_cost") int cost,
                                                      @Query("room_income") int income,
                                                      @Query("clean_num") int cleanNum,
-                                                     @Query("equip_depre_per") float depreper,
+                                                     @Query("equip_depre_per") Double depreper,
                                                      @Query("equip_depre_cycle") int circle);
 
 
@@ -293,4 +293,21 @@ public interface ApiService {
     @GET(Constants.API_URL_TRAINING_DETAIL)
     Observable<Response<Training>> getTrainingDetail(@Query(PARAMS_TRAINING_ID) int trainId);
 
+
+    /**
+     * 获取小组详情
+     * @param groupId
+     * @return
+     */
+    @GET(Constants.API_URL_GROUP_DETAIL)
+    Observable<Response<GroupDetailVo>> getGroupDetail(@Query(PARAMS_GROUP_ID) int groupId);
+
+
+    /**
+     * 结束招聘
+     * @param trainid
+     * @return
+     */
+    @GET(Constants.API_URL_TRAINING_HR_FINISH)
+    Observable<Response<String>> finishBid(@Query(PARAMS_TRAINING_ID) int trainid);
 }
