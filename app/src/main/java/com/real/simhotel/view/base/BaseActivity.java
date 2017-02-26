@@ -1,9 +1,12 @@
 package com.real.simhotel.view.base;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
+import com.real.simhotel.MainApplication;
 import com.real.simhotel.internal.dl.modules.ActivityModule;
 import com.real.simhotel.view.navigation.Navigator;
 
@@ -22,6 +25,16 @@ public abstract class BaseActivity extends AppCompatActivity {
     //布局文件ID
     protected abstract int getContentViewId();
 
+
+    @Inject
+    protected MainApplication application;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+        MainApplication.getComponent().inject(this);
+    }
 
     //返回键返回事件的处理
     //如果FragmentStack中只有1个fragment 关闭当前activity

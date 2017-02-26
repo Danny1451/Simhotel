@@ -50,7 +50,7 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
 
 
         //请求参数
-        subscription =apiService.getHotelTemplateList(1).
+        subscription =apiService.getHotelTemplateList(application.training.getId()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribeOn(Schedulers.io()).
                 flatMap(new Func1<Response<List<HotelTemplate>>, Observable<List<HotelTemplate>>>() {
@@ -103,8 +103,13 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
 
         mView.showLoading();
 
-        apiService.createHotelTemplate(application.training.getId(),template.getLocation(),template.getRoomLeastNum(),
-                template.getRoomCost(),template.getRoomIncome(),template.getCleanNum(),template.getEquipDepreCycle(),12)
+        apiService.createHotelTemplate(application.training.getId(),
+                template.getLocation(),
+                template.getRoomLeastNum(),
+                template.getRoomCost(),
+                template.getRoomIncome(),
+                template.getCleanNum(),
+                template.getEquipDeprePer(),12)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<String>, Observable<String>>() {
@@ -124,6 +129,8 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
+
+                        mView.showToast("创建失败");
                     }
 
                     @Override
@@ -131,6 +138,7 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
+                        mView.dismissDialog();
                         //重新请求列表
                         requestData();
                     }
@@ -151,6 +159,7 @@ public class TeacherTrainingInitPresenter extends BasePresenter {
                     @Override
                     public void OnChangedSuccess() {
 
+                        application.training.setTrainingStatus(EventCode.TraingingCode.TRAINING_BUILDED);
                         mView.disMissLoading();
                         //初始化成功
                         mView.initSuccess();

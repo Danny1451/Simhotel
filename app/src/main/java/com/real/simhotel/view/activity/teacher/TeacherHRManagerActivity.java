@@ -102,7 +102,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
                 if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
 
-                    DialogUitls.showConfirmDialog(mContext, "确认推送?",
+                    DialogUitls.showConfirmDialog(mContext, getString(R.string.teacher_hr_push_confirm),
                             (dialogInterface,i)->
                                     //确认推送人员信息
                                     mPresenter.pushApplicants()
@@ -110,7 +110,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
                 }else {
 
-                    DialogUitls.showConfirmDialog(mContext, "确认开启新报价?",
+                    DialogUitls.showConfirmDialog(mContext, getString(R.string.teacher_hr_restart_confirm),
                             (dialogInterface,i)->
                                     //重新报价
                                     mPresenter.restartBid()
@@ -126,7 +126,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
                 //结束报价
                 if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
 
-                    DialogUitls.showConfirmDialog(mContext, "确认退出?",
+                    DialogUitls.showConfirmDialog(mContext, getString(R.string.dialog_exit_confirm),
                             (dialogInterface,i)->
                                     //返回
                                     this.finish()
@@ -135,7 +135,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
 
                 }else {
-                    DialogUitls.showConfirmDialog(mContext, "确认结束招聘?",
+                    DialogUitls.showConfirmDialog(mContext, getString(R.string.teacher_hr_end_confirm),
                             (dialogInterface,i)->
                                     //结束
                                     mPresenter.finishBid()
@@ -150,11 +150,11 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
             case R.id.action_result:{
 
                 if (mDetailFragment.getClass() == ApplicantInitDetailFragment.class){
-                    showToast("尚未开始报价,不能推送结果");
+                    showToast(getString(R.string.teacher_hr_push_toast));
                     return true;
                 }
 
-                DialogUitls.showConfirmDialog(mContext,"确认推送结果?",(dialogInterface,i)->
+                DialogUitls.showConfirmDialog(mContext,getString(R.string.teacher_hr_push_resule_confirm),(dialogInterface,i)->
                         //重新报价
                         mPresenter.pushResult()
                 );
@@ -175,7 +175,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     @Override
     protected void initView() {
 
-        mAddApplicant.setText("增加候选人");
+        mAddApplicant.setText(getString(R.string.teacher_hr_add_applicant));
         mAdapter = new DynamicListAdapter(this)
                 .setRowInterface((pos, model)-> {
 
@@ -208,16 +208,16 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
                             View content = dialog.getHolderView();
 
-                            String name = ((EditText) content.findViewById(R.id.applicant_name_tv)).getText().toString();
+                            String place = ((EditText) content.findViewById(R.id.applicant_name_tv)).getText().toString();
                             String level = ((EditText) content.findViewById(R.id.applicant_level_tv)).getText().toString();
                             String price = ((EditText) content.findViewById(R.id.applicant_price_tv)).getText().toString();
 
 
                             switch (view.getId()) {
                                 case R.id.training_create_confirm: {
-                                    if (TextUtils.isEmpty(name) || TextUtils.isEmpty(level) || TextUtils.isEmpty(name) ) {
+                                    if (TextUtils.isEmpty(place) || TextUtils.isEmpty(level) || TextUtils.isEmpty(place) ) {
 
-                                        Toast.makeText(mContext, "请完整填写人员信息", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext, getString(R.string.teacher_hr_add_toast), Toast.LENGTH_SHORT).show();
                                         return;
                                     }
 
@@ -226,10 +226,10 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 //                                    template.setEmployNum(1);
                                     template.setExpectMonthIncome(Integer.parseInt(price));
                                     template.setLevel(Integer.parseInt(level));
-                                    template.setExpectWorkPlace(Integer.parseInt(level));
+                                    template.setExpectWorkPlace(Integer.parseInt(place));
                                     template.quotes = new ArrayList<>();
 
-                                    DialogUitls.showConfirmDialog(mContext, "确认新建应聘者?",
+                                    DialogUitls.showConfirmDialog(mContext,getString(R.string.teacher_hr_add_confirm) ,
                                             (dialogInterface,i)->
                                                 //创建确认
                                                 mPresenter.createApplicant(template)
@@ -312,7 +312,7 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
 
         //刷新界面
         if (mDetailFragment.getClass() == ApplicantListDetailFragment.class)
-            mDetailFragment.renderView(quoteList);
+            mDetailFragment.updateInfo(quoteList);
     }
 
     /**
@@ -323,12 +323,12 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
         mDetailFragment = new ApplicantInitDetailFragment();
 
         if (mConfirm != null) {
-            mConfirm.setTitle("开启招聘");
-            mFinish.setTitle("退出招聘");
+            mConfirm.setTitle(getString(R.string.teacher_hr_title_start));
+            mFinish.setTitle(getString(R.string.teacher_hr_title_exit));
         }
         //删除
         mDetailFragment.setConfirmListener(view ->
-            DialogUitls.showConfirmDialog(mContext,"确认删除",(dialog,which)->
+            DialogUitls.showConfirmDialog(mContext,getString(R.string.dialog_delete_confirm),(dialog,which)->
                 //点击删除指定位置
                 mPresenter.removeApplicant(mAdapter.getSelectPos())
             )
@@ -343,8 +343,8 @@ public class TeacherHRManagerActivity extends AppActivity implements ITHRManager
     public void transToInitListFragment(){
 
         if (mConfirm != null) {
-            mConfirm.setTitle("开启下轮");
-            mFinish.setTitle("结束招聘");
+            mConfirm.setTitle(getString(R.string.teacher_hr_title_restart));
+            mFinish.setTitle(getString(R.string.teacher_hr_title_finish));
         }
 
         mDetailFragment = new ApplicantListDetailFragment();

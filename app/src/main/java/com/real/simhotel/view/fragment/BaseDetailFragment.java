@@ -69,13 +69,13 @@ public class BaseDetailFragment<T> extends BaseFragment {
 
 
 
-        if (model != null)
-            updateInfo(model);
-
-
     }
 
+
+
     public void initView(){
+
+
 
         normLayout.setVisibility(View.GONE);
         listLayout.setVisibility(View.GONE);
@@ -85,23 +85,34 @@ public class BaseDetailFragment<T> extends BaseFragment {
 
     public void updateInfo(T info){
 
+
+
         model = info;
 
         //避免为初始化的状态
-        if (tvLine1 == null || info == null)
+        if (tvLine1 == null)
             return;
 
-
+        refreshView();
         renderView(info);
 
     }
 
-    public void renderView(T model){
+    protected void renderView(T model){
 
     }
 
     @Override
     protected void initData() {
+
+
+        if (model != null) {
+            updateInfo(model);
+        }
+        else {
+            showEmptyView(getString(R.string.detail_empty));
+        }
+
 
     }
 

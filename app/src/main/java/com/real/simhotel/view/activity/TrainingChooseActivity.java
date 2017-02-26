@@ -91,7 +91,7 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
         //学生的话不显示加号 显示座位号
         if (mUserType == Constants.USER_TYPE_STUDENT) {
 
-            setTitle("实例选择界面" + PreferenceUtils.getTeamNum(this) + PreferenceUtils.getCharacter(this));
+            setTitle( getString(R.string.training_choose_title) + PreferenceUtils.getTeamNum(this) + PreferenceUtils.getCharacter(this));
             mAddTraining.setVisibility(View.GONE);
         }
 
@@ -160,7 +160,7 @@ public class TrainingChooseActivity extends AppActivity implements ITrainingView
                                 case R.id.training_create_confirm: {
 
                                     if (TextUtils.isEmpty(name) || TextUtils.isEmpty(time) || TextUtils.isEmpty(hiretime) || TextUtils.isEmpty(equiptime)) {
-                                        Toast.makeText(mContext, "请完整填写实例信息", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(mContext,getString(R.string.training_detail_miss) , Toast.LENGTH_SHORT).show();
                                         return;
                                     }
 

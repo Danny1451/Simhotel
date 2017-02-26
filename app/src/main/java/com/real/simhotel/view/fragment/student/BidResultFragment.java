@@ -93,7 +93,7 @@ public class BidResultFragment extends BaseFragment<BidResultPresenter> implemen
             if (quoteList.size() == 0 ){
                 mDetailFragment.showEmptyView("没有报价");
             }else {
-                mDetailFragment.renderView(quoteList);
+                mDetailFragment.updateInfo(quoteList);
             }
         }
 

@@ -153,7 +153,7 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
 
         if (mDialog == null) {
             KLog.d("点击了 创建酒店模板");
-            showToast("暂时不支持动态添加,此处为默认");
+//            showToast("暂时不支持动态添加,此处为默认");
             mDialog = DialogPlus.newDialog(this)
                     .setContentHolder(new ViewHolder(R.layout.create_hotel_template_layout))
                     .setOnClickListener((dialog, view1)-> {
@@ -167,8 +167,8 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
                             String hotelIncome = ((EditText) content.findViewById(R.id.hotel_income_tv)).getText().toString();
                             String hotelEquipPre = ((EditText) content.findViewById(R.id.hotel_equip_pre_tv)).getText().toString();
 
-                            switch (view.getId()) {
-                                case R.id.training_create_confirm: {
+                            switch (view1.getId()) {
+                                case R.id.hotel_template_create_confirm: {
 
                                     if (TextUtils.isEmpty(location) || TextUtils.isEmpty(minNum) ||
                                             TextUtils.isEmpty(hotelCost) || TextUtils.isEmpty(hotelIncome) || TextUtils.isEmpty(hotelEquipPre)){
@@ -183,14 +183,21 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
                                     template.setRoomCost(Integer.parseInt(hotelCost));
                                     template.setRoomIncome(Integer.parseInt(hotelIncome));
                                     template.setEquipDeprePer(Double.parseDouble(hotelEquipPre));
+                                    //TODO
 
+
+
+
+
+
+                                    template.setCleanNum(2);
                                     mPresenter.createHotelTemplate(template);
 
 
 
                                     break;
                                 }
-                                case R.id.training_create_cancel: {
+                                case R.id.hotel_template_create_cancel: {
 
                                     dialog.dismiss();
                                     break;
@@ -212,6 +219,11 @@ public class TeacherTraningInitActivity extends AppActivity implements ITraining
         }
     }
 
+    @Override
+    public void dismissDialog() {
+        if (mDialog != null)
+            mDialog.dismiss();
+    }
 
     @Override
     public void renderTemlplateList(List<DynamicListModel> trainingsList) {

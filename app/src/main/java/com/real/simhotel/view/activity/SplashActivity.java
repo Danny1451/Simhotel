@@ -7,11 +7,7 @@ import android.text.TextUtils;
 import com.real.simhotel.R;
 import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.view.activity.student.StudentMainActivity;
-import com.real.simhotel.view.activity.teacher.TeacherControlActivity;
-import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 import com.real.simhotel.view.base.AppActivity;
-import com.real.simhotel.view.base.BaseActivity;
-import com.real.simhotel.view.base.BaseFragment;
 
 /**
  * Created by liudan on 2016/12/8.
@@ -52,7 +48,7 @@ public class SplashActivity extends AppActivity {
                     if (lastUser.startsWith("")){
                         startActivity(new Intent(SplashActivity.this, StudentMainActivity                                                                                                                                                            .class));
                     }else {
-                        startActivity(new Intent(SplashActivity.this, TeacherMainActivity.class));
+
                     }
                     finish();
                 }else {

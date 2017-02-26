@@ -20,6 +20,14 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 @Module
 public class ApiServiceModule {
+
+    private final String baseUrl;
+
+    public ApiServiceModule(String url){
+        baseUrl = url;
+    }
+
+
     @Provides
     @Singleton
     protected OkHttpClient provideClient() {
@@ -43,7 +51,12 @@ public class ApiServiceModule {
     @Provides
     @Singleton
     protected ApiService provideApiService(RxJavaCallAdapterFactory rxJavaCallAdapterFactory, GsonConverterFactory gsonConverterFactory, OkHttpClient client) {
-        return new Retrofit.Builder().addCallAdapterFactory(rxJavaCallAdapterFactory)
-                .addConverterFactory(gsonConverterFactory).client(client).baseUrl(Constants.API_BASE_URL).build().create(ApiService.class);
+        return new Retrofit.Builder()
+                .addCallAdapterFactory(rxJavaCallAdapterFactory)
+                .addConverterFactory(gsonConverterFactory)
+                .client(client)
+                .baseUrl(baseUrl)
+                .build()
+                .create(ApiService.class);
     }
 }

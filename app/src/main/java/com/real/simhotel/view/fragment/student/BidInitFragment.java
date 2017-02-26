@@ -139,7 +139,7 @@ public class BidInitFragment extends BaseFragment<BidInitPresenter> implements I
         mAdapter.setDataList(applicantsList);
 
         //默认选中第一个
-        mDetailFragment.renderView((Applicant)applicantsList.get(0).ext);
+        mDetailFragment.updateInfo((Applicant)applicantsList.get(0).ext);
 
     }
 

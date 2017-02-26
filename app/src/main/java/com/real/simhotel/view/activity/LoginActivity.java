@@ -14,8 +14,11 @@ import com.real.simhotel.utils.PreferenceUtils;
 import com.real.simhotel.view.iview.ILoginView;
 import com.real.simhotel.view.base.AppActivity;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.Bind;
 import butterknife.OnClick;
+import rx.Observable;
 
 /**
  * Created by liudan on 2016/12/7.
@@ -44,21 +47,43 @@ public class LoginActivity extends AppActivity implements ILoginView {
     }
 
 
-    @OnClick({R.id.loginbtn})
+    @OnClick({R.id.loginbtn,R.id.login_reset_btn})
     public void onClick(View view){
 
-        String name = mNameTf.getText().toString();
-        String pwd = mPwdTf.getText().toString();
+        switch (view.getId()){
+            case R.id.loginbtn:
+            {
+                String name = mNameTf.getText().toString();
+                String pwd = mPwdTf.getText().toString();
 
-        if(TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)){
-            Toast.makeText(this,"请输入用户名和密码",Toast.LENGTH_LONG).show();
-            return;
+                if(TextUtils.isEmpty(name) || TextUtils.isEmpty(pwd)){
+                    Toast.makeText(this,this.getString(R.string.login_toast),Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                int role = !mToggleBtn.isChecked() ? Constants.USER_TYPE_TEACHER : Constants.USER_TYPE_STUDENT;
+
+                //登录
+                mLoginPresenter.login(role,name,pwd);
+
+            }
+                break;
+            case R.id.login_reset_btn:
+            {
+
+                PreferenceUtils.clean(this);
+
+                Toast.makeText(this,"重置完成,即将重启",Toast.LENGTH_SHORT).show();
+                Observable.timer(3, TimeUnit.SECONDS)
+                        .subscribe( call ->{
+
+                            android.os.Process.killProcess(android.os.Process.myPid());  //获取PID
+                            System.exit(0);   //常规java、c#的标准退出法，返回值为0代表正常退出
+
+                        });
+            }
+                break;
         }
-
-        int role = !mToggleBtn.isChecked() ? Constants.USER_TYPE_TEACHER : Constants.USER_TYPE_STUDENT;
-
-        //登录
-        mLoginPresenter.login(role,name,pwd);
 
     }
 
@@ -95,7 +120,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
     @Override
     public void loginFaied(String reason) {
 
-        showToast("登录失败 " + reason);
+        showToast(getString(R.string.login_toast_failed) + reason);
 
     }
 
@@ -105,7 +130,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
 
 
         //跳转到学生界面
-        showToast("登录成功");
+        showToast(getString(R.string.login_toast_success));
         navigator.toStudentTrainingDetailActivity(this);
 
         //记住密码
@@ -118,7 +143,7 @@ public class LoginActivity extends AppActivity implements ILoginView {
     public void loginTeacherSuccess(int uid) {
 
         //跳转到老师界面
-        showToast("登录成功");
+        showToast(getString(R.string.login_toast_success));
         navigator.toTeacherTrainingDetailActivity(this);
 
         //记住密码

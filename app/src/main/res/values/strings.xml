@@ -16,4 +16,60 @@
     <string name="trainging_detail_create_time">创建时间: %1$s</string>
     <string name="trainging_detail_update_time">更新时间: %1$s</string>
     <string name="trainging_detail_teacher_id">教师ID: %1$s</string>
+    <string name="trainging_detail_name">模板名称: %1$s</string>
+
+    <string name="login_toast">请输入用户名和密码</string>
+
+    <string name="login_toast_success">登录成功</string>
+    <string name="login_toast_failed">登录失败</string>
+
+    <string name="training_detail_miss">请完整填写实例信息"</string>
+    <string name="training_join_success">加入成功</string>
+    <string name="training_join_permission">对不起,没有权限进入</string>
+    <string name="training_create_failed">创建实例失败</string>
+
+    <string name="teacher_control_inited">已经初始化过了</string>
+
+    <string name="teacher_hr_push_confirm">确认推送?</string>
+    <string name="teacher_hr_restart_confirm">确认开启新报价?</string>
+    <string name="teacher_hr_end_confirm">确认结束招聘?</string>
+    <string name="teacher_hr_push_resule_confirm">确认推送结果?</string>
+    <string name="teacher_hr_push_toast">尚未开始报价,不能推送结果</string>
+    <string name="teacher_hr_add_applicant">增加候选人</string>
+    <string name="teacher_hr_add_confirm">确认新建应聘者?</string>
+    <string name="teacher_hr_add_toast">请完整填写人员信息</string>
+    <string name="teacher_hr_title_start">开启招聘</string>
+    <string name="teacher_hr_title_exit">退出招聘</string>
+    <string name="teacher_hr_title_restart">开启下轮</string>
+    <string name="teacher_hr_title_finish">结束招聘</string>
+    <string name="teacher_hr_finish_toast">招聘结束</string>
+
+    <string name="teacher_push_success">推送成功</string>
+    <string name="teacher_push_failed">推送失败</string>
+
+    <string name="applicant_quote">报价:%1$s</string>
+    <string name="applicant_name">名称:%1$s</string>
+    <string name="applicant_level">等级:%1$s</string>
+    <string name="applicant_expect_income">期望月薪:%1$s</string>
+    <string name="applicant_expeerience">工作年限:%1$s</string>
+    <string name="applicant_unit">"/月"</string>
+    <string name="applicant_action_bid">竞拍</string>
+
+    <string name="applicant_income">月薪</string>
+
+
+
+
+    <string name="applicant_empty">暂无人员</string>
+    <string name="quote_empty">报价为空</string>
+
+    <string name="detail_empty">暂无数据</string>
+
+    <string name="dialog_exit_confirm">确认退出?</string>
+    <string name="dialog_delete_confirm">确认删除?</string>
+
+    <string name="request_failed">请求失败,请稍后再试</string>
+    <string name="update_failed">刷新失败</string>
+    <string name="delete">删除</string>
+    <string name="fire">解雇</string>
 </resources>

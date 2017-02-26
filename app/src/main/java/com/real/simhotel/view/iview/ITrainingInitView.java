@@ -13,4 +13,6 @@ public interface ITrainingInitView extends IBaseView {
 
     void initSuccess();
 
+    void dismissDialog();
+
 }

@@ -53,7 +53,7 @@ public class CeoInitPresenter extends BasePresenter {
         KLog.d("id = " + application.mHotel.getId());
 
         //请求参数
-        subscription =apiService.getHotelTemplateList(1).
+        subscription =apiService.getHotelTemplateList(application.training.getId()).
                 observeOn(AndroidSchedulers.mainThread()).
                 subscribeOn(Schedulers.io()).
                 flatMap(new Func1<Response<List<HotelTemplate>>, Observable<List<HotelTemplate>>>() {
@@ -63,45 +63,7 @@ public class CeoInitPresenter extends BasePresenter {
                     }
                 }).subscribe(new HotelTempalteListSubscriber());
 
-//        subscription =apiService.getHotelTemplateList(1).
-//                observeOn(AndroidSchedulers.mainThread()).
-//                subscribeOn(Schedulers.io()).
-//                flatMap((listResponse)-> {
-//                        return RetrofitUtils.flatResponse(listResponse);
-//
-//                });
-//        list = new ArrayList();
-//
-//        DynamicListModel modelTest = new DynamicListModel();
-//        modelTest.itemType = DynamicListModel.TYPE_SEEK;
-//        modelTest.title = "酒店数量";
-//        modelTest.max = 20;
-//        modelTest.unit = "间";
-//        modelTest.selectedValue = - 1;
-//
-//        DynamicListModel modelTest2 = new DynamicListModel();
-//        modelTest2.itemType = DynamicListModel.TYPE_SEEK;
-//        modelTest2.title = "价格";
-//        modelTest2.max = 100;
-//        modelTest2.unit = "元";
-//        modelTest.selectedValue = - 1;
-//
-//        DynamicListModel modelTest3 = new DynamicListModel();
-//        modelTest3.itemType = DynamicListModel.TYPE_RADIO_BUTTONS;
-//        modelTest3.mChooseItems = new ArrayList<>();
-//        modelTest3.mChooseItems.add("选项1");
-//        modelTest3.mChooseItems.add("选项2");
-//        modelTest3.mChooseItems.add("选项3");
-//        modelTest3.mChooseItems.add("选项4");
-//        modelTest3.title = "酒店位置";
-//
-//
-//
-//        list.add(modelTest2);
-//        list.add(modelTest);
-//        list.add(modelTest3);
-//        //加载列表
-//        mView.renderHotelInitItems(list);
+
     }
 
     public class HotelTempalteListSubscriber extends DefaultSubscriber<List<HotelTemplate>>{
@@ -168,7 +130,7 @@ public class CeoInitPresenter extends BasePresenter {
         DynamicListModel mNumsViewModel = viewModellist.get(1);
 
 
-        int hotelId = mLocationViewModel.selectedValue;
+        int hotelId = dataModellist.get(mLocationViewModel.selectedValue).getId();
         int roomNums = mNumsViewModel.selectedValue;
 
         KLog.d("dad","hotelID = " + hotelId + " roomNums = " + roomNums);

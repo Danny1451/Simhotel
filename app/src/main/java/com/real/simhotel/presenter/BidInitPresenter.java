@@ -101,9 +101,9 @@ public class BidInitPresenter extends BasePresenter {
 
         mView.showLoading();
 
-        applicant.quotePrice = seekValue;
+        applicant.quotePrice = seekValue * 1000;
         //报价
-        apiService.bidEmploy(1,applicant.getEmployId(),applicant.quotePrice)
+        apiService.bidEmploy(application.group.getId(),applicant.getEmployId(),applicant.quotePrice)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .flatMap(new Func1<Response<String>, Observable<String>>() {

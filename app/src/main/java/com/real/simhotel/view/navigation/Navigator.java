@@ -4,13 +4,11 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.real.simhotel.config.Constants;
-import com.real.simhotel.presenter.TeacherHRManagerPresenter;
 import com.real.simhotel.view.activity.LoginActivity;
 import com.real.simhotel.view.activity.TrainingChooseActivity;
 import com.real.simhotel.view.activity.student.StudentMainActivity;
 import com.real.simhotel.view.activity.teacher.TeacherControlActivity;
 import com.real.simhotel.view.activity.teacher.TeacherHRManagerActivity;
-import com.real.simhotel.view.activity.teacher.TeacherMainActivity;
 import com.real.simhotel.view.activity.teacher.TeacherTraningInitActivity;
 
 import javax.inject.Inject;
@@ -31,10 +29,6 @@ public class Navigator {
 
     }
 
-    public void toTeacherMainActivity(Context context){
-        Intent intent = new Intent(context, TeacherMainActivity.class);
-        context.startActivity(intent);
-    }
 
 
     public void toTeacherTrainingDetailActivity(Context context){

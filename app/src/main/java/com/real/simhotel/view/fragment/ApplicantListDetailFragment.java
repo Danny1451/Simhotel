@@ -51,8 +51,8 @@ public class ApplicantListDetailFragment extends BaseDetailFragment<List<Dynamic
 
         refreshView();
 
-        if (model.size() == 0){
-            showEmptyView("报价为空");
+        if (model == null ||model.size() == 0){
+            showEmptyView(getString(R.string.quote_empty));
         }else {
 
             //刷新数据

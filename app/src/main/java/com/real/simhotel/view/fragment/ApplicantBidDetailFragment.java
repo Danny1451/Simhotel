@@ -1,5 +1,6 @@
 package com.real.simhotel.view.fragment;
 
+import android.os.Looper;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -48,7 +49,7 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
                 //更新值
                 mSeekBarlValue = i;
                 //滑动的时候
-                mSelectResultTv.setText(mSeekBarlValue * 1000 +  "/月");
+                mSelectResultTv.setText(mSeekBarlValue * 1000 +  getString(R.string.applicant_unit));
 
             }
 
@@ -68,15 +69,18 @@ public class ApplicantBidDetailFragment extends BaseDetailFragment<Applicant> {
     public void renderView(Applicant model) {
         super.renderView(model);
 
-        tvLine1.setText("人员名称:"+ model.getLevelStr());
-        tvLine2.setText("等级:" + model.getLevel());
-        tvLine3.setText("期望月薪:" + model.getExpectMonthIncome());
+
+
+
+        tvLine1.setText(getString(R.string.applicant_name,model.getLevelStr()));
+        tvLine2.setText(getString(R.string.applicant_level,model.getLevel()));
+        tvLine3.setText(getString(R.string.applicant_expect_income,model.getExpectMonthIncome()));
 //        tvLine4.setText("教师id:" + model.getTeacherId());
 //        tvLine5.setText("参数5:" + model.getCurrentCycle());
-        tvLine6.setText("工作年限:" + model.getExpectWorkPlace());
+        tvLine6.setText(getString(R.string.applicant_expeerience,model.getExpectWorkPlace()));
 
-        tvLine5.setText("报价:" + model.getBiddingPrice());
-        confirmBtn.setText("竞价");
+        tvLine5.setText(getString(R.string.applicant_quote,model.getBiddingPrice()));
+        confirmBtn.setText(getString(R.string.applicant_action_bid));
         if (model.quotePrice != null || model.getBiddingPrice() != 0 ){
             confirmBtn.setEnabled(false);
         }else {

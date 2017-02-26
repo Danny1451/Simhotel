@@ -47,11 +47,12 @@ public class TeacherControlActivity extends AppActivity {
         switch (view.getId()){
             case R.id.cardBtn1:
 
+
                 if (getMainApplication().training.getTrainingStatus() < EventCode.TraingingCode.TRAINING_BUILDED) {
                     //跳转到酒店管理界面
                     navigator.toTrainingInitActivity(this);
                 }else {
-                    showToast("已经初始化过了");
+                    showToast(getString(R.string.teacher_control_inited));
                 }
 
                 break;
@@ -92,7 +93,7 @@ public class TeacherControlActivity extends AppActivity {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(aLong -> {
 
-                    item.setTitle("小组: 8/10");
+                    item.setTitle("小组更新");
 
                 });
 

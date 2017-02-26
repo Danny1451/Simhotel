@@ -1,5 +1,6 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.R;
 import com.real.simhotel.data.Response;
 import com.real.simhotel.data.RetrofitUtils;
 import com.real.simhotel.events.EventCode;
@@ -54,7 +55,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
             applicant.quotes = new ArrayList<>();
             //转换到显示模型
-            viewModel.info = "报价:" + applicant.quotePrice;
+            viewModel.info = application.getString(R.string.applicant_quote,applicant.quotePrice);
             viewModel.ext =  new ArrayList<>();
 
         }
@@ -89,10 +90,16 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
     public void requestApplicantListQuotes(int pos){
 
+        Applicant model = mDataList.get(pos);
+
+
+        if (model == null)
+            return;
+
+
         //请求候选人的报价
         mView.showLoading();
 
-        Applicant model = mDataList.get(pos);
 
         apiService.getEmployQuotes(model.getEmployId())
                 .subscribeOn(Schedulers.io())
@@ -111,7 +118,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                     @Override
                     public void onError(Throwable e) {
-                        mView.showToast("刷新失败");
+                        mView.showToast(application.getString(R.string.update_failed));
                         mView.disMissLoading();
                     }
 
@@ -192,7 +199,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         //删除失败
                         mView.disMissLoading();
-                        mView.showToast("删除失败");
+                        mView.showToast(application.getString(R.string.request_failed));
                     }
 
                     @Override
@@ -238,12 +245,15 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public void onError(Throwable e) {
 
                         mView.disMissLoading();
-                        mView.showToast("新建失败");
+                        mView.showToast(application.getString(R.string.request_failed));
                     }
 
                     @Override
                     public void onNext(Integer integer) {
 
+
+                        //设置 ID
+                        model.setEmployId(integer);
 
                         mDataList.add(model);
 
@@ -292,7 +302,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                         //更新列表
                         mView.renderApplicantsList(mViewModelList);
 
-                        mView.updateConfirmStatus("重新竞价");
+                        mView.updateConfirmStatus(application.getString(R.string.teacher_hr_title_restart));
 
 //                        mView.updateGroupStatus(finishNum + "/" + mDataList.size());
                     }
@@ -302,7 +312,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
-                        mView.showToast("请求失败,请稍后再试");
+                        mView.showToast(application.getString(R.string.request_failed));
 
                         KLog.d(erro);
                     }
@@ -328,14 +338,14 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public void OnChangedSuccess() {
                         mView.disMissLoading();
 
-                        mView.showToast("推送成功");
+                        mView.showToast(application.getString(R.string.teacher_push_success));
                     }
 
                     @Override
                     public void OnChangedFailed(String erro) {
                         mView.disMissLoading();
 
-                        mView.showToast("推送失败");
+                        mView.showToast(application.getString(R.string.teacher_push_failed));
                     }
                 });
     }
@@ -373,7 +383,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
                     public void onError(Throwable e) {
                         mView.disMissLoading();
 
-                        mView.showToast("请求失败,请稍后再试");
+                        mView.showToast(application.getString(R.string.request_failed));
 
                         e.printStackTrace();
                     }
@@ -402,6 +412,33 @@ public class TeacherHRManagerPresenter extends BasePresenter {
         mView.showLoading();
 
 
+        apiService.finishBid(application.training.getId())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .flatMap(new Func1<Response<String>, Observable<String>>() {
+                    @Override
+                    public Observable<String> call(Response<String> stringResponse) {
+                        return RetrofitUtils.flatResponse(stringResponse);
+                    }
+                })
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+
+                    }
+                });
+
+
         //结束招聘
         application.traingingStatusManager.changeTrainingStatus(
                 EventCode.TraingingCode.TRAINING_HIRE_FINISHED,
@@ -411,7 +448,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
-                        mView.showToast("招聘结束");
+                        mView.showToast(application.getString(R.string.teacher_hr_finish_toast));
 
                         mView.finishHire();
                     }
@@ -421,7 +458,7 @@ public class TeacherHRManagerPresenter extends BasePresenter {
 
                         mView.disMissLoading();
 
-                        mView.showToast("请求失败,请稍后再试");
+                        mView.showToast(application.getString(R.string.request_failed));
 
                         KLog.d(erro);
                     }

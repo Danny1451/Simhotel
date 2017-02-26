@@ -1,5 +1,6 @@
 package com.real.simhotel.presenter;
 
+import com.real.simhotel.R;
 import com.real.simhotel.config.Constants;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.data.Response;
@@ -90,7 +91,7 @@ public class TrainingChoosePresenter extends BasePresenter {
                                 public void onError(Throwable e) {
 
                                     mView.disMissLoading();
-                                    mView.showToast("请求失败,请稍后再试");
+                                    mView.showToast(application.getString(R.string.request_failed));
                                 }
 
                                 @Override
@@ -98,7 +99,7 @@ public class TrainingChoosePresenter extends BasePresenter {
 
                                     mView.disMissLoading();
 
-                                    mView.showToast("加入成功");
+                                    mView.showToast(application.getString(R.string.training_join_success));
 
                                     application.group = s;
 
@@ -112,7 +113,7 @@ public class TrainingChoosePresenter extends BasePresenter {
 
             }else {
 
-                mView.showToast("对不起,没有权限进入");
+                mView.showToast(application.getString(R.string.training_join_permission));
 
             }
 
@@ -161,23 +162,7 @@ public class TrainingChoosePresenter extends BasePresenter {
 
 
 
-//
-//            RxBus.getDefault().post(new Hotel());
-//
-//            Subscription ms = RxBus.getDefault()
-//                    .toObservable(Hotel.class)
-//                    .subscribe(new Action1<Hotel>() {
-//                @Override
-//                public void call(Hotel s) {
-//                    KLog.d();
-//                }
-//            });
-//            //定时
-//            Observable.timer(2,TimeUnit.SECONDS)
-//                    .subscribe(call ->{
-//
-//
-//            });
+
 
 
 
@@ -255,7 +240,7 @@ public class TrainingChoosePresenter extends BasePresenter {
         public void onError(Throwable e) {
             super.onError(e);
 
-            mView.showToast("创建实例失败");
+            mView.showToast(application.getString(R.string.training_create_failed));
             KLog.e(e.toString());
         }
     }
@@ -270,7 +255,7 @@ public class TrainingChoosePresenter extends BasePresenter {
 
             if (trainings == null || trainings.size() == 0){
 
-                mView.showEmptyView("获取数据异常");
+                mView.showEmptyView(application.getString(R.string.request_failed));
 
             }else {
 

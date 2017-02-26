@@ -128,14 +128,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="确定"
-            android:id="@+id/training_create_confirm"
+            android:id="@+id/hotel_template_create_confirm"
             android:layout_weight="1" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="取消"
-            android:id="@+id/training_create_cancel"
+            android:id="@+id/hotel_template_create_cancel"
             android:layout_weight="1" />
     </LinearLayout>
 </LinearLayout>

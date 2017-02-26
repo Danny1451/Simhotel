@@ -11,5 +11,7 @@ public interface IStudentMainView extends IBaseView {
     void updateDetailFragment(BaseFragment fragment);
 
     void updateStudentInfo(Student student);
+
+
     BaseFragment getCurrentDetailFragment();
 }

@@ -12,18 +12,12 @@ import com.real.simhotel.MainApplication;
 import com.real.simhotel.R;
 import com.real.simhotel.config.Role;
 import com.real.simhotel.events.EventCode;
-import com.real.simhotel.model.Group;
 import com.real.simhotel.model.GroupDetailVo;
 import com.real.simhotel.model.Student;
-import com.real.simhotel.model.Training;
 import com.real.simhotel.presenter.StudentMainPresenter;
 import com.real.simhotel.utils.log.KLog;
 import com.real.simhotel.view.base.AppActivity;
 import com.real.simhotel.view.base.BaseFragment;
-import com.real.simhotel.view.fragment.student.BidInitFragment;
-import com.real.simhotel.view.fragment.student.BidResultFragment;
-import com.real.simhotel.view.fragment.student.CeoInitFragment;
-import com.real.simhotel.view.fragment.student.CeoNormalFragment;
 import com.real.simhotel.view.fragment.student.LoadingFragment;
 import com.real.simhotel.view.iview.IStudentMainView;
 
